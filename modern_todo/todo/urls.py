@@ -1,12 +1,8 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 
 import views
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
-
 urlpatterns = patterns('',
-    # Examples:
     url(r'^$', views.Index.as_view(), name='index'),
+    url(r'^todolists$', views.StaticListTodoLists.as_view(), name="static_todo_lists")
 )
