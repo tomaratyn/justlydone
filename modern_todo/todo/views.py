@@ -12,3 +12,5 @@ class StaticListTodoLists(ListView):
     context_object_name = "todolists"
 
 
+class JavaScriptDynamicView(TemplateView):
+    template_name = "js_todo_list.html"

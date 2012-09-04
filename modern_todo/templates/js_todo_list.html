@@ -1,0 +1,16 @@
+{%  extends "base.html" %}
+
+{% block page_contents %}
+
+    <div class="row"><h2>To Do List</h2></div>
+
+{% endblock %}
+
+{% block bottom_script_page %}
+
+    <script type="text/javascript">
+        TODOLISTS_URL = "/api/testing/todolist/?format=json"
+
+    </script>
+
+{% endblock %}
