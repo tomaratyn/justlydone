@@ -3,14 +3,21 @@
 {% block page_contents %}
 
     <div class="row"><h2>To Do List</h2></div>
+    <div class="row">
+        <ul class="todolist_list">
+
+        </ul>
+    </div>
 
 {% endblock %}
 
 {% block bottom_script_page %}
 
     <script type="text/javascript">
-        TODOLISTS_URL = "/api/testing/todolist/?format=json"
-
+        TODOLISTS_URL = '{{ ToDoListResource.get_resource_list_uri }}'
+        TODO_URL = '{{ ToDoResource.get_resourece_list_uri }}'
+    </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo.js">
     </script>
 
 {% endblock %}
