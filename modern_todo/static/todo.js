@@ -23,7 +23,8 @@ ToDoListView = Backbone.View.extend({
   render: function() {
     console.log(this.collection)
     $(this.el).append(this.collection.models.map(function(value, key, list) {
-      return "<li>" + value.attributes.name + "</li>"
+      var template = $("script#list_todolist").text()
+      return Mustache.render(template, value.attributes)
     }))
   }
 })

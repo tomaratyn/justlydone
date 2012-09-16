@@ -19,4 +19,4 @@ class JavaScriptDynamicView(TemplateView):
 
     def get_context_data(self, **kwargs):
         return {"ToDoListResource": ToDoListResource,
-                "ToDoResource": ToDoResource }
+                "ToDoResource": ToDoResource, }

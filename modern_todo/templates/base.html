@@ -15,8 +15,11 @@
         <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap-2.1.0/css/bootstrap.css">
         {% endblock header_css %}
         {% block header_script %}
-        <script src="{{ STATIC_URL }}modernizr-2.6.1.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}modernizr-2.6.1.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}mustache-0.7.0.js"></script>
         {% endblock header_script %}
+        {% block header_template %}
+        {% endblock %}
     </head>
     <body>
         <!--[if lt IE 7]>
