@@ -14,8 +14,15 @@
 {% block page_contents %}
 
     <div class="row"><h2>To Do List</h2></div>
-    <div class="row">
-        <ul class="todolist_list">
+    <div class="row todolist_list">
+        <form class="form-horizontal nosubmit">
+            <button class="btn refresh"><i class="icon-refresh"></i></button>
+            <div class="input-append">
+                <input class="span2 new_list_name" placeholder="New List Name" type="text"><button class="btn add_new_list" type="button"><i class="icon-plus"></i></button>
+            </div>
+        </form>
+
+        <ul class="todolists">
         </ul>
     </div>
 
