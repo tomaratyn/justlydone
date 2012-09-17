@@ -1,29 +1,35 @@
-{%  extends "base.html" %}
+{% extends "base.html" %}
 {% load ssi from future %}
 
 {% block header_template %}
 
-    <script type="application/mustache"
-            id="list_todolist">
-    {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
-    <li>[[name]]</li>
+    <script type="application/mustache" id="list_todolist">
+        {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
+        <li class="todolist">[[name]] <span class="btn-link"><i class="icon-remove remove-list"></i></span></li>
     </script>
 
 {% endblock %}
 
 {% block page_contents %}
 
-    <div class="row"><h2>To Do List</h2></div>
+    <div class="row">
+        <div class="span12">
+            <h2>To Do List</h2>
+        </div>
+    </div>
     <div class="row todolist_list">
-        <form class="form-horizontal nosubmit">
-            <button class="btn refresh"><i class="icon-refresh"></i></button>
-            <div class="input-append">
-                <input class="span2 new_list_name" placeholder="New List Name" type="text"><button class="btn add_new_list" type="button"><i class="icon-plus"></i></button>
-            </div>
-        </form>
+        <div class="span12">
+            <form class="form-horizontal nosubmit">
+                <button class="btn refresh"><i class="icon-refresh"></i></button>
+                <div class="input-append">
+                    <input class="span2 new_list_name" placeholder="New List Name" type="text">
+                    <button class="btn add_new_list" type="button"><i class="icon-plus"></i></button>
+                </div>
+            </form>
 
-        <ul class="todolists">
-        </ul>
+            <ul class="todolists">
+            </ul>
+        </div>
     </div>
 
 {% endblock %}
