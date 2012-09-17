@@ -15,11 +15,21 @@ ToDoList_List = Backbone.Collection.extend({
 })
 
 ToDoList_View = Backbone.View.extend({
-  template: $("script#list_todolist").text(),
+  events: {
+    "click .btn": "remove_list"
+  },
+  initialize: function(options){
+    this.model.on("destroy", this.remove, this)
+  },
+  remove_list: function() {
+    console.log("ToDoList_View::remove_list")
+    this.model.destroy()
+  },
   render: function() {
-    this.el = Mustache.render(this.template, this.model.attributes)
+    this.setElement(Mustache.render(this.template, this.model.attributes))
     return this
-  }
+  },
+  template: $("script#list_todolist").text()
 })
 
 ToDoList_List_View = Backbone.View.extend({
@@ -36,6 +46,7 @@ ToDoList_List_View = Backbone.View.extend({
     if (new_list_name.length > 0) {
       this.collection.create({name:new_list_name})
     }
+    $label.val("")
   },
   initialize: function() {
     console.log("initializing ToDoList_List_View")
@@ -44,7 +55,6 @@ ToDoList_List_View = Backbone.View.extend({
     this.collection.fetch()
   },
   refresh: function(e){
-    var self = this
     console.log("called refresh()")
     this.collection.fetch()
   },
@@ -57,12 +67,14 @@ ToDoList_List_View = Backbone.View.extend({
   render_new_single_list: function(new_todo_list) {
     console.log("ToDoList_List_View::render_new_list", new_todo_list)
     var view = new ToDoList_View({model: new_todo_list})
-    var new_todo_list_el = view.render()
-    $(this.el).find("ul").append(new_todo_list_el.el)
+    list_of_list_views.push(view)
+    $(this.el).find("ul").append(view.render().el)
   }
 })
 
-todolist_view = new ToDoList_List_View()
+new ToDoList_List_View()
+
+list_of_list_views = []
 
 $(function() {
   $("form.nosubmit").submit(function() {return false})

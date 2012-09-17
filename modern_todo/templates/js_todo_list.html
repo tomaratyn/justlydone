@@ -1,11 +1,10 @@
 {% extends "base.html" %}
-{% load ssi from future %}
 
 {% block header_template %}
 
     <script type="application/mustache" id="list_todolist">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
-        <li class="todolist">[[name]] <span class="btn-link"><i class="icon-remove remove-list"></i></span></li>
+        <li class="todolist">[[name]] <button class="btn-link remove-list"><i class="icon-remove remove-list"></i></button></li>
     </script>
 
 {% endblock %}
