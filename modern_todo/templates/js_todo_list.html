@@ -4,7 +4,7 @@
 
     <script type="application/mustache" id="list_todolist">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
-        <li class="todolist">[[name]] <button class="btn-link remove-list"><i class="icon-remove remove-list"></i></button></li>
+        <li class="todolist"><span class="name">[[name]]</span> <button class="btn-link remove-list"><i class="icon-remove remove-list"></i></button></li>
     </script>
 
 {% endblock %}
@@ -30,11 +30,34 @@
             </ul>
         </div>
     </div>
+    <div>
+        <div class="modal hide"
+             id="edit-list-name-modal"
+             tabindex="-1"
+             role="dialog"
+             aria-labelledby="edit-list-name-modal-label"
+             aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="edit-list-name-modal-label">Rename '<span class="list-old-name"></span>'</h3>
+            </div>
+            <div class="modal-body">
+                <div>
+                Enter the list's new name: <input type="text" class="list-new-name">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button class="btn btn-primary save">Save changes</button>
+            </div>
 
+        </div>
+    </div>
 {% endblock %}
 
 {% block bottom_script_page %}
 
+    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-2.1.0/js/bootstrap.js"></script>
     <script type="text/javascript">
         TODOLISTS_URL = '{{ ToDoListResource.get_resource_list_uri }}'
         TODO_URL = '{{ ToDoResource.get_resource_list_uri }}'
