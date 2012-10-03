@@ -16,7 +16,7 @@ ToDoList_List = Backbone.Collection.extend({
 
 ToDoList_View = Backbone.View.extend({
   events: {
-    "click .btn": "remove_list",
+    "click .remove-list": "remove_list",
     "dblclick .name": "rename_list"
   },
   initialize: function(options){
