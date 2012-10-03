@@ -1,18 +1,25 @@
 
-ToDoList = Backbone.Model.extend({
+ToDoList_model = Backbone.RelationalModel.extend({
   defaults: {
     name: ""
   }
 })
 
+ToDo_model = Backbone.RelationalModel.extend({
+  defaults: {
+    text: ""
+  }
+})
+
 ToDoList_List = Backbone.Collection.extend({
-  model: ToDoList,
+  model: ToDoList_model,
   url: TODOLISTS_URL,
   parse: function(response) {
     console.log("ToDoList_List::Parse", response)
     return response.objects
   }
 })
+
 
 ToDoList_View = Backbone.View.extend({
   events: {
@@ -53,6 +60,7 @@ ToDoList_View = Backbone.View.extend({
   }
 })
 
+
 ToDoList_List_View = Backbone.View.extend({
   collection: new ToDoList_List(),
   el: ".todolist_list",
@@ -92,7 +100,9 @@ ToDoList_List_View = Backbone.View.extend({
   }
 })
 
+
 new ToDoList_List_View()
+
 
 $(function() {
   $("form.nosubmit").submit(function() {return false})
