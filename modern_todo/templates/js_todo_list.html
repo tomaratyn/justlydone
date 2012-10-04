@@ -2,9 +2,18 @@
 
 {% block header_template %}
 
+    <script type="application/mustahce" id="partial_todo">
+        {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
+        <div class="well">"[[id]]", [[cid]], [[name]],|[[attributes.complete]]|,=[[attributes.creation_datetime]]=, ~[[attributes.text]]~,</div>
+    </script>
     <script type="application/mustache" id="list_todolist">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
-        <li class="todolist"><span class="name">[[name]]</span> <button class="btn-link remove-list"><i class="icon-remove remove-list"></i></button></li>
+        <li class="todolist">
+            <span class="name">[[name]]</span>([[todos.length]])[[id]]
+            <button class="btn-link remove-list"><i class="icon-remove remove-list"></i></button>
+            <p class="todos">
+            </p>
+        </li>
     </script>
 
 {% endblock %}
@@ -13,7 +22,7 @@
 
     <div class="row">
         <div class="span12">
-            <h2>To Do List</h2>
+            <h2>{{ request.user.username }}'s To Do List</h2>
         </div>
     </div>
     <div class="row todolist_list">
@@ -65,3 +74,4 @@
     </script>
 
 {% endblock %}
+
