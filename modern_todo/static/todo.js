@@ -31,18 +31,20 @@ ToDoList_List = Backbone.Collection.extend({
   }
 })
 
+
 ToDoView = Backbone.View.extend({
-  template: $("script#todo_template").text(),
   render: function() {
     this.setElement(Mustache.render(this.template, this.model.attributes))
     return this
-  }
+  },
+  template: $("script#todo_template").text()
 })
 
 
 ToDoList_View = Backbone.View.extend({
   events: {
     "click .remove-list": "remove_list",
+    "click .toggle-todos": "toggle_todos",
     "dblclick .name": "rename_list"
   },
   initialize: function(options) {
@@ -85,6 +87,20 @@ ToDoList_View = Backbone.View.extend({
     }})
     this.setElement(Mustache.render(this.template, this.model.attributes, partials))
     return this
+  },
+  toggle_todos: function() {
+    var $todos = this.$el.find(".todos")
+    var $toggle_icon = this.$el.find(".toggle-todos")
+    if ($todos.hasClass("hide")) {
+      $toggle_icon.removeClass("icon-chevron-right")
+      $toggle_icon.addClass("icon-chevron-down")
+      $todos.removeClass("hide")
+    }
+    else {
+      $toggle_icon.removeClass("icon-chevron-down")
+      $toggle_icon.addClass("icon-chevron-right")
+      $todos.addClass("hide")
+    }
   },
   template: $("script#list_todolist").text(),
   update_name_label: function() {
