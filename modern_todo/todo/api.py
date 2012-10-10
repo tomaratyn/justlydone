@@ -9,6 +9,7 @@ from todo.util import PrettyJSONSerializer
 
 class ToDoListResource(ModelResource):
     todos = fields.ToManyField('todo.api.ToDoResource', 'todo_set', null=True)
+
     class Meta:
         always_return_data = True
         queryset = ToDoList.objects.all()
@@ -17,9 +18,11 @@ class ToDoListResource(ModelResource):
         authentication = Authentication()
         authorization = Authorization()
 
+
 class ToDoResource(ModelResource):
     list = fields.ForeignKey(ToDoListResource, "list")
 
     class Meta:
         queryset = ToDo.objects.all()
         resource_name = "todo"
+        serializer = PrettyJSONSerializer()

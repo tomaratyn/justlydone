@@ -4,7 +4,6 @@ from todo.api import ToDoListResource, ToDoResource
 from todo.models import ToDoList as ToDoListModel
 
 
-
 class Index(TemplateView):
     template_name = "base.html"
 
@@ -19,4 +18,5 @@ class JavaScriptDynamicView(TemplateView):
 
     def get_context_data(self, **kwargs):
         return {"ToDoListResource": ToDoListResource,
-                "ToDoResource": ToDoResource, }
+                "ToDoResource": ToDoResource,
+                "request": self.request }
