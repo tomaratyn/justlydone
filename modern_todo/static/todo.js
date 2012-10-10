@@ -31,9 +31,14 @@ ToDoList_List = Backbone.Collection.extend({
   }
 })
 
-ToDoView = Backbone.View.extend(
+ToDoView = Backbone.View.extend({
+  template: $("script#todo_template").text(),
+  render: function() {
+    this.setElement(Mustache.render(this.template, this.model.attributes))
+    return this
+  }
+})
 
-)
 
 ToDoList_View = Backbone.View.extend({
   events: {
@@ -45,14 +50,6 @@ ToDoList_View = Backbone.View.extend({
     this.model.on("change:name", this.update_name_label, this)
     this.model.on("add:"+this.model.id, this.onAddTodo, this)
     this.model.on("reset:"+this.model.id, this.onAddTodo, this)
-    var self = this
-    var mymodel = this.model
-    var todos = this.model.fetchRelated("todos")
-    _.each(todos, function(deferred) {
-      deferred.done(function(fetched_todo) {
-        console.log("have completed todo:", fetched_todo.attributes)
-      })
-    })
   },
   onAddTodo:function(addedModel, collection){
   },
@@ -79,6 +76,13 @@ ToDoList_View = Backbone.View.extend({
   render: function() {
     console.log("ToDoList_View::render", "this.template", this.template, "this.model.attributes", this.model.attributes)
     var partials = {todo: $("#partial_todo").text()}
+    var self = this
+    this.model.fetchRelated("todos", {success: function() {
+      _.each(self.model.attributes.todos.models, function (todo) {
+        var todo_view = new ToDoView({model: todo})
+        self.$el.find(".todos").append(todo_view.render().el)
+      })
+    }})
     this.setElement(Mustache.render(this.template, this.model.attributes, partials))
     return this
   },
@@ -124,8 +128,7 @@ ToDoList_List_View = Backbone.View.extend({
   render_new_single_list: function(new_todo_list) {
     console.log("ToDoList_List_View::render_new_list", new_todo_list)
     var view = new ToDoList_View({model: new_todo_list})
-    //TODO: don't just use ul here, use ul.classname:
-    $(this.el).find("ul").append(view.render().el)
+    $(this.el).find(".todolists").append(view.render().el)
   }
 })
 

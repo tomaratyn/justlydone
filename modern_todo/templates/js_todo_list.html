@@ -2,17 +2,20 @@
 
 {% block header_template %}
 
-    <script type="application/mustahce" id="partial_todo">
+    <script type="application/mustahce" id="todo_template">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
-        <div class="well">"[[id]]", [[cid]], [[name]],|[[attributes.complete]]|,=[[attributes.creation_datetime]]=, ~[[attributes.text]]~,</div>
+        <li><input type="checkbox" [[#complete]]checked=""[[/complete]]>
+            [[text]]
+            <small class="muted">created: [[creation_datetime]]</small>
+        </li>
     </script>
     <script type="application/mustache" id="list_todolist">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
         <li class="todolist">
-            <span class="name">[[name]]</span>([[todos.length]])[[id]]
+            <span class="name">[[name]]</span>([[todos.models.length]])
             <button class="btn-link remove-list"><i class="icon-remove remove-list"></i></button>
-            <p class="todos">
-            </p>
+            <ul class="todos">
+            </ul>
         </li>
     </script>
 
