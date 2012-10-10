@@ -23,6 +23,9 @@ class ToDoResource(ModelResource):
     list = fields.ForeignKey(ToDoListResource, "list")
 
     class Meta:
+        always_return_data = True
         queryset = ToDo.objects.all()
         resource_name = "todo"
         serializer = PrettyJSONSerializer()
+        authentication = Authentication()
+        authorization = Authorization()
