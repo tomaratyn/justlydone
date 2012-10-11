@@ -72,14 +72,32 @@
 {% block bottom_script_page %}
     <script>
         require.config(global_require_config)
-        define("urls", function(){
+        define("urls", function () {
             return {
                 TODOLISTS_URL: '{{ ToDoListResource.get_resource_list_uri }}',
                 TODO_URL: '{{ ToDoResource.get_resource_list_uri }}'
             }
         })
+        require(["jquery", "views/todolist_list", "bootstrap"],
+                function ($, ToDoList_List_View) {
+                    new ToDoList_List_View()
+                    $(function () {
+                        $("form.nosubmit").submit(function () {
+                            return false
+                        })
+                        $(".modal#edit-list-name-modal .save").click(function () {
+                            var $modal = $(this).parents(".modal#edit-list-name-modal")
+                            $modal.data("dosave", true)
+                            $modal.modal("hide")
+                        })
+                        $(".modal#edit-list-name-modal").on("hidden", function () {
+                            $(this).find(".list-new-name").val("")
+                        })
+                    })
+                }
+        )
+
     </script>
-    <script type="text/javascript" src="{{ STATIC_URL }}todo.js"></script>
 
 {% endblock %}
 
