@@ -1,4 +1,9 @@
 
+require (
+           ["jquery", "backbone-relational",  "mustache", "urls", "bootstrap"],
+  function ($,         Backbone,               Mustache,   urls) {
+
+
 ToDoList_model = Backbone.RelationalModel.extend({
   defaults: {
     name: ""
@@ -11,7 +16,7 @@ ToDoList_model = Backbone.RelationalModel.extend({
       key: "list"
     }
   }],
-  urlRoot: TODOLISTS_URL
+  urlRoot: urls.TODOLISTS_URL
 })
 
 
@@ -19,13 +24,13 @@ ToDo_model = Backbone.RelationalModel.extend({
   defaults: {
     text: ""
   },
-  urlRoot: TODO_URL
+  urlRoot: urls.TODO_URL
 })
 
 
 ToDoList_List = Backbone.Collection.extend({
   model: ToDoList_model,
-  url: TODOLISTS_URL,
+  url: urls.TODOLISTS_URL,
   parse: function(response) {
     return response.objects
   }
@@ -176,3 +181,4 @@ $(function() {
   })
 })
 
+})

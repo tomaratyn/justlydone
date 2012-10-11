@@ -2,7 +2,7 @@
 
 {% block header_template %}
 
-    <script type="application/mustahce" id="todo_template">
+    <script type="x-application/mustache" id="todo_template">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
         <li>
             <input type="checkbox" class="done" [[#complete]]checked=""[[/complete]]>
@@ -11,7 +11,7 @@
         </li>
     </script>
 
-    <script type="application/mustache" id="list_todolist">
+    <script type="x-application/mustache" id="list_todolist">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
         <li class="todolist">
             <i class="icon-chevron-right toggle-todos [[^todos.models.length]]hide[[/todos.models.length]]"></i>
@@ -70,13 +70,16 @@
 {% endblock %}
 
 {% block bottom_script_page %}
-
-    <script type="text/javascript">
-        TODOLISTS_URL = '{{ ToDoListResource.get_resource_list_uri }}'
-        TODO_URL = '{{ ToDoResource.get_resource_list_uri }}'
+    <script>
+        require.config(global_require_config)
+        define("urls", function(){
+            return {
+                TODOLISTS_URL: '{{ ToDoListResource.get_resource_list_uri }}',
+                TODO_URL: '{{ ToDoResource.get_resource_list_uri }}'
+            }
+        })
     </script>
-    <script type="text/javascript" src="{{ STATIC_URL }}todo.js">
-    </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}todo.js"></script>
 
 {% endblock %}
 
