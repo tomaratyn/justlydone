@@ -12,7 +12,7 @@ config["My tests"] = {
     "**/*.js"
   ],
   tests: [
-    "test_js/foo-test.js"
+    "test_js/*-test.js"
   ],
   extensions: [ require("buster-amd") ]
 }
