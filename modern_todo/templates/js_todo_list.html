@@ -71,13 +71,11 @@
 
 {% block bottom_script_page %}
     <script>
+        DEFINED_URLS = {
+            TODOLISTS_URL: '{{ ToDoListResource.get_resource_list_uri }}',
+            TODO_URL: '{{ ToDoResource.get_resource_list_uri }}'
+        }
         require.config(global_require_config)
-        define("urls", function () {
-            return {
-                TODOLISTS_URL: '{{ ToDoListResource.get_resource_list_uri }}',
-                TODO_URL: '{{ ToDoResource.get_resource_list_uri }}'
-            }
-        })
         require(["jquery", "views/todolist_list", "bootstrap"],
                 function ($, ToDoList_List_View) {
                     new ToDoList_List_View()

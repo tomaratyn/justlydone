@@ -1,7 +1,9 @@
-define(["models/todo"], function(todo) {
+define(["models/todo"], function(todo_model) {
   buster.testCase("todo models tests", {
     "one": function() {
-      assert(1==1)
+      var todo = new todo_model({id:1, url:""})
+      todo.fetch()
+      assert(true)
     }
   })
 });
