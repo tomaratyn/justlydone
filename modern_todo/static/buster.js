@@ -15,11 +15,11 @@ config["My tests"] = {
     "test_js/*-test.js"
   ],
   extensions: [ require("buster-amd") ]
-  ,
-  resources: [{
-    path:"/api",
-    backend:"http://localhost:8000/api"
-  }]
+//  ,
+//  resources: [{
+//    path:"/api",
+//    backend:"http://localhost:8000/api"
+//  }]
 }
 
 

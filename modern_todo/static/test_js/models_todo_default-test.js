@@ -1,4 +1,4 @@
-define(["models/todo"], function(todo_model){
+define(["models/todo"], function(todo_model) {
   buster.testCase("test todo_model's name", {
     setUp: function() {
       this.useFakeServer()
