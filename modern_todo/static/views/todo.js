@@ -2,7 +2,7 @@ define( ["jquery", "backbone-relational", "mustache"],
 function ($,        Backbone,              Mustache) {
   ToDoView = Backbone.View.extend({
     events: {
-      "click .done": "make_done"
+      "change .done": "make_done"
     },
     make_done: function () {
       if (this.$el.find(".done").is(":checked")) {
