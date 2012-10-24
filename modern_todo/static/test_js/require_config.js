@@ -1,5 +1,5 @@
 var require = {
-  baseUrl: "./",
+  baseUrl: "../resources/",
   shim: {
     "backbone": {
       deps: ["jquery", "underscore"],

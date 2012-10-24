@@ -1,4 +1,4 @@
-define(["jquery", "underscore", "backbone-relational", "mustache", "views/ToDo"],
+define(["jquery", "underscore", "backbone-relational", "mustache", "views/todo"],
 function($,        _,            Backbone,              Mustache, ToDoView) {
   return Backbone.View.extend({
     events: {
