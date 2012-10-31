@@ -4,7 +4,8 @@ function($,        _,            Backbone,              Mustache, ToDoView) {
     events: {
       "click .remove-list": "remove_list",
       "click .toggle-todos": "toggle_todos",
-      "dblclick .name": "rename_list"
+      "dblclick .name": "rename_list",
+      "click .edit-list-name-modal .save": "save_and_close_edit_name_modal"
     },
     initialize: function (options) {
       this.model.on("destroy", this.remove, this)
@@ -29,6 +30,7 @@ function($,        _,            Backbone,              Mustache, ToDoView) {
           $modal.data("dosave", false)
           $modal.off("hide")
         }
+        $modal.find(".list-new-name").val("")
       })
     },
     render: function () {
@@ -43,6 +45,13 @@ function($,        _,            Backbone,              Mustache, ToDoView) {
       })
       this.setElement(Mustache.render(this.template, this.model.attributes))
       return this
+    },
+    save_and_close_edit_name_modal: function() {
+      var $modal = this.$el.find(".edit-list-name-modal")
+      if ($modal.find(".list-new-name").val()) {
+        $modal.data("dosave", 1)
+      }
+      $modal.modal("hide")
     },
     toggle_todos: function () {
       var $todos = this.$el.find(".todos")

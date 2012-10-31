@@ -8,12 +8,13 @@ function($,        when,   todolist_model,    todolist_view ) {
       this.view.template =
         "<div>" +
         "<span class='name'>{{name}}</span>" +
-        "<div data-dosave='1' class='edit-list-name-modal modal'><i class='list-old-name'></i><input class='list-new-name' type='text'></div>" +
+        "<div class='edit-list-name-modal modal'>" +
+        "<i class='list-old-name'></i>" +
+        "<input class='list-new-name' type='text'>" +
+        "<button class='save'>" +
+        "</div>" +
         "</div>"
       this.$el = this.view.render().$el
-    },
-    tearDown: function () {
-      this.$el.remove()
     },
     test_rename_list: function() {
       var self = this
@@ -26,7 +27,26 @@ function($,        when,   todolist_model,    todolist_view ) {
       this.$el.find(".name").trigger("dblclick")
       buster.assert.same(this.$el.find(".list-old-name").text(), this.todolist.attributes.name)
       this.$el.find(".list-new-name").val(new_name)
-      this.$el.find(".edit-list-name-modal").modal("hide")
+      this.$el.find(".edit-list-name-modal .save").trigger("click")
+      return deferred.promise
+    },
+    test_modal_save_button: function() {
+      var deferred = when.defer()
+      var self = this
+      var $modal = this.$el.find(".edit-list-name-modal")
+      var $save = $modal.find(".save")
+      var assert_called_hide = function(){
+        buster.assert.same(undefined, $modal.data("dosave"))
+        $modal.off("hide", assert_called_hide)
+        $modal.find(".list-new-name").val("foo")
+        $modal.on("hide", function() {
+          buster.assert.same(1, $modal.data("dosave"))
+          deferred.resolver.resolve()
+        })
+        $save.trigger("click")
+      }
+      $modal.on("hide", assert_called_hide)
+      $save.trigger("click")
       return deferred.promise
     }
   })
