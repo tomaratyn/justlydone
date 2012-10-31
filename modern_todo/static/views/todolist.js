@@ -1,4 +1,4 @@
-define(["jquery", "underscore", "backbone-relational", "mustache", "views/todo"],
+define(["jquery", "underscore", "backbone-relational", "mustache", "views/todo", "bootstrap"],
 function($,        _,            Backbone,              Mustache, ToDoView) {
   return Backbone.View.extend({
     events: {
@@ -17,9 +17,8 @@ function($,        _,            Backbone,              Mustache, ToDoView) {
       this.model.destroy()
     },
     rename_list: function (e) {
-      console.log("ToDoList_View::rename_list")
       var view = this
-      var $modal = $("#edit-list-name-modal")
+      var $modal = this.$el.find(".edit-list-name-modal")
       $modal.find(".list-old-name").text(this.model.attributes.name)
       $modal.find(".list-new-name").attr("placeholder", this.model.attributes.name)
       $modal.modal()
@@ -33,17 +32,16 @@ function($,        _,            Backbone,              Mustache, ToDoView) {
       })
     },
     render: function () {
-      console.log("ToDoList_View::render", "this.template", this.template, "this.model.attributes",
-        this.model.attributes)
-      var partials = {todo: $("#partial_todo").text()}
       var self = this
-      this.model.fetchRelated("todos", {success: function () {
-        _.each(self.model.attributes.todos.models, function (todo) {
-          var todo_view = new ToDoView({model: todo})
-          self.$el.find(".todos").append(todo_view.render().el)
-        })
-      }})
-      this.setElement(Mustache.render(this.template, this.model.attributes, partials))
+      this.model.fetchRelated("todos", {
+        success: function () {
+          _.each(self.model.attributes.todos.models, function (todo) {
+            var todo_view = new ToDoView({model: todo})
+            self.$el.find(".todos").append(todo_view.render().el)
+          })
+        }
+      })
+      this.setElement(Mustache.render(this.template, this.model.attributes))
       return this
     },
     toggle_todos: function () {

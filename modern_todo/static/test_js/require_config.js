@@ -25,6 +25,7 @@ var require = {
     "bootstrap": "bootstrap-2.1.0/js/bootstrap",
     "jquery": "jquery-1.8.0",
     "mustache": "mustache-0.7.0",
-    "underscore": "underscore-1.4.2"
+    "underscore": "underscore-1.4.2",
+    "when": "when-1.6.0"
   }
 }
