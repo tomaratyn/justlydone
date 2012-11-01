@@ -11,8 +11,6 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
     initialize: function (options) {
       this.model.on("destroy", this.remove, this)
       this.model.on("change:name", this.update_name_label, this)
-      this.model.on("add:" + this.model.id, this.onAddTodo, this)
-      this.model.on("reset:" + this.model.id, this.onAddTodo, this)
     },
     add_new_todo: function() {
       var text = this.$el.find(".new_todo_text").val()
