@@ -1,6 +1,6 @@
 define(["jquery", "when", "models/todolist", "views/todolist"],
 function($,        when,   todolist_model,    todolist_view ) {
-  buster.testCase("views todolist rename list", {
+  buster.testCase("views todolist", {
     setUp: function() {
       this.useFakeServer()
       this.todolist = new todolist_model({name:"my todolist"})
@@ -8,46 +8,81 @@ function($,        when,   todolist_model,    todolist_view ) {
       this.view.template =
         "<div>" +
         "<span class='name'>{{name}}</span>" +
+        "<input type='text'class='new_todo_text'>" +
+        "<button class='add_new_todo'></button>" +
         "<div class='edit-list-name-modal modal'>" +
         "<i class='list-old-name'></i>" +
         "<input class='list-new-name' type='text'>" +
-        "<button class='save'>" +
+        "<button class='save'></button>" +
         "</div>" +
         "</div>"
       this.$el = this.view.render().$el
     },
-    test_rename_list: function() {
-      var self = this
-      var new_name = "new name"
-      var deferred = when.defer()
-      this.todolist.on("change:name", function() {
-        buster.assert.same(new_name, self.todolist.attributes.name)
-        deferred.resolver.resolve()
-      })
-      this.$el.find(".name").trigger("dblclick")
-      buster.assert.same(this.$el.find(".list-old-name").text(), this.todolist.attributes.name)
-      this.$el.find(".list-new-name").val(new_name)
-      this.$el.find(".edit-list-name-modal .save").trigger("click")
-      return deferred.promise
-    },
-    test_modal_save_button: function() {
-      var deferred = when.defer()
-      var self = this
-      var $modal = this.$el.find(".edit-list-name-modal")
-      var $save = $modal.find(".save")
-      var assert_called_hide = function(){
-        buster.assert.same(undefined, $modal.data("dosave"))
-        $modal.off("hide", assert_called_hide)
-        $modal.find(".list-new-name").val("foo")
-        $modal.on("hide", function() {
-          buster.assert.same(1, $modal.data("dosave"))
+    rename_list : {
+      test_rename_list: function() {
+        var self = this
+        var new_name = "new name"
+        var deferred = when.defer()
+        this.todolist.on("change:name", function() {
+          buster.assert.same(new_name, self.todolist.attributes.name)
           deferred.resolver.resolve()
         })
+        this.$el.find(".name").trigger("dblclick")
+        buster.assert.same(this.$el.find(".list-old-name").text(), this.todolist.attributes.name)
+        this.$el.find(".list-new-name").val(new_name)
+        this.$el.find(".edit-list-name-modal .save").trigger("click")
+        return deferred.promise
+      },
+      test_modal_save_button: function() {
+        var deferred = when.defer()
+        var $modal = this.$el.find(".edit-list-name-modal")
+        var $save = $modal.find(".save")
+        var assert_called_hide = function(){
+          buster.assert.same(undefined, $modal.data("dosave"))
+          $modal.off("hide", assert_called_hide)
+          $modal.find(".list-new-name").val("foo")
+          $modal.on("hide", function() {
+            buster.assert.same(1, $modal.data("dosave"))
+            deferred.resolver.resolve()
+          })
+          $save.trigger("click")
+        }
+        $modal.on("hide", assert_called_hide)
         $save.trigger("click")
+        return deferred.promise
       }
-      $modal.on("hide", assert_called_hide)
-      $save.trigger("click")
-      return deferred.promise
+    },
+    add_new_todo: {
+      add_todo: function() {
+        var self = this
+        var deferred = when.defer()
+        var new_todo_name = "Save the World"
+        var $add_todo = this.$el.find(".add_new_todo")
+        var $new_todo_textbox = this.$el.find(".new_todo_text")
+        var assert_todo_added = function() {
+          buster.assert.same(1, self.todolist.attributes.todos.length)
+          buster.assert.same(new_todo_name, self.todolist.attributes.todos.models[0].attributes.text)
+          deferred.resolver.resolve()
+        }
+        this.todolist.on("add:todos", assert_todo_added)
+        $new_todo_textbox.val(new_todo_name)
+        $add_todo.trigger("click")
+        return deferred
+      },
+      dont_add_empty: function() {
+        var deferred = when.defer()
+        var $add_todo = this.$el.find(".add_new_todo")
+        var assert_didnt_fire = function(){
+          buster.assert(false)
+        }
+        this.todolist.on("add:todos", assert_didnt_fire)
+        $add_todo.trigger("click")
+        setTimeout(function() {
+          assert(true)
+          deferred.resolver.resolve()
+        }, 100)
+        return deferred.promise
+      }
     }
   })
 })
