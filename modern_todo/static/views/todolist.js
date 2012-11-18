@@ -17,9 +17,12 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       if (text) {
         var new_todo = new TodoModel({text: text, list: this.model})
         new_todo.save()
-        var new_view = new ToDoView({model: new_todo})
+        var new_view = this.make_todo_view(new_todo)
         this.$el.find(".todos").append(new_view.render().el)
       }
+    },
+    make_todo_view: function(todo) {
+      return new ToDoView({model: todo})
     },
     remove_list: function () {
       console.log("ToDoList_View::remove_list")
@@ -46,7 +49,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       this.model.fetchRelated("todos", {
         success: function () {
           _.each(self.model.attributes.todos.models, function (todo) {
-            var todo_view = new ToDoView({model: todo})
+            var todo_view = self.make_todo_view(todo)
             self.$el.find(".todos").append(todo_view.render().el)
           })
         }

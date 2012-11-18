@@ -1,5 +1,5 @@
 define(["jquery", "when", "models/todolist", "views/todolist"],
-function($,        when,   todolist_model,    todolist_view ) {
+function($,        when,   todolist_model,    todolist_view) {
   buster.testCase("views todolist", {
     setUp: function() {
       this.useFakeServer()
@@ -55,19 +55,35 @@ function($,        when,   todolist_model,    todolist_view ) {
     add_new_todo: {
       add_todo: function() {
         var self = this
-        var deferred = when.defer()
+        var timeout_deferred = when.defer()
+        var assert_deferred = when.defer()
+        var joined_deferred = when.defer()
+        joined_deferred.count = 2
+        var decrement_joined_deferred = function () {
+          joined_deferred.count--
+          if (joined_deferred.count == 0) {
+            joined_deferred.resolver.resolve()
+          }
+        }
+        timeout_deferred.promise.then(decrement_joined_deferred)
+        assert_deferred.promise.then(decrement_joined_deferred)
         var new_todo_name = "Save the World"
         var $add_todo = this.$el.find(".add_new_todo")
         var $new_todo_textbox = this.$el.find(".new_todo_text")
+        this.spy(this.view, "make_todo_view")
         var assert_todo_added = function() {
           buster.assert.same(1, self.todolist.attributes.todos.length)
           buster.assert.same(new_todo_name, self.todolist.attributes.todos.models[0].attributes.text)
-          deferred.resolver.resolve()
+          assert_deferred.resolver.resolve()
         }
         this.todolist.on("add:todos", assert_todo_added)
         $new_todo_textbox.val(new_todo_name)
         $add_todo.trigger("click")
-        return deferred
+        window.setTimeout(function() {
+          buster.assert.calledOnce(self.view.make_todo_view)
+          timeout_deferred.resolver.resolve()
+        }, 100)
+        return joined_deferred
       },
       dont_add_empty: function() {
         var deferred = when.defer()
