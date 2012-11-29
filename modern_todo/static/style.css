@@ -1,0 +1,14 @@
+body {
+    background: url(images/tileable_wood_texture.png) repeat;
+}
+
+.new-list-container {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.todolist_list {
+    background: url(images/linedpaper.png);
+    background-repeat: repeat;
+    -webkit-border-radius: 5px;
+}

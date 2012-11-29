@@ -2,6 +2,8 @@
 
 {% block header_template %}
 
+    <link rel="stylesheet" href="{{ STATIC_URL }}style.css">
+
     <script type="x-application/mustache" id="todo_template">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
         <li>
@@ -52,13 +54,15 @@
     </div>
     <div class="row todolist_list">
         <div class="span12">
-            <form class="form-horizontal nosubmit">
-                <button class="btn refresh"><i class="icon-refresh"></i></button>
-                <div class="input-append">
-                    <input class="span2 new_list_name" placeholder="New List Name" type="text">
-                    <button class="btn add_new_list" type="button"><i class="icon-plus"></i></button>
-                </div>
-            </form>
+            <div class="new-list-container">
+                <form class="form-horizontal nosubmit">
+                    <button class="btn refresh"><i class="icon-refresh"></i></button>
+                    <div class="input-append">
+                        <input class="span2 new_list_name" placeholder="New List Name" type="text">
+                        <button class="btn add_new_list" type="button"><i class="icon-plus"></i></button>
+                    </div>
+                </form>
+            </div>
             <ul class="todolists unstyled">
             </ul>
         </div>
