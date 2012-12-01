@@ -18,7 +18,7 @@
         <li class="todolist span11">
             <i class="icon-chevron-right toggle-todos [[^todos.models.length]]hide[[/todos.models.length]]"></i>
             <span class="name">[[name]]</span> ([[todos.models.length]])
-            <button class="btn-link remove-list"><i class="icon-trash remove-list"></i></button>
+            <button class="btn-link remove-list"><i class="icon-grey icon-trash remove-list"></i></button>
             <ul class="todos unstyled hide offset1 span10">
             </ul>
             <div class="modal hide edit-list-name-modal"
@@ -70,25 +70,28 @@
     </div>
     <div class="row">
         <div class="span12">
-            <h2>{{ request.user.username }}'s To Do List</h2>
+            <h1>Howdy {{ request.user.username }}! <small>Here are your to do lists:</small></h1>
         </div>
     </div>
     <div class="row todolist_list">
-        <div class="span12">
-            <div class="new-list-container">
+        <div class="span11">
+            <div class="new-list-container consistent-top-controls-padding">
                 <form class="form-horizontal nosubmit">
-                    <button class="btn refresh"><i class="icon-refresh"></i></button>
                     <div class="input-append">
                         <input class="span2 new_list_name" placeholder="New List Name" type="text">
                         <button class="btn add_new_list" type="button"><i class="icon-plus"></i></button>
                     </div>
                 </form>
+
             </div>
             <ul class="todolists unstyled">
             </ul>
         </div>
-    </div>
-    <div>
+        <div class="span1">
+            <div class="consistent-top-controls-padding">
+                <a class="btn btn-link refresh"><i class="icon-grey icon-refresh"></i></a>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
