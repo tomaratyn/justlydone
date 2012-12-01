@@ -12,6 +12,7 @@
 
 body {
     background: url(images/fabric_plaid.png) repeat;
+    padding-top: 40px;
 }
 
 .new-list-container {

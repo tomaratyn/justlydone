@@ -47,6 +47,27 @@
 
 {% block page_contents %}
 
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <ul class="nav">
+                    <li><a class="brand" href="#">LibreToDo</a></li>
+                </ul>
+                <ul class="nav pull-right   ">
+                    <li>
+                        <a class="{% if request.user.is_authenticated %} logout {% else %} login {% endif %}" href="#">
+                            <i class="icon-user"></i>
+                            {% if request.user.is_authenticated %}
+                                {{ request.user.username }}
+                            {% else %}
+                                login
+                            {% endif %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="span12">
             <h2>{{ request.user.username }}'s To Do List</h2>
