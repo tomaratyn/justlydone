@@ -44,9 +44,7 @@ function humaneDate(date, compareTo){
       [Infinity, lang.year, lang.years, 31536000] // Infinity, 1 year
     ],
     isString = typeof date == 'string',
-    date = isString ?
-           new Date(('' + date).replace(/-/g,"/").replace(/T|(?:\.\d+)?Z/g," ")) :
-           date,
+    date = isString ? new Date(date) : date,
     compareTo = compareTo || new Date,
     seconds = (compareTo - date +
                (compareTo.getTimezoneOffset() -
