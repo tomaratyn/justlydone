@@ -1,4 +1,4 @@
-define( ["jquery", "backbone-relational", "mustache"],
+define( ["jquery", "backbone-relational", "mustache", "humane"],
 function ($,        Backbone,              Mustache) {
   ToDoView = Backbone.View.extend({
     events: {
@@ -15,6 +15,7 @@ function ($,        Backbone,              Mustache) {
     },
     render: function () {
       this.setElement(Mustache.render(this.template, this.model.attributes))
+      this.$el.find("time").humaneDates()
       return this
     },
     template: $("script#todo_template").text()

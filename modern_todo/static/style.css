@@ -1,0 +1,39 @@
+/* offer icon-grey */
+.icon-grey,
+.nav > .active > a > [class^="icon-"],
+.nav > .active > a > [class*=" icon-"],
+.dropdown-menu > li > a:hover > [class^="icon-"],
+.dropdown-menu > li > a:hover > [class*=" icon-"],
+.dropdown-menu > .active > a > [class^="icon-"],
+.dropdown-menu > .active > a > [class*=" icon-"] {
+    background-image: url("bootstrap-2.1.0/img/glyphicons-halflings-grey.png");
+}
+
+
+body {
+    background: url(images/fabric_plaid.png) repeat;
+    padding-top: 40px;
+}
+
+
+.consistent-top-controls-padding{
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.todolist_list {
+    background: white;
+    -webkit-border-radius: 5px;
+    padding-bottom: 15px;
+}
+
+.todos li {
+    margin-bottom: 3px;
+    margin-left: 18px;
+}
+
+li.todolist {
+    border-bottom: 1px solid #DDD;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
