@@ -34,6 +34,8 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       $modal.find(".list-old-name").text(this.model.attributes.name)
       $modal.find(".list-new-name").attr("placeholder", this.model.attributes.name)
       $modal.modal()
+      //focus must be given after .modal() is called
+      $modal.find(".list-new-name").focus()
       $modal.on("hide", function () {
         if ($modal.data("dosave")) {
           view.model.set({"name": $modal.find(".list-new-name").val()})

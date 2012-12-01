@@ -9,23 +9,23 @@
         <li>
             <input type="checkbox" class="done" [[#complete]]checked=""[[/complete]]>
             [[text]]
-            <small class="muted">created: [[creation_datetime]]</small>
+            <small class="muted" >created: <time datetime="[[creation_datetime]]"></time></small>
         </li>
     </script>
 
     <script type="x-application/mustache" id="list_todolist">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
-        <li class="todolist">
+        <li class="todolist span11">
             <i class="icon-chevron-right toggle-todos [[^todos.models.length]]hide[[/todos.models.length]]"></i>
             <span class="name">[[name]]</span> ([[todos.models.length]])
-            <button class="btn-link remove-list"><i class="icon-remove remove-list"></i></button>
-            <ul class="todos unstyled hide">
+            <button class="btn-link remove-list"><i class="icon-trash remove-list"></i></button>
+            <ul class="todos unstyled hide offset1 span10">
             </ul>
             <div class="modal hide edit-list-name-modal"
-                 tabindex="-1"
                  role="dialog"
                  aria-labelledby="edit-list-name-modal-label"
-                 aria-hidden="true">
+                 aria-hidden="true"
+                 data-keyboard="true">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h3 id="edit-list-name-modal-label">Rename '<span class="list-old-name"></span>'</h3>
