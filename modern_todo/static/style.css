@@ -1,3 +1,15 @@
+/* offer icon-grey */
+.icon-grey,
+.nav > .active > a > [class^="icon-"],
+.nav > .active > a > [class*=" icon-"],
+.dropdown-menu > li > a:hover > [class^="icon-"],
+.dropdown-menu > li > a:hover > [class*=" icon-"],
+.dropdown-menu > .active > a > [class^="icon-"],
+.dropdown-menu > .active > a > [class*=" icon-"] {
+    background-image: url("bootstrap-2.1.0/img/glyphicons-halflings-grey.png");
+}
+
+
 body {
     background: url(images/fabric_plaid.png) repeat;
 }
