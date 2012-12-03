@@ -29,7 +29,7 @@ define(["jquery", "underscore", "collections/todolist", "views/todolist"],
         })
       },
       refresh: function (e) {
-        this.collection.fetch()
+        this.collection.fetch({add:true})
       },
       render_new_single_list: function (new_todo_list) {
         var view = new ToDoList_View({model: new_todo_list})
