@@ -4,6 +4,10 @@ function ($,        Backbone,              Mustache) {
     events: {
       "change .done": "make_done"
     },
+    initialize: function() {
+      var self = this
+      this.model.on("destroy", function() { self.remove() })
+    },
     make_done: function () {
       if (this.$el.find(".done").is(":checked")) {
         this.model.attributes.complete = true
