@@ -1,9 +1,8 @@
-define(["jquery", "when", "views/todo", "models/todolist", "models/todo"],
-function($,        when,   ToDoView,     todolist_model,     todo_model) {
+define(["jquery", "views/todo", "models/todo"],
+function($,        ToDoView,     todo_model) {
   buster.testCase("views todo", {
     setUp: function() {
-      todolist = new todolist_model()
-      todo = new todo_model({text: "lorem ipsum", list: todolist})
+      todo = new todo_model({text: "lorem ipsum"})
       this.view = new ToDoView({model: todo})
     },
     make_done: {
