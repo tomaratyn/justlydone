@@ -99,6 +99,11 @@ function($,        when,   todolist_model,    todolist_view) {
         }, 100)
         return deferred.promise
       }
+    },
+    "test remove view on model removal": function() {
+      this.spy(this.view, "remove")
+      this.view.model.trigger("destroy", this.view.model)
+      buster.assert.calledOnce(this.view.remove)
     }
   })
 })
