@@ -5,8 +5,8 @@ function ($,        Backbone,              Mustache) {
       "change .done": "make_done"
     },
     initialize: function() {
-      var self = this
-      this.model.on("destroy", function() { self.remove() })
+      // we wrap the call to remove in a closure so that we can spy on remove() in tests.
+      this.model.on("destroy", function() { this.remove() }, this)
     },
     make_done: function () {
       if (this.$el.find(".done").is(":checked")) {

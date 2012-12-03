@@ -9,6 +9,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       "click .add_new_todo": "add_new_todo"
     },
     initialize: function (options) {
+      // we wrap the call to remove in a closure so that we can spy on remove() in tests.
       this.model.on("destroy", function() { this.remove() }, this)
       this.model.on("change:name", this.update_name_label, this)
     },
@@ -25,7 +26,6 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       return new ToDoView({model: todo})
     },
     remove_list: function () {
-      console.log("ToDoList_View::remove_list")
       this.model.destroy()
     },
     rename_list: function (e) {
