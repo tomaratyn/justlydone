@@ -15,6 +15,10 @@ body {
     padding-top: 40px;
 }
 
+.add-todo-container {
+    margin-left: 18px;
+    margin-bottom: 10px;
+}
 
 .consistent-top-controls-padding{
     margin-top: 10px;

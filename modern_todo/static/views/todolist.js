@@ -67,7 +67,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       $modal.modal("hide")
     },
     toggle_todos_display: function () {
-      var $todos = this.$el.find(".todos")
+      var $todos = this.$el.find(".todolist-details")
       var $toggle_icon = this.$el.find(".toggle-todos")
       if ($todos.hasClass("hide")) {
         $toggle_icon.removeClass("icon-chevron-right")
