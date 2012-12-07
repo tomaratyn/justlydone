@@ -1,5 +1,5 @@
-define(["jquery", "when", "models/todolist", "views/todolist"],
-function($,        when,   todolist_model,    todolist_view) {
+define(["underscore", "jquery", "when", "models/todolist", "views/todolist"],
+function(_,            $,        when,   todolist_model,    todolist_view) {
   buster.testCase("views todolist", {
     setUp: function() {
       this.useFakeServer()
@@ -68,6 +68,8 @@ function($,        when,   todolist_model,    todolist_view) {
         timeout_deferred.promise.then(decrement_joined_deferred)
         assert_deferred.promise.then(decrement_joined_deferred)
         var new_todo_name = "Save the World"
+        this.sandbox.server.autoRespond = true
+        this.sandbox.server.respondWith("POST", "http://localhost:8000/api/testing/todo/", JSON.stringify({text:new_todo_name, id:99}))
         var $add_todo = this.$el.find(".add_new_todo")
         var $new_todo_textbox = this.$el.find(".new_todo_text")
         this.spy(this.view, "make_todo_view")

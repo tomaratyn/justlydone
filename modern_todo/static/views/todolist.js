@@ -15,11 +15,14 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
     },
     add_new_todo: function() {
       var text = this.$el.find(".new_todo_text").val()
+      var self = this
       if (text) {
         var new_todo = new TodoModel({text: text, list: this.model})
-        new_todo.save()
-        var new_view = this.make_todo_view(new_todo)
-        this.$el.find(".todos").append(new_view.render().el)
+        new_todo.save(null, { success: function(new_todo, response, options) {
+              var new_view = self.make_todo_view(new_todo)
+              self.$el.find(".todos").append(new_view.render().el)
+            }
+        })
       }
     },
     make_todo_view: function(todo) {
