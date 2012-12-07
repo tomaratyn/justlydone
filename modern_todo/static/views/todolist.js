@@ -6,7 +6,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       "click .toggle-todos": "toggle_todos_display",
       "dblclick .name": "rename_list",
       "click .edit-list-name-modal .save": "save_and_close_edit_name_modal",
-      "click .add_new_todo": "add_new_todo"
+      "click .add-new-todo": "add_new_todo"
     },
     initialize: function (options) {
       // we wrap the call to remove in a closure so that we can spy on remove() in tests.
@@ -14,7 +14,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       this.model.on("change:name", this.update_name_label, this)
     },
     add_new_todo: function() {
-      var text = this.$el.find(".new_todo_text").val()
+      var text = this.$el.find(".new-todo-text").val()
       var self = this
       if (text) {
         var new_todo = new TodoModel({text: text, list: this.model})

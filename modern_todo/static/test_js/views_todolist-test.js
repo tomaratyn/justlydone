@@ -8,8 +8,8 @@ function(_,            $,        when,   todolist_model,    todolist_view) {
       this.view.template =
         "<div>" +
         "<span class='name'>{{name}}</span>" +
-        "<input type='text'class='new_todo_text'>" +
-        "<button class='add_new_todo'></button>" +
+        "<input type='text'class='new-todo-text'>" +
+        "<button class='add-new-todo'></button>" +
         "<div class='edit-list-name-modal modal'>" +
         "<i class='list-old-name'></i>" +
         "<input class='list-new-name' type='text'>" +
@@ -70,8 +70,8 @@ function(_,            $,        when,   todolist_model,    todolist_view) {
         var new_todo_name = "Save the World"
         this.sandbox.server.autoRespond = true
         this.sandbox.server.respondWith("POST", "http://localhost:8000/api/testing/todo/", JSON.stringify({text:new_todo_name, id:99}))
-        var $add_todo = this.$el.find(".add_new_todo")
-        var $new_todo_textbox = this.$el.find(".new_todo_text")
+        var $add_todo = this.$el.find(".add-new-todo")
+        var $new_todo_textbox = this.$el.find(".new-todo-text")
         this.spy(this.view, "make_todo_view")
         var assert_todo_added = function() {
           buster.assert.same(1, self.todolist.attributes.todos.length)
@@ -89,7 +89,7 @@ function(_,            $,        when,   todolist_model,    todolist_view) {
       },
       dont_add_empty: function() {
         var deferred = when.defer()
-        var $add_todo = this.$el.find(".add_new_todo")
+        var $add_todo = this.$el.find(".add-new-todo")
         var assert_didnt_fire = function(){
           buster.assert(false)
         }
