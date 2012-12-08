@@ -1,8 +1,11 @@
 from django.db import models
 
+from django.contrib.auth.models import User
+
 class ToDoList(models.Model):
     name = models.CharField(max_length=140)
     creation_datetime = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(User, null=False)
 
     def __unicode__(self):
         return u'%s' % self.name

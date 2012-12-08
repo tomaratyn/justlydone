@@ -2,12 +2,14 @@ from django.conf.urls import include, patterns, url
 from tastypie.api import Api
 from todo import api, views
 
-todolistresource = api.ToDoListResource()
-todoresource = api.ToDoResource()
+todolistResource = api.ToDoListResource()
+todoResource = api.ToDoResource()
+userResource = api.UserResource()
 
 testing_api = Api(api_name="testing")
-testing_api.register(todoresource)
-testing_api.register(todolistresource)
+testing_api.register(todoResource)
+testing_api.register(todolistResource)
+testing_api.register(userResource)
 
 static_urls = patterns('',
                        url(r'^$', views.Index.as_view(), name='index'),
