@@ -6,10 +6,12 @@
 
     <script type="x-application/mustache" id="todo_template">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
-        <li>
+        <li class="span9">
             <input type="checkbox" class="done" [[#complete]]checked=""[[/complete]]>
             [[text]]
+            &nbsp;
             <small class="muted" >created: <time datetime="[[creation_datetime]]"></time></small>
+            <button class="pull-right btn btn-link delete-todo"><i class="icon-trash icon-grey"></i></button>
         </li>
     </script>
 
