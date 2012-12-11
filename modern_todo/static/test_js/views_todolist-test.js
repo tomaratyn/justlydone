@@ -1,5 +1,5 @@
-define(["underscore", "jquery", "when", "models/todolist", "views/todolist"],
-function(_,            $,        when,   todolist_model,    todolist_view) {
+define(["underscore", "jquery", "when", "models/todolist", "models/todo", "views/todolist"],
+function(_,            $,        when,   todolist_model,    ToDoModel,     todolist_view) {
   buster.testCase("views todolist", {
     setUp: function() {
       this.useFakeServer()
@@ -8,6 +8,7 @@ function(_,            $,        when,   todolist_model,    todolist_view) {
       this.view.template =
         "<div>" +
         "<span class='name'>{{name}}</span>" +
+        "<span class='todo-count'></span>" +
         "<input type='text'class='new-todo-text'>" +
         "<button class='add-new-todo'></button>" +
         "<div class='edit-list-name-modal modal'>" +
@@ -99,6 +100,45 @@ function(_,            $,        when,   todolist_model,    todolist_view) {
           assert(true)
           deferred.resolver.resolve()
         }, 100)
+        return deferred.promise
+      }
+    },
+    "update todo count" : {
+      setUp: function() {
+        this.todo1 = new ToDoModel({text:"lorem ipsum", list: this.view.model})
+        this.todo2 = new ToDoModel({text:"lorem ipsum", list: this.view.model})
+        this.todo3 = new ToDoModel({text:"lorem ipsum", list: this.view.model})
+      },
+      "on add": function() {
+        var self = this
+        var deferred = when.defer()
+        var starting_text_todo_count = this.$el.find(".todo-count").text()
+        var starting_model_todo_count = this.view.model.attributes.todos.length
+        buster.assert.equals(parseInt(starting_text_todo_count), starting_model_todo_count)
+        this.view.model.on("add:todos", function() {
+          setTimeout(function() {
+            buster.assert.equals(parseInt(self.$el.find(".todo-count").text()), self.view.model.attributes.todos.length)
+            buster.assert.equals(starting_model_todo_count + 1, self.view.model.attributes.todos.length)
+            deferred.resolver.resolve()
+          }, 10)
+        })
+        new ToDoModel({text: "going to trigger the tested code", list: this.view.model})
+        return deferred.promise
+      },
+      "on delete": function() {
+        var self = this
+        var deferred = when.defer()
+        var starting_text_todo_count = this.$el.find(".todo-count").text()
+        var starting_model_todo_count = this.view.model.attributes.todos.length
+        buster.assert.equals(parseInt(starting_text_todo_count), starting_model_todo_count)
+        this.view.model.on("remove:todos", function() {
+          setTimeout(function() {
+            buster.assert.equals(parseInt(self.$el.find(".todo-count").text()), self.view.model.attributes.todos.length)
+            buster.assert.equals(starting_model_todo_count - 1, self.view.model.attributes.todos.length)
+            deferred.resolver.resolve()
+          }, 10)
+        })
+        this.todo3.destroy()
         return deferred.promise
       }
     },
