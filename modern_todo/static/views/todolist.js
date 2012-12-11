@@ -13,6 +13,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       this.model.on("destroy", function() { this.remove() }, this)
       this.model.on("change:name", this.update_name_label, this)
       this.model.on("add:todos", function() {this.update_todo_count() }, this)
+      this.model.on("remove:todos", function() {this.update_todo_count() }, this)
     },
     add_new_todo: function() {
       var text = this.$el.find(".new-todo-text").val()

@@ -116,7 +116,6 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     todol
         var starting_model_todo_count = this.view.model.attributes.todos.length
         buster.assert.equals(parseInt(starting_text_todo_count), starting_model_todo_count)
         this.view.model.on("add:todos", function() {
-          console.log("got add:todos")
           setTimeout(function() {
             buster.assert.equals(parseInt(self.$el.find(".todo-count").text()), self.view.model.attributes.todos.length)
             buster.assert.equals(starting_model_todo_count + 1, self.view.model.attributes.todos.length)
@@ -126,13 +125,18 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     todol
         new ToDoModel({text: "going to trigger the tested code", list: this.view.model})
         return deferred.promise
       },
-      "//on delete": function() {
-        var deferred = when.defer()
+      "on delete": function() {
         var self = this
-        console.log("this.view.model.attributes.todos.length", this.view.model.attributes.todos.length)
+        var deferred = when.defer()
+        var starting_text_todo_count = this.$el.find(".todo-count").text()
+        var starting_model_todo_count = this.view.model.attributes.todos.length
+        buster.assert.equals(parseInt(starting_text_todo_count), starting_model_todo_count)
         this.view.model.on("remove:todos", function() {
-          console.log("self.view.model.attributes.todos.length", self.view.model.attributes.todos.length)
-          deferred.resolver.resolve()
+          setTimeout(function() {
+            buster.assert.equals(parseInt(self.$el.find(".todo-count").text()), self.view.model.attributes.todos.length)
+            buster.assert.equals(starting_model_todo_count - 1, self.view.model.attributes.todos.length)
+            deferred.resolver.resolve()
+          }, 10)
         })
         this.todo3.destroy()
         return deferred.promise
