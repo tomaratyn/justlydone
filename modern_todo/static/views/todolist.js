@@ -20,9 +20,11 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       var self = this
       if (text) {
         var new_todo = new TodoModel({text: text, list: this.model})
-        new_todo.save(null, { success: function(new_todo, response, options) {
-              var new_view = self.make_todo_view(new_todo)
-              self.$el.find(".todos").append(new_view.render().el)
+        new_todo.save(null, {
+          success: function(new_todo, response, options) {
+            var new_view = self.make_todo_view(new_todo)
+            self.$el.find(".todos").append(new_view.render().el)
+            self.$el.find(".new-todo-text").val("")
             }
         })
       }
