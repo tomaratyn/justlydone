@@ -50,7 +50,7 @@ function humaneDate(date, compareTo){
                (compareTo.getTimezoneOffset() -
                  // if we received a GMT time from a string, doesn't include time zone bias
                  // if we got a date object, the time zone is built in, we need to remove it.
-                (isString ? 0 : date.getTimezoneOffset())
+                (date.getTimezoneOffset())
                  ) * 60000
                 ) / 1000,
     token;
