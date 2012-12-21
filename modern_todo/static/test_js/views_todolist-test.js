@@ -107,9 +107,59 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     todol
     },
     "tests with todos": {
       setUp: function() {
-        this.todo1 = new ToDoModel({text:"lorem ipsum", list: this.view.model})
-        this.todo2 = new ToDoModel({text:"lorem ipsum", list: this.view.model})
-        this.todo3 = new ToDoModel({text:"lorem ipsum", list: this.view.model})
+        var self = this
+        var id = 99
+        var deferred = when.defer()
+        console.log("in tests with todos setUp")
+        this.sandbox.server.autoRespond = true
+        this.sandbox.server.autoRespondAfter = 2
+        this.sandbox.server.respondWith(/todolist\/?$/, function(xhr) {
+          console.log('got a create todolist request on fakeserver')
+          xhr.respond(201, { "Content-Type": "application/json" }, JSON.stringify({
+            "creation_datetime": "2012-12-20T22:37:32.580887+00:00",
+            "id": "88",
+            "name": "test",
+            //"owner": "/api/testing/user/1/",
+            "resource_uri": "/api/testing/todolist/88/",
+            "todos": []
+          }))
+        })
+        this.sandbox.server.respondWith(/todo\/?$/, function(xhr) {
+          console.log('got a create todo request on fakeserver', id)
+          var text = JSON.stringify({
+            "complete": false,
+            "completion_datetime": null,
+            "creation_datetime": "2012-12-15T20:24:16.415315+00:00",
+            "id": ++id,
+            "list": "/api/testing/todolist/88/",
+            "resource_uri": "/api/testing/todo/" + id + "/",
+            "text": "lorem ipsum " + id
+          })
+          console.log("going to return data ", text)
+          xhr.respond(201, { "Content-Type": "application/json" }, text)
+        })
+        self.view.model.on("all", function() { console.log("listening on view.model events", arguments)})
+        self.view.model.on("remove:todos", function() { debugger})
+        var rv = this.view.model.save()
+//        debugger
+        rv.then(function() {
+          self.todo1 = new ToDoModel({text:"lorem ipsum", list: self.view.model})
+          //TODO why do these stop being associated with their list?
+          console.log()
+          self.todo1.save().then(function() {
+//            debugger
+            self.todo2 = new ToDoModel({text:"lorem ipsum", list: self.view.model})
+            self.todo2.save().then(function() {
+              self.todo3 = new ToDoModel({text:"lorem ipsum", list: self.view.model})
+//              debugger
+              self.todo3.save().then(function() {
+//                debugger
+                deferred.resolver.resolve()
+              })
+            })
+          })
+        })
+        return deferred.promise
       },
       "update todo count" : {
         "on add": function() {
@@ -145,28 +195,38 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     todol
           return deferred.promise
         }
       },
-      "render only not-done todos": function () {
+      "//render only not-done todos": function () {
+        console.log("todo1", this.todo1)
         var deferred = when.defer()
         var self = this
-        var doneTodo = new ToDoModel({text:"lorem ipsum", list: this.view.model, complete: true})
         this.spy(this.view, "make_todo_view")
         var keys = ["complete", "id", "resource_uri", "creation_datetime", "text"]
         this.sandbox.server.respondWith("GET",
           /\/todo\/set\//,
-          JSON.stringify({
-              "objects": _.map([this.todo1, this.todo2, this.todo3, doneTodo],
-                function (todo) {
-                  return _.pick(todo.attributes, keys)
-                })
-            }
-          )
+          function(xhr) {
+            var response = JSON.stringify({
+                "objects": _.map([self.todo1, self.todo2, self.todo3],
+                  function (todo) {
+                    console.log("doing picking attributes of todo ", todo)
+                    return _.pick(todo.attributes, keys)
+                  })
+              }
+            )
+            console.log("served set response")
+            xhr.respond(200, { "Content-Type": "application/json" }, response)
+          }
         )
         this.view.render()
         setTimeout(function () {
           console.log("self.sandbox.server", self.sandbox.server)
+          _.each(self.sandbox.server.requests, function (r, i) { console.log(r,"[", i, "]")})
+          console.log('self.view.model.getRelation("todos")', self.view.model.getRelation("todos"), self.view.model.getRelation("todos").keyContents)
+          console.log("going to assert todoview ")
+          console.log(self.view.make_todo_view.printf("%n %C"), self.view.make_todo_view.callCount)
           buster.assert.equals(3, self.view.make_todo_view.callCount)
+          //debugger
           deferred.resolver.resolve()
-        }, 10)
+        }, 100)
         return deferred.promise
       }
     },

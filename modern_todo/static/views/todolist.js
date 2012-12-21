@@ -56,14 +56,22 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
     },
     render: function () {
       var self = this
-      this.model.fetchRelated("todos", {
+      console.log("going to render")
+      console.log('this.model.getRelation("todos")', this.model.getRelation("todos"), this.model.getRelation("todos").keyContents)
+      var rv = this.model.fetchRelated("todos", {
         success: function () {
           _.each(self.model.attributes.todos.models, function (todo) {
+            console.log("going to make todo view for ", todo)
             var todo_view = self.make_todo_view(todo)
+            console.log("made todo view", self.make_todo_view)
             self.$el.find(".todos").append(todo_view.render().el)
           })
-        }
-      })
+        },
+        error: function() {console.log("got error", arguments)},
+        complete: function() {console.log("got complete", arguments)},
+        beforeSend: function() {console.log("got beforeSend", arguments)}
+      }, true)
+      console.log("fetchRelated returned", rv)
       this.setElement(Mustache.render(this.template, this.model.attributes))
       return this
     },

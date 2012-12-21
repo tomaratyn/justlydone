@@ -1,6 +1,6 @@
 define(["backbone-relational", "urls", "models/todo"],
-function (Backbone, urls) {
-    ToDoList_model = Backbone.RelationalModel.extend({
+function (Backbone, urls, ToDoModel) {
+    var ToDoList_model = Backbone.RelationalModel.extend({
       defaults: {
         name:""
       },
@@ -8,7 +8,7 @@ function (Backbone, urls) {
         {
           type:"HasMany",
           key:"todos",
-          relatedModel: "ToDo_model",
+          relatedModel: ToDoModel,
           reverseRelation:{
             key:"list"
           }

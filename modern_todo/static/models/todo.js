@@ -1,6 +1,6 @@
 define(["backbone-relational", "urls"],
   function(BackBone,              urls) {
-    ToDo_model = Backbone.RelationalModel.extend({
+    var ToDo_model = Backbone.RelationalModel.extend({
       defaults: {
         text: ""
       },
