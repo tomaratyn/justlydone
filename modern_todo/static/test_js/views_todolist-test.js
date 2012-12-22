@@ -15,45 +15,14 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     todol
         "<i class='list-old-name'></i>" +
         "<input class='list-new-name' type='text'>" +
         "<button class='save'></button>" +
+        "<button class='show-done-todolist'></button>" +
         "</div>" +
         "<ul class='todos'>" +
         "</ul>" +
+        "<ul class='donetodos'>" +
+        "</ul>" +
         "</div>"
       this.$el = this.view.render().$el
-    },
-    rename_list : {
-      test_rename_list: function() {
-        var self = this
-        var new_name = "new name"
-        var deferred = when.defer()
-        this.todolist.on("change:name", function() {
-          buster.assert.same(new_name, self.todolist.attributes.name)
-          deferred.resolver.resolve()
-        })
-        this.$el.find(".name").trigger("dblclick")
-        buster.assert.same(this.$el.find(".list-old-name").text(), this.todolist.attributes.name)
-        this.$el.find(".list-new-name").val(new_name)
-        this.$el.find(".edit-list-name-modal .save").trigger("click")
-        return deferred.promise
-      },
-      test_modal_save_button: function() {
-        var deferred = when.defer()
-        var $modal = this.$el.find(".edit-list-name-modal")
-        var $save = $modal.find(".save")
-        var assert_called_hide = function(){
-          buster.assert.same(undefined, $modal.data("dosave"))
-          $modal.off("hide", assert_called_hide)
-          $modal.find(".list-new-name").val("foo")
-          $modal.on("hide", function() {
-            buster.assert.same(1, $modal.data("dosave"))
-            deferred.resolver.resolve()
-          })
-          $save.trigger("click")
-        }
-        $modal.on("hide", assert_called_hide)
-        $save.trigger("click")
-        return deferred.promise
-      }
     },
     add_new_todo: {
       add_todo: function() {
@@ -105,6 +74,56 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     todol
         return deferred.promise
       }
     },
+    rename_list : {
+      test_rename_list: function() {
+        var self = this
+        var new_name = "new name"
+        var deferred = when.defer()
+        this.todolist.on("change:name", function() {
+          buster.assert.same(new_name, self.todolist.attributes.name)
+          deferred.resolver.resolve()
+        })
+        this.$el.find(".name").trigger("dblclick")
+        buster.assert.same(this.$el.find(".list-old-name").text(), this.todolist.attributes.name)
+        this.$el.find(".list-new-name").val(new_name)
+        this.$el.find(".edit-list-name-modal .save").trigger("click")
+        return deferred.promise
+      },
+      test_modal_save_button: function() {
+        var deferred = when.defer()
+        var $modal = this.$el.find(".edit-list-name-modal")
+        var $save = $modal.find(".save")
+        var assert_called_hide = function(){
+          buster.assert.same(undefined, $modal.data("dosave"))
+          $modal.off("hide", assert_called_hide)
+          $modal.find(".list-new-name").val("foo")
+          $modal.on("hide", function() {
+            buster.assert.same(1, $modal.data("dosave"))
+            deferred.resolver.resolve()
+          })
+          $save.trigger("click")
+        }
+        $modal.on("hide", assert_called_hide)
+        $save.trigger("click")
+        return deferred.promise
+      }
+    },
+    show_done_todos: function() {
+      var deferred = when.defer()
+      var self = this
+      this.spy(this.view, "make_done_todolist")
+      this.$el.find(".show-done-todolist").click()
+      setTimeout(function() {
+        buster.assert.called(self.view.make_done_todolist)
+        deferred.resolver.resolve()
+      }, 100)
+      return deferred.promise
+    },
+    "test remove view on model removal": function() {
+      this.spy(this.view, "remove")
+      this.view.model.trigger("destroy", this.view.model)
+      buster.assert.calledOnce(this.view.remove)
+    },
     "tests with todos": {
       setUp: function() {
         var deferred = when.defer()
@@ -136,16 +155,16 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     todol
           xhr.respond(201, { "Content-Type": "application/json" }, text)
         })
         this.sandbox.server.respondWith(/todo\/set\//,function(xhr) {
-            var response = JSON.stringify({
-                "objects": _.map([self.todo1, self.todo2, self.todo3],
-                  function (todo) {
-                    console.log("doing picking attributes of todo ", todo)
-                    return _.pick(todo.attributes, keys)
-                  })
-              }
-            )
-            xhr.respond(200, { "Content-Type": "application/json" }, response)
-          })
+          var response = JSON.stringify({
+              "objects": _.map([self.todo1, self.todo2, self.todo3],
+                function (todo) {
+                  console.log("doing picking attributes of todo ", todo)
+                  return _.pick(todo.attributes, keys)
+                })
+            }
+          )
+          xhr.respond(200, { "Content-Type": "application/json" }, response)
+        })
         this.view.model.save().then(function() {
           self.todo1 = new ToDoModel({text:"lorem ipsum", list: self.view.model})
           self.todo1.save().then(function() {
@@ -198,12 +217,10 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     todol
         this.spy(this.view, "make_todo_view")
         this.view.make_todo_views(this.view.model)
         buster.assert.equals(3, this.view.make_todo_view.callCount)
+        this.todo3.set("complete", true)
+        this.view.make_todo_views(this.view.model)
+        buster.assert.equals(3+2, this.view.make_todo_view.callCount)
       }
-    },
-    "test remove view on model removal": function() {
-      this.spy(this.view, "remove")
-      this.view.model.trigger("destroy", this.view.model)
-      buster.assert.calledOnce(this.view.remove)
     }
   })
 })

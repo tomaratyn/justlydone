@@ -2,11 +2,12 @@ define(["jquery", "underscore", "backbone-relational", "mustache", "views/todo",
 function($,        _,            Backbone,              Mustache, ToDoView, TodoModel) {
   return Backbone.View.extend({
     events: {
-      "click .remove-list": "remove_list",
-      "click .toggle-todos": "toggle_todos_display",
-      "dblclick .name": "rename_list",
+      "click .add-new-todo": "add_new_todo",
       "click .edit-list-name-modal .save": "save_and_close_edit_name_modal",
-      "click .add-new-todo": "add_new_todo"
+      "click .remove-list": "remove_list",
+      "click .show-done-todolist": "show_done_todolist",
+      "click .toggle-todos": "toggle_todos_display",
+      "dblclick .name": "rename_list"
     },
     initialize: function (options) {
       // we wrap the call to remove in a closure so that we can spy on remove() in tests.
@@ -30,16 +31,19 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
         })
       }
     },
+    make_done_todolist: function() {
+      //not defined yet!
+    },
     make_todo_view: function(todo) {
       return new ToDoView({model: todo})
     },
     make_todo_views: function(todolist) {
       var self = this
       _.each(todolist.get("todos").models, function (todo) {
-        console.log("going to make todo view for ", todo)
-        var todo_view = self.make_todo_view(todo)
-        console.log("made todo view", self.make_todo_view, "and todo_view is ", todo_view)
-        self.$el.find(".todos").append(todo_view.render().el)
+        if (!todo.get("complete")) {
+          var todo_view = self.make_todo_view(todo)
+          self.$el.find(".todos").append(todo_view.render().el)
+        }
       })
     },
     remove_list: function () {
@@ -79,6 +83,10 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
         $modal.data("dosave", 1)
       }
       $modal.modal("hide")
+    },
+    show_done_todolist: function() {
+      console.log('foo')
+      this.make_done_todolist()
     },
     toggle_todos_display: function () {
       var $todos = this.$el.find(".todolist-details")
