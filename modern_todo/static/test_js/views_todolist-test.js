@@ -108,7 +108,7 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     todol
         return deferred.promise
       }
     },
-    show_done_todos: function() {
+    show_done_todolist: function() {
       var deferred = when.defer()
       var self = this
       this.spy(this.view, "make_done_todolist")
