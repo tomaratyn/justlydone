@@ -5,7 +5,7 @@ function($,        _,            Backbone,              Mustache) {
         this.setElement(Mustache.render(this.template, this.model.attributes))
         return this
       },
-      template: $("script#donetodo_template").text()
+      template: $("script#todo_template").text()
     })
   }
 )
