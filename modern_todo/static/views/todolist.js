@@ -4,6 +4,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
     events: {
       "click .add-new-todo": "add_new_todo",
       "click .edit-list-name-modal .save": "save_and_close_edit_name_modal",
+      "click .hide-done-todolist": "hide_done_todolist",
       "click .remove-list": "remove_list",
       "click .show-done-todolist": "show_done_todolist",
       "click .toggle-todos": "toggle_todos_display",
@@ -30,6 +31,11 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
             }
         })
       }
+    },
+    hide_done_todolist: function() {
+      this.$el.find(".show-done-todolist").removeClass("hide")
+      this.$el.find(".donelist").addClass("hide")
+      this.$el.find(".hide-done-todolist").addClass("hide")
     },
     make_done_todolist: function() {
       return new DoneListView({model: this.model})
@@ -89,6 +95,9 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
        this.doneListView = this.make_done_todolist()
        this.$el.find(".donelist").append(this.doneListView.render().$el)
       }
+      this.$el.find(".show-done-todolist").addClass("hide")
+      this.$el.find(".donelist").removeClass("hide")
+      this.$el.find(".hide-done-todolist").removeClass("hide")
     },
     toggle_todos_display: function () {
       var $todos = this.$el.find(".todolist-details")

@@ -36,8 +36,11 @@
                     <button class="btn add-new-todo" type="button"><i class="icon-plus"></i></button>
                 </div>
                 <ul class="todos unstyled offset1 span10"></ul>
-                <button class="show-done-todolist btn">Show Done Todos</button>
-                <div class="donelist"></div>
+                <div class="span10">
+                    <button class="show-done-todolist btn">Show Done Todos</button>
+                    <button class="hide-done-todolist btn hide">Hide Done Todos</button>
+                </div>
+                <div class="donelist hide"></div>
             </div>
             <div class="modal hide edit-list-name-modal"
                  role="dialog"
@@ -71,7 +74,7 @@
                 <ul class="nav">
                     <li><a class="brand" href="#">LibreToDo</a></li>
                 </ul>
-                <ul class="nav pull-right   ">
+                <ul class="nav pull-right">
                     <li>
                         <a class="{% if request.user.is_authenticated %} logout {% else %} login {% endif %}" href="#">
                             <i class="icon-user"></i>
@@ -100,7 +103,6 @@
                         <button class="btn add_new_list" type="button"><i class="icon-plus"></i></button>
                     </div>
                 </form>
-
             </div>
             <ul class="todolists unstyled">
             </ul>
