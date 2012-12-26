@@ -15,6 +15,19 @@
         </li>
     </script>
 
+    <script type="x-application/mustache" id="donetodo_template">
+        {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
+        <li>[[ text ]]</li>
+    </script>
+
+    <script type="x-application/mustache" id="donetodolist_template">
+        {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
+        <div>
+            <ul class="donetodos unstyled  offset1 span10">
+            </ul>
+        </div>
+    </script>
+
     <script type="x-application/mustache" id="list_todolist">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
         <li class="todolist span11">
@@ -27,6 +40,8 @@
                     <button class="btn add-new-todo" type="button"><i class="icon-plus"></i></button>
                 </div>
                 <ul class="todos unstyled offset1 span10"></ul>
+                <button class="show-done-todolist btn">Show Done Todos</button>
+                <div class="donelist"></div>
             </div>
             <div class="modal hide edit-list-name-modal"
                  role="dialog"

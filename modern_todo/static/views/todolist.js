@@ -1,5 +1,5 @@
-define(["jquery", "underscore", "backbone-relational", "mustache", "views/todo", "models/todo", "bootstrap"],
-function($,        _,            Backbone,              Mustache, ToDoView, TodoModel) {
+define(["jquery", "underscore", "backbone-relational", "mustache", "views/todo", "models/todo", "views/donelist", "bootstrap"],
+function($,        _,            Backbone,              Mustache, ToDoView, TodoModel, DoneListView) {
   return Backbone.View.extend({
     events: {
       "click .add-new-todo": "add_new_todo",
@@ -32,7 +32,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       }
     },
     make_done_todolist: function() {
-      //not defined yet!
+      return new DoneListView({model: this.model})
     },
     make_todo_view: function(todo) {
       return new ToDoView({model: todo})
@@ -85,8 +85,8 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       $modal.modal("hide")
     },
     show_done_todolist: function() {
-      console.log('foo')
-      this.make_done_todolist()
+      var doneListView = this.make_done_todolist()
+      this.$el.find(".donelist").append(doneListView.render().$el)
     },
     toggle_todos_display: function () {
       var $todos = this.$el.find(".todolist-details")
