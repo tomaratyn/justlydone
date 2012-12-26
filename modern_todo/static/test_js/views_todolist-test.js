@@ -108,16 +108,34 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     todol
         return deferred.promise
       }
     },
-    show_done_todolist: function() {
-      var deferred = when.defer()
-      var self = this
-      this.spy(this.view, "make_done_todolist")
-      this.$el.find(".show-done-todolist").click()
-      setTimeout(function() {
-        buster.assert.called(self.view.make_done_todolist)
-        deferred.resolver.resolve()
-      }, 100)
-      return deferred.promise
+    "done todolist interaction": {
+      "check click creates a done todolist": function() {
+        var deferred = when.defer()
+        var self = this
+        this.spy(this.view, "make_done_todolist")
+        this.$el.find(".show-done-todolist").click()
+        setTimeout(function() {
+          buster.assert.called(self.view.make_done_todolist)
+          deferred.resolver.resolve()
+        }, 10)
+        return deferred.promise
+      },
+      "don't trigger twice": function() {
+        var deferred = when.defer()
+        var self = this
+        this.spy(this.view, "make_done_todolist")
+        this.$el.find(".show-done-todolist").click()
+        setTimeout(function() {
+          buster.assert.called(self.view.make_done_todolist)
+          self.$el.find(".show-done-todolist").click()
+          setTimeout(function() {
+            buster.assert.equals(1, self.view.make_done_todolist.callCount)
+            deferred.resolver.resolve()
+          }, 10)
+        }, 10)
+        return deferred.promise
+
+      }
     },
     "test remove view on model removal": function() {
       this.spy(this.view, "remove")

@@ -15,7 +15,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       this.model.on("change:name", this.update_name_label, this)
       this.model.on("add:todos", function() {this.update_todo_count() }, this)
       this.model.on("remove:todos", function() {this.update_todo_count() }, this)
-      console.log("this.model", this.model)
+      this.doneListView = null
     },
     add_new_todo: function() {
       var text = this.$el.find(".new-todo-text").val()
@@ -85,8 +85,10 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       $modal.modal("hide")
     },
     show_done_todolist: function() {
-      var doneListView = this.make_done_todolist()
-      this.$el.find(".donelist").append(doneListView.render().$el)
+      if (!this.doneListView) {
+       this.doneListView = this.make_done_todolist()
+       this.$el.find(".donelist").append(this.doneListView.render().$el)
+      }
     },
     toggle_todos_display: function () {
       var $todos = this.$el.find(".todolist-details")
