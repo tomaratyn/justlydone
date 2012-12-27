@@ -10,6 +10,15 @@ function(Backbone) {
     },
     humanize_times: function() {
       this.$el.find("time").humaneDates()
+    },
+    make_done: function () {
+      if (this.$el.find(".done").is(":checked")) {
+        this.model.set({"complete": true})
+      }
+      else {
+        this.model.set({"complete": false})
+      }
+      this.model.save()
     }
   })
 })

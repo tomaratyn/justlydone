@@ -2,18 +2,18 @@ define( ["jquery", "mustache", "views/AbstractTodoView", "humane"],
 function ($,        Mustache,   AbstractTodoView) {
   return AbstractTodoView.extend({
     events: {
-      "change .done": "make_done",
-      "click .delete-todo": "click_delete_todo"
+      "click .delete-todo": "click_delete_todo",
+      "change .done": "make_done"
     },
-    make_done: function () {
-      if (this.$el.find(".done").is(":checked")) {
-        this.model.attributes.complete = true
-      }
-      else {
-        this.model.attributes.complete = false
-      }
-      this.model.save()
+    initialize: function() {
+      var self = this
+      this.model.on("change:complete", function(model, isComplete, options){
+        if (isComplete){
+          self.remove()
+        }
+      })
     },
+
     render: function () {
       this.setElement(Mustache.render(this.template, this.model.attributes))
       this.humanize_times()

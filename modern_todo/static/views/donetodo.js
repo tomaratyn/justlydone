@@ -2,7 +2,17 @@ define(["jquery", "underscore", "mustache", "views/AbstractTodoView"],
 function($,        _,            Mustache, AbstractTodoView) {
     return AbstractTodoView.extend({
       events: {
-        "click .delete-todo": "click_delete_todo"
+        "click .delete-todo": "click_delete_todo",
+        "change .done": "make_done"
+
+      },
+      initialize: function() {
+        var self = this
+        this.model.on("change:complete", function(model, isComplete, options) {
+          if (!isComplete) {
+            self.remove()
+          }
+        })
       },
       render: function() {
         this.setElement(Mustache.render(this.template, this.model.attributes))
