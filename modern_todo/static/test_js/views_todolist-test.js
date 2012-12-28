@@ -1,10 +1,10 @@
 define(["underscore", "jquery", "when", "models/todolist", "models/todo", "views/todolist"],
-function(_,            $,        when,   todolist_model,    ToDoModel,     todolist_view) {
+function(_,            $,        when,   todolist_model,    ToDoModel,     TodoListView) {
   buster.testCase("views todolist", {
     setUp: function() {
       this.useFakeServer()
       this.todolist = new todolist_model({name:"my todolist"})
-      this.view = new todolist_view({model: this.todolist})
+      this.view = new TodoListView({model: this.todolist})
       this.view.template =
         "<div>" +
         "<span class='name'>{{name}}</span>" +
@@ -238,6 +238,37 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     todol
         this.todo3.set("complete", true)
         this.view.make_todo_views(this.view.model)
         buster.assert.equals(3+2, this.view.make_todo_view.callCount)
+      },
+      "create todo view on todo becoming not done": {
+        "for todos already in the todolist": function() {
+          var view = new TodoListView({model: this.view.model})
+          view.template = this.view.template
+          view.render()
+          this.todo3.set("complete", true)
+          this.spy(view, "make_todo_view")
+          console.log("made spy")
+          this.todo3.set("complete", false)
+          console.log("set complete to false")
+          buster.assert.equals(1, view.make_todo_view.callCount)
+        },
+        "for new todos": function() {
+          var self = this
+          var deferred = when.defer()
+          var view = new TodoListView({model: this.view.model})
+          view.template = this.view.template
+          view.render()
+          var todo4 = new ToDoModel({text: "lorem ispum", list: view.model})
+          todo4.save().then(function() {
+            todo4.set("complete", true)
+            self.spy(view, "make_todo_view")
+            console.log("made spy")
+            todo4.set("complete", false)
+            console.log("set complete to false")
+            buster.assert.equals(1, view.make_todo_view.callCount)
+            deferred.resolver.resolve()
+          })
+          return deferred.promise
+        }
       }
     }
   })

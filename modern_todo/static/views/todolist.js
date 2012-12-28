@@ -15,7 +15,14 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       this.model.on("destroy", function() { this.remove() }, this)
       this.model.on("change:name", this.update_name_label, this)
       this.model.on("add:todos", function() {this.update_todo_count() }, this)
+      this.model.on("add:todos", this.register_todo_view_creator_listener, this)
       this.model.on("remove:todos", function() {this.update_todo_count() }, this)
+      console.log("this.model.get('todos').models ", this.model.get('todos'))
+      var self = this
+      _.each(this.model.get('todos').models, function(todoModel) {
+        console.log("registering listeners on todo ", todoModel)
+        self.register_todo_view_creator_listener(todoModel)
+      })
       this.doneListView = null
     },
     add_new_todo: function() {
@@ -49,6 +56,16 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
         if (!todo.get("complete")) {
           var todo_view = self.make_todo_view(todo)
           self.$el.find(".todos").append(todo_view.render().el)
+        }
+      })
+    },
+    register_todo_view_creator_listener: function(todoModel) {
+      var self = this
+      todoModel.on("change:complete", function(todoModel, isComplete, options) {
+        if (!isComplete) {
+          var todoView = self.make_todo_view(todoModel)
+          todoView.render()
+          self.$el.find(".todos").append(todoView.$el)
         }
       })
     },
