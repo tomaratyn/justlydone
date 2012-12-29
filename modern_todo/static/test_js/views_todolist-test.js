@@ -239,36 +239,20 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         this.view.make_todo_views(this.view.model)
         buster.assert.equals(3+2, this.view.make_todo_view.callCount)
       },
-      "create todo view on todo becoming not done": {
-        "for todos already in the todolist": function() {
-          var view = new TodoListView({model: this.view.model})
-          view.template = this.view.template
-          view.render()
-          this.todo3.set("complete", true)
-          this.spy(view, "make_todo_view")
-          console.log("made spy")
-          this.todo3.set("complete", false)
-          console.log("set complete to false")
-          buster.assert.equals(1, view.make_todo_view.callCount)
-        },
-        "for new todos": function() {
-          var self = this
-          var deferred = when.defer()
-          var view = new TodoListView({model: this.view.model})
-          view.template = this.view.template
-          view.render()
-          var todo4 = new ToDoModel({text: "lorem ispum", list: view.model})
-          todo4.save().then(function() {
-            todo4.set("complete", true)
-            self.spy(view, "make_todo_view")
-            console.log("made spy")
-            todo4.set("complete", false)
-            console.log("set complete to false")
-            buster.assert.equals(1, view.make_todo_view.callCount)
-            deferred.resolver.resolve()
-          })
-          return deferred.promise
-        }
+      // We need to test this manually because `register_todo_view_creator_listener` gets called in the `success`
+      // callback of `fetchRelated` which, unfortunately, isn't testable in buster.
+      register_todo_view_creator_listener: function() {
+        this.spy(this.view, "make_todo_view")
+        this.todo1.set("complete", true)
+        buster.assert.equals(0, this.view.make_todo_view.callCount)
+        this.todo1.set("complete", false)
+        buster.assert.equals(0, this.view.make_todo_view.callCount)
+        this.view.register_todo_view_creator_listener(this.todo1)
+        this.todo1.set("complete", true)
+        buster.assert.equals(0, this.view.make_todo_view.callCount)
+        this.todo1.set("complete", false)
+        buster.assert.equals(1, this.view.make_todo_view.callCount)
+
       }
     }
   })
