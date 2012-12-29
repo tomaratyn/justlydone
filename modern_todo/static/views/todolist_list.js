@@ -19,7 +19,11 @@ define(["jquery", "underscore", "collections/todolist", "views/todolist"],
       initialize: function () {
         this.collection.on("add", this.render_new_single_list, this)
         this.collection.on("reset", this.render_new_many_lists, this)
-        this.collection.fetch()
+        var self = this
+        this.collection.fetch({silent:true}).then(function() {
+          console.log('going to render the new many lists')
+          self.render_new_many_lists()
+        })
       },
       render_new_many_lists: function () {
         this.$el.find("ul").html("")
@@ -34,6 +38,7 @@ define(["jquery", "underscore", "collections/todolist", "views/todolist"],
       render_new_single_list: function (new_todo_list) {
         var view = new ToDoList_View({model: new_todo_list})
         $(this.el).find(".todolists").append(view.render().el)
+
       }
     })
   })

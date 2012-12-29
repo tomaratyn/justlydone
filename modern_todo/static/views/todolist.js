@@ -15,9 +15,8 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       this.model.on("destroy", function() { this.remove() }, this)
       this.model.on("change:name", this.update_name_label, this)
       this.model.on("add:todos", function() {this.update_todo_count() }, this)
-      this.model.on("add:todos", this.register_todo_view_creator_listener, this)
       this.model.on("remove:todos", function() {this.update_todo_count() }, this)
-      console.log("this.model.get('todos').models ", this.model.get('todos'))
+      console.log("this.model.get('todos').length", this.model.get('todos').length)
       var self = this
       _.each(this.model.get('todos').models, function(todoModel) {
         console.log("registering listeners on todo ", todoModel)
@@ -54,18 +53,23 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       var self = this
       _.each(todolist.get("todos").models, function (todo) {
         if (!todo.get("complete")) {
+          console.log("making the todod from make_todo_views", todo.get("id"))
           var todo_view = self.make_todo_view(todo)
           self.$el.find(".todos").append(todo_view.render().el)
+          self.register_todo_view_creator_listener(todo)
         }
       })
     },
     register_todo_view_creator_listener: function(todoModel) {
       var self = this
       todoModel.on("change:complete", function(todoModel, isComplete, options) {
+        console.log("got change:complete for ", todoModel.get("id"), isComplete)
         if (!isComplete) {
-          var todoView = self.make_todo_view(todoModel)
-          todoView.render()
-          self.$el.find(".todos").append(todoView.$el)
+          if (self.$el) {
+            var todoView = self.make_todo_view(todoModel)
+            todoView.render()
+            self.$el.find(".todos").append(todoView.$el)
+          }
         }
       })
     },
@@ -96,6 +100,8 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       this.model.fetchRelated("todos", {
         success: function () {
           self.make_todo_views(self.model)
+          self.model.on("add:todos", this.register_todo_view_creator_listener, this)
+
         }
       })
       return this
