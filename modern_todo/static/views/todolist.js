@@ -56,8 +56,8 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
           console.log("making the todod from make_todo_views", todo.get("id"))
           var todo_view = self.make_todo_view(todo)
           self.$el.find(".todos").append(todo_view.render().el)
-          self.register_todo_view_creator_listener(todo)
         }
+        self.register_todo_view_creator_listener(todo)
       })
     },
     register_todo_view_creator_listener: function(todoModel) {
@@ -100,8 +100,6 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       this.model.fetchRelated("todos", {
         success: function () {
           self.make_todo_views(self.model)
-          self.model.on("add:todos", this.register_todo_view_creator_listener, this)
-
         }
       })
       return this
