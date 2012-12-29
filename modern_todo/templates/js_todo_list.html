@@ -122,20 +122,25 @@
             TODO_URL: '{{ ToDoResource.get_resource_list_uri }}'
         }
         require.config(global_require_config)
-        require(["jquery", "views/todolist_list", "bootstrap"],
-                function ($, ToDoList_List_View) {
-                    new ToDoList_List_View()
-                    $(function () {
-                        $("form.nosubmit").submit(function () {
-                            return false
-                        })
-                        $(".modal#edit-list-name-modal .save").click(function () {
-                            var $modal = $(this).parents(".modal#edit-list-name-modal")
-                            $modal.data("dosave", true)
-                            $modal.modal("hide")
-                        })
-                        $(".modal#edit-list-name-modal").on("hidden", function () {
-                            $(this).find(".list-new-name").val("")
+        require(["jquery", "collections/todolist", "views/todolist_list", "bootstrap"],
+                function ($, TodoListCollection, ToDoList_List_View) {
+                    var todolist_collection = new TodoListCollection();
+                    todolist_collection.fetch().then(function () {
+                        console.log("foo")
+                        var view = new ToDoList_List_View({collection: todolist_collection})
+                        view.render_new_many_lists()
+                        $(function () {
+                            $("form.nosubmit").submit(function () {
+                                return false
+                            })
+                            $(".modal#edit-list-name-modal .save").click(function () {
+                                var $modal = $(this).parents(".modal#edit-list-name-modal")
+                                $modal.data("dosave", true)
+                                $modal.modal("hide")
+                            })
+                            $(".modal#edit-list-name-modal").on("hidden", function () {
+                                $(this).find(".list-new-name").val("")
+                            })
                         })
                     })
                 }

@@ -1,7 +1,6 @@
 define(["jquery", "underscore", "collections/todolist", "views/todolist"],
   function ($, _, ToDoList_List, ToDoList_View) {
     return Backbone.View.extend({
-      collection: new ToDoList_List(),
       el: ".todolist_list",
       events: {
         "click .refresh": "refresh",
@@ -19,11 +18,6 @@ define(["jquery", "underscore", "collections/todolist", "views/todolist"],
       initialize: function () {
         this.collection.on("add", this.render_new_single_list, this)
         this.collection.on("reset", this.render_new_many_lists, this)
-        var self = this
-        this.collection.fetch({silent:true}).then(function() {
-          console.log('going to render the new many lists')
-          self.render_new_many_lists()
-        })
       },
       render_new_many_lists: function () {
         this.$el.find("ul").html("")
