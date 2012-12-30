@@ -13,9 +13,27 @@ function($,        _,            Backbone,              Mustache,   DoneTodoView
         }
       })
     },
+    register_donetodo_view_creator_listener: function(todoModel) {
+      var self = this
+      console.log("registering change:complete listener on ", todoModel.get("id"))
+      todoModel.on("change:complete", function(todoModel, isComplete, options) {
+        console.log("got change:complete for ", todoModel.get("id"), isComplete)
+        if (isComplete) {
+          if (self.$el) {
+            var todoView = self.make_donetodo_view(todoModel)
+            todoView.render()
+            self.$el.find(".donetodos").append(todoView.$el)
+          }
+        }
+      })
+    },
     render: function() {
       this.setElement(Mustache.render(this.template, this.model.attributes))
       this.make_donetodo_views(this.model)
+      var self = this
+      _.each(this.model.get("todos").models, function(todo) {
+        self.register_donetodo_view_creator_listener(todo)
+      })
       return this
     },
     template: $("script#donetodolist_template").text()

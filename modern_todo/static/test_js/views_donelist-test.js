@@ -42,7 +42,6 @@ function(_,            $,        when,   ToDoListModel,    ToDoModel,     DoneLi
           var response = JSON.stringify({
               "objects": _.map([self.todo1, self.todo2, self.todo3],
                 function (todo) {
-                  console.log("doing picking attributes of todo ", todo)
                   return _.pick(todo.attributes, keys)
                 })
             }
@@ -69,6 +68,14 @@ function(_,            $,        when,   ToDoListModel,    ToDoModel,     DoneLi
         this.spy(this.view, "make_donetodo_view")
         this.view.make_donetodo_views(this.view.model)
         buster.assert.equals(2, this.view.make_donetodo_view.callCount)
+      },
+      register_donetodo_view_creator_listener: function() {
+        this.todo1.set("complete", true)
+        this.todo1.set("complete", false)
+        this.view.register_donetodo_view_creator_listener(this.todo1)
+        this.spy(this.view, "make_donetodo_view")
+        this.todo1.set("complete", true)
+        buster.assert.equals(1, this.view.make_donetodo_view.callCount)
       }
     })
   }
