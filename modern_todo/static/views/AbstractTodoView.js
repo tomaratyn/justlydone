@@ -12,11 +12,12 @@ function(Backbone) {
       this.$el.find("time").humaneDates()
     },
     make_done: function () {
+      var options = {silent:true}
       if (this.$el.find(".done").is(":checked")) {
-        this.model.set({"complete": true})
+        this.model.set({"complete": true}, options)
       }
       else {
-        this.model.set({"complete": false})
+        this.model.set({"complete": false}, options)
       }
       this.model.save()
     }
