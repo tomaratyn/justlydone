@@ -16,7 +16,6 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       this.model.on("change:name", this.update_name_label, this)
       this.model.on("add:todos", function() {this.update_todo_count() }, this)
       this.model.on("remove:todos", function() {this.update_todo_count() }, this)
-      console.log("this.model.get('todos').length", this.model.get('todos').length)
       var self = this
       _.each(this.model.get('todos').models, function(todoModel) {
         console.log("registering listeners on todo ", todoModel)
@@ -31,10 +30,11 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
         var new_todo = new TodoModel({text: text, list: this.model})
         new_todo.save(null, {
           success: function(new_todo, response, options) {
+            self.register_todo_view_creator_listener(new_todo)
             var new_view = self.make_todo_view(new_todo)
             self.$el.find(".todos").append(new_view.render().el)
             self.$el.find(".new-todo-text").val("")
-            }
+          }
         })
       }
     },

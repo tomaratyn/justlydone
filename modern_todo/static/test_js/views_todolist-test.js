@@ -176,7 +176,6 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
           var response = JSON.stringify({
               "objects": _.map([self.todo1, self.todo2, self.todo3],
                 function (todo) {
-                  console.log("doing picking attributes of todo ", todo)
                   return _.pick(todo.attributes, keys)
                 })
             }
@@ -252,7 +251,6 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         buster.assert.equals(0, this.view.make_todo_view.callCount)
         this.todo1.set("complete", false)
         buster.assert.equals(1, this.view.make_todo_view.callCount)
-
       }
     }
   })

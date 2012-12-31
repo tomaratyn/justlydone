@@ -1,6 +1,9 @@
 define(["jquery", "underscore", "backbone-relational", "mustache", "views/donetodo"],
 function($,        _,            Backbone,              Mustache,   DoneTodoView) {
   return Backbone.View.extend({
+    initialize: function() {
+      this.model.on("add:todos", this.register_donetodo_view_creator_listener, this)
+    },
     make_donetodo_view: function(todo) {
       return new DoneTodoView({model:todo})
     },

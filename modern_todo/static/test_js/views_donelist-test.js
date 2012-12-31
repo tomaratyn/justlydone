@@ -70,9 +70,6 @@ function(_,            $,        when,   ToDoListModel,    ToDoModel,     DoneLi
         buster.assert.equals(2, this.view.make_donetodo_view.callCount)
       },
       register_donetodo_view_creator_listener: function() {
-        this.todo1.set("complete", true)
-        this.todo1.set("complete", false)
-        this.view.register_donetodo_view_creator_listener(this.todo1)
         this.spy(this.view, "make_donetodo_view")
         this.todo1.set("complete", true)
         buster.assert.equals(1, this.view.make_donetodo_view.callCount)
