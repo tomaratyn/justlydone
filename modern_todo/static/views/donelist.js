@@ -18,9 +18,7 @@ function($,        _,            Backbone,              Mustache,   DoneTodoView
     },
     register_donetodo_view_creator_listener: function(todoModel) {
       var self = this
-      console.log("registering change:complete listener on ", todoModel.get("id"))
       todoModel.on("change:complete", function(todoModel, isComplete, options) {
-        console.log("got change:complete for ", todoModel.get("id"), isComplete)
         if (isComplete) {
           if (self.$el) {
             var todoView = self.make_donetodo_view(todoModel)
