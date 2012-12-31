@@ -30,6 +30,10 @@ body {
     color: #555;
 }
 
+.show-done-todolist {
+    margin-bottom: 10px;
+}
+
 .todolist_list {
     background: #fff;
     -webkit-border-radius: 5px;
