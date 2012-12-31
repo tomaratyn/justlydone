@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 
 from django.contrib.auth.models import User
@@ -5,10 +6,11 @@ from django.contrib.auth.models import User
 class ToDoList(models.Model):
     name = models.CharField(max_length=140)
     creation_datetime = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey(User, null=False)
+    owner = models.ForeignKey(User, null=False, blank=False)
 
     def __unicode__(self):
         return u'%s' % self.name
+
 
 class ToDo(models.Model):
     text = models.CharField(max_length=140)
@@ -19,3 +21,10 @@ class ToDo(models.Model):
 
     def __unicode__(self):
         return u'%s%s' % (self.text, " (done)" if self.complete else "")
+
+    def save(self, *args, **kwargs):
+        if self.complete and self.completion_datetime is None:
+            self.completion_datetime = datetime.utcnow()
+        super(ToDo, self).save(*args, **kwargs)
+
+
