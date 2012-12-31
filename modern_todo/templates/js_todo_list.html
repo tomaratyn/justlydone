@@ -10,9 +10,18 @@
             <input type="checkbox" class="done" [[#complete]]checked=""[[/complete]]>
             [[text]]
             &nbsp;
+            [[#complete]]<small>Finished: <time datetime="[[completion_datetime]]"></time></small>[[/complete]]
             <small class="muted" >created: <time datetime="[[creation_datetime]]"></time></small>
             <button class="pull-right btn btn-link delete-todo"><i class="icon-trash icon-grey"></i></button>
         </li>
+    </script>
+
+    <script type="x-application/mustache" id="donetodolist_template">
+        {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
+        <div>
+            <ul class="donetodos unstyled  offset1 span10">
+            </ul>
+        </div>
     </script>
 
     <script type="x-application/mustache" id="list_todolist">
@@ -27,6 +36,11 @@
                     <button class="btn add-new-todo" type="button"><i class="icon-plus"></i></button>
                 </div>
                 <ul class="todos unstyled offset1 span10"></ul>
+                <div class="offset4 span3">
+                    <button class="show-done-todolist btn">Show Done Todos</button>
+                    <button class="hide-done-todolist btn hide">Hide Done Todos</button>
+                </div>
+                <div class="donelist hide"></div>
             </div>
             <div class="modal hide edit-list-name-modal"
                  role="dialog"
@@ -60,7 +74,7 @@
                 <ul class="nav">
                     <li><a class="brand" href="#">LibreToDo</a></li>
                 </ul>
-                <ul class="nav pull-right   ">
+                <ul class="nav pull-right">
                     <li>
                         <a class="{% if request.user.is_authenticated %} logout {% else %} login {% endif %}" href="#">
                             <i class="icon-user"></i>
@@ -89,7 +103,6 @@
                         <button class="btn add_new_list" type="button"><i class="icon-plus"></i></button>
                     </div>
                 </form>
-
             </div>
             <ul class="todolists unstyled">
             </ul>
@@ -109,20 +122,25 @@
             TODO_URL: '{{ ToDoResource.get_resource_list_uri }}'
         }
         require.config(global_require_config)
-        require(["jquery", "views/todolist_list", "bootstrap"],
-                function ($, ToDoList_List_View) {
-                    new ToDoList_List_View()
-                    $(function () {
-                        $("form.nosubmit").submit(function () {
-                            return false
-                        })
-                        $(".modal#edit-list-name-modal .save").click(function () {
-                            var $modal = $(this).parents(".modal#edit-list-name-modal")
-                            $modal.data("dosave", true)
-                            $modal.modal("hide")
-                        })
-                        $(".modal#edit-list-name-modal").on("hidden", function () {
-                            $(this).find(".list-new-name").val("")
+        require(["jquery", "collections/todolist", "views/todolist_list", "bootstrap"],
+                function ($, TodoListCollection, ToDoList_List_View) {
+                    var todolist_collection = new TodoListCollection();
+                    todolist_collection.fetch().then(function () {
+                        console.log("foo")
+                        var view = new ToDoList_List_View({collection: todolist_collection})
+                        view.render_new_many_lists()
+                        $(function () {
+                            $("form.nosubmit").submit(function () {
+                                return false
+                            })
+                            $(".modal#edit-list-name-modal .save").click(function () {
+                                var $modal = $(this).parents(".modal#edit-list-name-modal")
+                                $modal.data("dosave", true)
+                                $modal.modal("hide")
+                            })
+                            $(".modal#edit-list-name-modal").on("hidden", function () {
+                                $(this).find(".list-new-name").val("")
+                            })
                         })
                     })
                 }

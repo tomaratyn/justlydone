@@ -1,32 +1,24 @@
-define( ["jquery", "backbone-relational", "mustache", "humane"],
-function ($,        Backbone,              Mustache) {
-  ToDoView = Backbone.View.extend({
+define( ["jquery", "mustache", "views/AbstractTodoView", "humane"],
+function ($,        Mustache,   AbstractTodoView) {
+  return AbstractTodoView.extend({
     events: {
-      "change .done": "make_done",
-      "click .delete-todo": "click_delete_todo"
+      "click .delete-todo": "click_delete_todo",
+      "change .done": "make_done"
     },
     initialize: function() {
-      // we wrap the call to remove in a closure so that we can spy on remove() in tests.
-      this.model.on("destroy", function() { this.remove() }, this)
-    },
-    click_delete_todo: function() {
-      this.model.destroy()
-    },
-    make_done: function () {
-      if (this.$el.find(".done").is(":checked")) {
-        this.model.attributes.complete = true
-      }
-      else {
-        this.model.attributes.complete = false
-      }
-      this.model.save()
+      var self = this
+      this.__proto__.__proto__.initialize.apply(this)
+      this.model.on("change:complete", function(model, isComplete, options){
+        if (isComplete){
+          self.remove()
+        }
+      })
     },
     render: function () {
       this.setElement(Mustache.render(this.template, this.model.attributes))
-      this.$el.find("time").humaneDates()
+      this.humanize_times()
       return this
     },
     template: $("script#todo_template").text()
   })
-  return ToDoView
 })

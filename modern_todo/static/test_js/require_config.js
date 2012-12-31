@@ -7,12 +7,12 @@ var require = {
       deps: ["jquery", "underscore"],
       exports: "Backbone"
     },
-//    "backbone-tastypie": {
-//      deps: ["backbone"],
-//      exports: "Backbone"
-//    },
-    "backbone-relational": {
+    "backbone-tastypie": {
       deps: ["backbone"],
+      exports: "Backbone"
+    },
+    "backbone-relational": {
+      deps: ["backbone-tastypie"],
       exports: "Backbone"
     },
     "bootstrap": {deps: ["jquery"]},
@@ -23,7 +23,7 @@ var require = {
   },
   paths: {
     "backbone": "backbone-0.9.2",
-//    "backbone-tastypie": "/Users/mystic/Documents/Work/modern_django_todo/src/backbone-tastypie/backbone_tastypie/static/js/backbone-tastypie.js",
+    "backbone-tastypie": "test_js/backbone-tastypie",
     "backbone-relational": "backbone-relational.head",
     "bootstrap": "bootstrap-2.1.0/js/bootstrap",
     "humane": "humane-custom",
