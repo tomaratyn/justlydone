@@ -25,6 +25,8 @@ class ToDo(models.Model):
     def save(self, *args, **kwargs):
         if self.complete and self.completion_datetime is None:
             self.completion_datetime = datetime.utcnow()
+        elif not self.complete and self.completion_datetime is not None:
+            self.completion_datetime = None
         super(ToDo, self).save(*args, **kwargs)
 
 

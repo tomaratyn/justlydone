@@ -20,3 +20,16 @@ class TodoRecordCompletionTimeTest(TestCase):
         self.assertTrue(todo.complete)
         self.assertTrue(timedelta(seconds=2) > (now - todo.completion_datetime))
 
+    def test_clearing_on_save(self):
+        email = "abc@example.com"
+        user = User.objects.create_user(email, email)
+        list = ToDoList.objects.create(name="Test", owner=user)
+        todo = ToDo.objects.create(text="World Domination", list=list)
+        self.assertFalse(todo.complete)
+        self.assertEquals(None, todo.completion_datetime)
+        todo.complete = True
+        todo.save()
+        todo.complete = False
+        todo.save()
+        self.assertFalse(todo.complete)
+        self.assertTrue(todo.completion_datetime is None)
