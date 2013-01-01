@@ -105,7 +105,6 @@
                 function ($, TodoListCollection, ToDoList_List_View) {
                     var todolist_collection = new TodoListCollection();
                     todolist_collection.fetch().then(function () {
-                        console.log("foo")
                         var view = new ToDoList_List_View({collection: todolist_collection})
                         view.render_new_many_lists()
                         $(function () {
