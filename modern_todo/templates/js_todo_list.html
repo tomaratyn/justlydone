@@ -2,7 +2,6 @@
 
 {% block header_template %}
 
-    <link rel="stylesheet" href="{{ STATIC_URL }}style.css">
 
     <script type="x-application/mustache" id="todo_template">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
@@ -68,27 +67,7 @@
 
 {% block page_contents %}
 
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <ul class="nav">
-                    <li><a class="brand" href="#">LibreToDo</a></li>
-                </ul>
-                <ul class="nav pull-right">
-                    <li>
-                        <a class="{% if request.user.is_authenticated %} logout {% else %} login {% endif %}" href="#">
-                            <i class="icon-user"></i>
-                            {% if request.user.is_authenticated %}
-                                {{ request.user.username }}
-                            {% else %}
-                                login
-                            {% endif %}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+
     <div class="row">
         <div class="span12">
             <h1>Howdy {{ request.user.username }}! <small>Here are your to do lists:</small></h1>

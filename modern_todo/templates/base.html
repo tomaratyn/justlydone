@@ -13,6 +13,8 @@
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         {% block header_css %}
         <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap-2.1.0/css/bootstrap.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}style.css">
+
         {% endblock header_css %}
         {% block header_script %}
         <script type="text/javascript" src="{{ STATIC_URL }}modernizr-2.6.1.js"></script>
@@ -26,6 +28,27 @@
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
         <div class="container">
+            <div class="navbar navbar-fixed-top">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <ul class="nav">
+                            <li><a class="brand" href="#">LibreToDo</a></li>
+                        </ul>
+                        <ul class="nav pull-right">
+                            <li>
+                                <a class="{% if request.user.is_authenticated %} logout {% else %} login {% endif %}" href="#">
+                                    <i class="icon-user"></i>
+                                    {% if request.user.is_authenticated %}
+                                        {{ request.user.username }}
+                                    {% else %}
+                                        login
+                                    {% endif %}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         {% block page_contents %}
         {% endblock page_contents %}
         </div>
