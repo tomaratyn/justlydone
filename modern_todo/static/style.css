@@ -30,6 +30,13 @@ body {
     color: #555;
 }
 
+.icon-logout {
+    width: 14px;
+    height: 14px;
+    background-image: url("images/glyphicons_063_power.png");
+    background-position: 0 0;
+}
+
 .show-done-todolist {
     margin-bottom: 10px;
 }

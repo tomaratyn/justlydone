@@ -1,4 +1,5 @@
 # Django settings for modern_todo project.
+from django.core.urlresolvers import reverse_lazy
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -123,6 +124,8 @@ INSTALLED_APPS = (
     'backbone_tastypie',
     'todo',
 )
+
+LOGIN_REDIRECT_URL = reverse_lazy("dynamic_todo_list")
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
