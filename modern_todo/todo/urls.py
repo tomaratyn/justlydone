@@ -1,4 +1,5 @@
 from django.conf.urls import include, patterns, url
+from django.contrib.auth.decorators import login_required
 from tastypie.api import Api
 from todo import api, views
 
@@ -17,11 +18,14 @@ static_urls = patterns('',
 )
 
 jsdynamic_urls = patterns('',
-                          url(r'^$', views.JavaScriptDynamicView.as_view(), name="dyanic_todo_list"),
+                          url(r'^$', login_required(views.JavaScriptDynamicView.as_view()), name="dynamic_todo_list"),
 )
 
 urlpatterns = patterns('',
+                       (r'^/?$', include(jsdynamic_urls)),
                        (r'^statichtml/', include(static_urls)),
-                       (r'^dynamicjs/', include(jsdynamic_urls)),
                        (r'^api/', include(testing_api.urls)),
+                       (url(r'^accounts/login/$', 'django.contrib.auth.views.login', name="login")),
+                       (url(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login', name="logout")),
+
 )
