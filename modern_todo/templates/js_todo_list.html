@@ -26,9 +26,9 @@
     <script type="x-application/mustache" id="list_todolist">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
         <li class="todolist span11">
-            <button class="btn-link"><i class="icon-chevron-right toggle-todos"></i></button>
+            <button class="btn btn-link toggle-todos"><i class="icon-chevron-right"></i></button>
             <span class="name">[[name]]</span> (<span class="todo-count">[[todos.length]]</span>)
-            <button class="btn-link remove-list"><i class="icon-grey icon-trash remove-list"></i></button>
+            <button class="btn-link btn remove-list"><i class="icon-grey icon-trash remove-list"></i></button>
             <div class="hide todolist-details">
                 <div class="input-append add-todo-container">
                     <input type="text" class="new-todo-text" placeholder="Add New Tasks Here...">
