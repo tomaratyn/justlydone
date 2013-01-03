@@ -1,4 +1,4 @@
-define([ "backbone-relational", "humane"],
+define([ "backbone-relational", "humane", "object_get_prototype_monkeypatch"],
 function(Backbone) {
   return Backbone.View.extend({
     initialize: function() {

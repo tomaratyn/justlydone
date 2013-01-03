@@ -119,7 +119,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
     },
     toggle_todos_display: function () {
       var $todos = this.$el.find(".todolist-details")
-      var $toggle_icon = this.$el.find(".toggle-todos")
+      var $toggle_icon = this.$el.find(".toggle-todos i")
       if ($todos.hasClass("hide")) {
         $toggle_icon.removeClass("icon-chevron-right")
         $toggle_icon.addClass("icon-chevron-down")
