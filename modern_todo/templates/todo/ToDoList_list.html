@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block page_contents %}
+
+    <div class="row">
+        <h1>The Lists Available</h1>
+        <ul>
+        {% for todolist in todolists %}
+            <li>{{ todolist.name }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

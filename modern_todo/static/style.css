@@ -1,0 +1,69 @@
+/* offer icon-grey */
+.icon-grey,
+.nav > .active > a > [class^="icon-"],
+.nav > .active > a > [class*=" icon-"],
+.dropdown-menu > li > a:hover > [class^="icon-"],
+.dropdown-menu > li > a:hover > [class*=" icon-"],
+.dropdown-menu > .active > a > [class^="icon-"],
+.dropdown-menu > .active > a > [class*=" icon-"] {
+    background-image: url("bootstrap-2.1.0/img/glyphicons-halflings-grey.png");
+}
+
+
+body {
+    background: url(images/fabric_plaid.png) repeat;
+    padding-top: 40px;
+}
+
+.add-todo-container {
+    margin-left: 18px;
+    margin-bottom: 10px;
+}
+
+.consistent-top-controls-padding{
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.donetodos {
+    margin-top: 10px;
+    color: #555;
+}
+
+.icon-logout {
+    width: 14px;
+    height: 14px;
+    background-image: url("images/glyphicons_063_power.png");
+    background-position: 0 0;
+}
+
+.show-done-todolist {
+    margin-bottom: 10px;
+}
+
+.todolist_list {
+    background: #fff;
+    -webkit-border-radius: 5px;
+    padding-bottom: 15px;
+}
+
+.todos li {
+    margin-bottom: 3px;
+    margin-left: 18px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.todos li:hover {
+    background-color: #f5f5f5;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+
+}
+
+li.todolist {
+    border-bottom: 1px solid #DDD;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
