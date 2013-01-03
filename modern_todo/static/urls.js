@@ -2,7 +2,6 @@
  * a set of urls using a global `DEFINED_URLS` variable.
  */
 define(["test_js/testing_host", "underscore"], function(testing_host, _) {
-	console.log("inside urls.js, DEFINED_URLS is ", (typeof DEFINED_URLS))
   if (typeof DEFINED_URLS !== "undefined") {
     return DEFINED_URLS
   }
