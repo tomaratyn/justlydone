@@ -5,6 +5,7 @@
  * Backbone-tastypie may be freely distributed under the MIT license.
  * Add or override Backbone.js functionality, for compatibility with django-tastypie.
  */
+
 (function( undefined ) {
 	"use strict";
 	
