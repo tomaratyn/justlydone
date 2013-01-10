@@ -1,0 +1,8 @@
+*~
+.DS_Store
+bin
+include
+lib
+readline-6.2.0-py2.6-macosx-10.6-universal.egg
+*.pyc
+.idea
