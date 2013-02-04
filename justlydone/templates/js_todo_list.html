@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% comment %}
+
+ Copyright (C) 2012  The Boulevard Platform Inc.
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as
+ published by the Free Software Foundation, either version 3 of the
+ License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+ Contributors:
+  - Tom Aratyn <tom@aratyn.name>
+
+{% endcomment %}
+
+{% block header_template %}
+
+
+    <script type="x-application/mustache" id="todo_template">
+        {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
+        <li class="span9">
+            <input type="checkbox" class="done" [[#complete]]checked=""[[/complete]]>
+            [[text]]
+            &nbsp;
+            [[#complete]]<small>Finished: <time datetime="[[completion_datetime]]"></time></small>[[/complete]]
+            <small class="muted" >created: <time datetime="[[creation_datetime]]"></time></small>
+            <button class="pull-right btn btn-link delete-todo"><i class="icon-trash icon-grey"></i></button>
+        </li>
+    </script>
+
+    <script type="x-application/mustache" id="donetodolist_template">
+        {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
+        <div>
+            <ul class="donetodos unstyled  offset1 span10">
+            </ul>
+        </div>
+    </script>
+
+    <script type="x-application/mustache" id="list_todolist">
+        {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
+        <li class="todolist span11">
+            <button class="btn btn-link toggle-todos"><i class="icon-chevron-right"></i></button>
+            <span class="name">[[name]]</span> (<span class="todo-count">[[todos.length]]</span>)
+            <button class="btn-link btn remove-list"><i class="icon-grey icon-trash remove-list"></i></button>
+            <div class="hide todolist-details">
+                <div class="input-append add-todo-container">
+                    <input type="text" class="new-todo-text" placeholder="Add New Tasks Here...">
+                    <button class="btn add-new-todo" type="button"><i class="icon-plus"></i></button>
+                </div>
+                <ul class="todos unstyled offset1 span10"></ul>
+                <div class="offset4 span3">
+                    <button class="show-done-todolist btn">Show Done Todos</button>
+                    <button class="hide-done-todolist btn hide">Hide Done Todos</button>
+                </div>
+                <div class="donelist hide"></div>
+            </div>
+            <div class="modal hide edit-list-name-modal"
+                 role="dialog"
+                 aria-labelledby="edit-list-name-modal-label"
+                 aria-hidden="true"
+                 data-keyboard="true">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="edit-list-name-modal-label">Rename '<span class="list-old-name"></span>'</h3>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        Enter the list's new name: <input type="text" class="list-new-name">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                    <button class="btn btn-primary save">Save changes</button>
+                </div>
+            </div>
+        </li>
+    </script>
+
+{% endblock %}
+
+{% block page_contents %}
+
+
+    <div class="row">
+        <div class="span12">
+            <h1>Howdy {{ request.user.username }}! <small>Here are your to do lists:</small></h1>
+        </div>
+    </div>
+    <div class="row todolist_list">
+        <div class="span11">
+            <div class="new-list-container consistent-top-controls-padding">
+                <form class="form-horizontal nosubmit">
+                    <div class="input-append">
+                        <input class="span2 new_list_name" placeholder="New List Name" type="text">
+                        <button class="btn add_new_list" type="button"><i class="icon-plus"></i></button>
+                    </div>
+                </form>
+            </div>
+            <ul class="todolists unstyled">
+            </ul>
+        </div>
+        <div class="span1">
+            <div class="consistent-top-controls-padding">
+                <a class="btn btn-link refresh"><i class="icon-grey icon-refresh"></i></a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block bottom_script_page %}
+    <script>
+        DEFINED_URLS = {
+            TODOLISTS_URL: '{{ ToDoListResource.get_resource_list_uri }}',
+            TODO_URL: '{{ ToDoResource.get_resource_list_uri }}'
+        }
+        require.config(global_require_config)
+        require(["jquery", "collections/todolist", "views/todolist_list", "bootstrap"],
+                function ($, TodoListCollection, ToDoList_List_View) {
+                    var todolist_collection = new TodoListCollection();
+                    todolist_collection.fetch().then(function () {
+                        var view = new ToDoList_List_View({collection: todolist_collection})
+                        view.render_new_many_lists()
+                        $(function () {
+                            $("form.nosubmit").submit(function () {
+                                return false
+                            })
+                            $(".modal#edit-list-name-modal .save").click(function () {
+                                var $modal = $(this).parents(".modal#edit-list-name-modal")
+                                $modal.data("dosave", true)
+                                $modal.modal("hide")
+                            })
+                            $(".modal#edit-list-name-modal").on("hidden", function () {
+                                $(this).find(".list-new-name").val("")
+                            })
+                        })
+                    })
+                }
+        )
+
+    </script>
+
+{% endblock %}
+
