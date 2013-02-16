@@ -32,7 +32,8 @@ config["My tests"] = {
     "**/*.js"
   ],
   tests: [
-    "test_js/*-test.js"
+    "test_js/*-test.js",
+    "test_js/controllers/*-test.js"
   ],
   extensions: [ require("buster-amd") ]
 // Not used until buster starts shipping with resources/proxying.
