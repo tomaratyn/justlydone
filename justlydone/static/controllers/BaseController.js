@@ -38,6 +38,7 @@ function(_,            backbone) {
         var attr = controllerOptions[i]
         if (options[attr]) this[attr] = options[attr]
       }
+      if (this.view && this.view.model && !this.model) this.model = this.view.model
       this.options = options
     }
   }

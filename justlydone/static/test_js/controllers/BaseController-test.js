@@ -29,6 +29,18 @@ function(backbone,   BaseController) {
       })
       new NewController({view:view})
     },
+    "controller attaches model directly": function() {
+      var model = new (backbone.Model.extend({}))()
+      var view = new (backbone.View.extend({model:model}))()
+      var NewController = BaseController.extend({
+        initialize: function() {
+          buster.assert.same(view, this.view)
+          buster.assert.same(this.view.model, this.model)
+          buster.assert.same(model, this.model)
+        }
+      })
+      new NewController({view:view})
+    },
     "simple new controller": function() {
       var NewController = BaseController.extend({
         initialize: function() {
