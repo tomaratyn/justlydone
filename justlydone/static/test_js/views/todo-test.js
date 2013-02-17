@@ -25,7 +25,7 @@ function($,        when,         ToDoView,     todo_model) {
       this.view = new ToDoView({model: todo})
     },
     with_template: {
-      setUp:function() {
+      setUp: function() {
         template_text = "<div id='buster_test'><input type='checkbox' class='done'><label>{{text}}</label><button class='delete-todo'>X</button></div>"
         this.useFakeServer()
         this.view.template = template_text
@@ -42,7 +42,14 @@ function($,        when,         ToDoView,     todo_model) {
         }, 100)
         this.view.$el.find(".delete-todo").click()
         return deferred.promise
+      },
+      "//test click done destroys view": function() {
+        this.spy(this.view, "remove")
+        buster.refute.called(this.view.remove)
+        this.view.click_done_todo_checkbox()
+        buster.assert.calledOnce(this.view.remove)
+        buster.assert(false)
       }
-    },
+    }
   })
 })

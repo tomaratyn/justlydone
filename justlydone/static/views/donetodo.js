@@ -22,8 +22,6 @@ function($,        _,            Mustache, AbstractTodoView) {
     return AbstractTodoView.extend({
       events: {
         "click .delete-todo": "click_delete_todo",
-        "change .done": "make_done"
-
       },
       initialize: function() {
         var self = this

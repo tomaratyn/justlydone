@@ -17,21 +17,20 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define( ["jquery", "mustache", "views/AbstractTodoView", "humane"],
-function ($,        Mustache,   AbstractTodoView) {
+define( ["jquery", "mustache", "views/AbstractTodoView", "controllers/Todo", "humane"],
+function ($,        Mustache,   AbstractTodoView,         TodoController) {
   return AbstractTodoView.extend({
     events: {
       "click .delete-todo": "click_delete_todo",
-      "change .done": "make_done"
+      "click .done": "click_done_todo_checkbox"
+    },
+    click_done_todo_checkbox: function() {
+      this.controller.mark_todo_as_complete()
     },
     initialize: function() {
       var self = this
+      this.controller = new TodoController({view:this})
       Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this)
-      this.model.on("change:complete", function(model, isComplete, options){
-        if (isComplete){
-          self.remove()
-        }
-      })
     },
     render: function () {
       this.setElement(Mustache.render(this.template, this.model.attributes))

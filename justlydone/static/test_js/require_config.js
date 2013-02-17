@@ -41,9 +41,9 @@ var require = {
     "underscore": {exports: "_"}
   },
   paths: {
-    "backbone": "backbone-0.9.2",
+    "backbone": "backbone-0.9.10",
     "backbone-tastypie": "test_js/backbone-tastypie",
-    "backbone-relational": "backbone-relational.head",
+    "backbone-relational": "backbone-relational-0.7.1",
     "bootstrap": "bootstrap-2.1.0/js/bootstrap",
     "humane": "humane-custom",
     "jquery": "jquery-1.8.0",
