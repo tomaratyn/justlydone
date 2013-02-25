@@ -17,8 +17,8 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["jquery", "underscore", "backbone-relational", "mustache", "views/todo", "models/todo", "views/donelist", "bootstrap"],
-function($,        _,            Backbone,              Mustache, ToDoView, TodoModel, DoneListView) {
+define(["jquery", "underscore", "backbone-relational", "mustache", "controllers/Todolist", "views/todo", "models/todo", "views/donelist", "bootstrap"],
+function($,        _,            Backbone,              Mustache,   TodolistController,         ToDoView,     TodoModel,     DoneListView) {
   return Backbone.View.extend({
     events: {
       "click .add-new-todo": "add_new_todo",
@@ -40,6 +40,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
         self.register_todo_view_creator_listener(todoModel)
       })
       this.doneListView = null
+      this.controller = new TodolistController({view: this})
     },
     add_new_todo: function() {
       var text = this.$el.find(".new-todo-text").val()
@@ -50,11 +51,14 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
           success: function(new_todo, response, options) {
             self.register_todo_view_creator_listener(new_todo)
             var new_view = self.make_todo_view(new_todo)
-            self.$el.find(".todos").append(new_view.render().el)
+            self.add_new_todo_view_to_display(new_view)
             self.$el.find(".new-todo-text").val("")
           }
         })
       }
+    },
+    add_new_todo_view_to_display: function(todoView){
+      this.$(".todos").append(todoView.render().el)
     },
     hide_done_todolist: function() {
       this.$el.find(".show-done-todolist").removeClass("hide")
@@ -72,7 +76,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       _.each(todolist.get("todos").models, function (todo) {
         if (!todo.get("complete")) {
           var todo_view = self.make_todo_view(todo)
-          self.$el.find(".todos").append(todo_view.render().el)
+          self.add_new_todo_view_to_display(todo_view)
         }
         self.register_todo_view_creator_listener(todo)
       })
@@ -83,8 +87,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
         if (!isComplete) {
           if (self.$el) {
             var todoView = self.make_todo_view(todoModel)
-            todoView.render()
-            self.$el.find(".todos").append(todoView.$el)
+            self.add_new_todo_view_to_display(todoView)
           }
         }
       })

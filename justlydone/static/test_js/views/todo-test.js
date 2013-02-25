@@ -42,13 +42,6 @@ function($,        when,         ToDoView,     todo_model) {
         }, 100)
         this.view.$el.find(".delete-todo").click()
         return deferred.promise
-      },
-      "//test click done destroys view": function() {
-        this.spy(this.view, "remove")
-        buster.refute.called(this.view.remove)
-        this.view.click_done_todo_checkbox()
-        buster.assert.calledOnce(this.view.remove)
-        buster.assert(false)
       }
     }
   })

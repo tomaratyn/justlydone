@@ -28,7 +28,6 @@ function(BaseController) {
         this.model.destroy()
       },
       remove_view: function() {
-//        debugger
         this.view.remove()
       }
     })

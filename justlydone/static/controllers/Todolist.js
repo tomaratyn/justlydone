@@ -16,22 +16,20 @@
  * Contributors:
  *  - Tom Aratyn <tom@aratyn.name>
  */
+define(["controllers/BaseController", "models/todo"],
+function (BaseController, TodoModel) {
+  return BaseController.extend({
+    initialize: function() {
+      this.model.on("add:todos", function(todo) {
+        this.view.add_new_todo_view_to_display(this.view.make_todo_view(todo))
 
-define(["controllers/AbstractTodo"],
-function(AbstractTodoController) {
-    return AbstractTodoController.extend({
-      initialize: function() {
-        Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this)
-        var self = this
-        this.model.on("change:complete", function(model, isComplete, options){
-          if (isComplete){
-            self.remove_view()
-          }
-        })
-      },
-      mark_todo_as_complete: function(){
-        this.model.set({complete:true}, {silent:true})
-        this.model.save()
-      }
-    })
+      }, this)
+    },
+    make_todo: function(todo_properties) {
+      todo_properties.list = this.model
+      var todo = new TodoModel(todo_properties)
+      var promise = todo.save()
+      return promise
+    }
+  })
 })
