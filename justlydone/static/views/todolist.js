@@ -18,7 +18,7 @@
  */
 
 define(["jquery", "underscore", "backbone-relational", "mustache", "controllers/Todolist", "views/todo", "models/todo", "views/donelist", "bootstrap"],
-function($,        _,            Backbone,              Mustache,   TodolistController,         ToDoView,     TodoModel,     DoneListView) {
+function($,        _,            Backbone,              Mustache,   TodolistController,     ToDoView,     TodoModel,     DoneListView) {
   return Backbone.View.extend({
     events: {
       "click .add-new-todo": "add_new_todo",
@@ -50,8 +50,6 @@ function($,        _,            Backbone,              Mustache,   TodolistCont
         new_todo.save(null, {
           success: function(new_todo, response, options) {
             self.register_todo_view_creator_listener(new_todo)
-            var new_view = self.make_todo_view(new_todo)
-            self.add_new_todo_view_to_display(new_view)
             self.$el.find(".new-todo-text").val("")
           }
         })

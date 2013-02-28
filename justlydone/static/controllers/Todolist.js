@@ -21,8 +21,10 @@ function (BaseController, TodoModel) {
   return BaseController.extend({
     initialize: function() {
       this.model.on("add:todos", function(todo) {
-        this.view.add_new_todo_view_to_display(this.view.make_todo_view(todo))
-
+        if (this.view.el) {
+          var todoview = this.view.make_todo_view(todo)
+          this.view.add_new_todo_view_to_display(todoview)
+        }
       }, this)
     },
     make_todo: function(todo_properties) {

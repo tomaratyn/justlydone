@@ -44,7 +44,7 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
       this.$el = this.view.render().$el
     },
     add_new_todo: {
-      "//add_todo": function() {
+      "add_todo": function() {
         var self = this
         var timeout_deferred = when.defer()
         var assert_deferred = when.defer()
@@ -60,13 +60,16 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         assert_deferred.promise.then(decrement_joined_deferred)
         var new_todo_name = "Save the World"
         this.sandbox.server.autoRespond = true
-        this.sandbox.server.respondWith("POST", "http://localhost:8000/api/testing/todo/", JSON.stringify({text:new_todo_name, id:99}))
+        this.sandbox.server.respondWith("POST",
+                                        "http://localhost:8000/api/testing/todo/",
+                                        JSON.stringify({text:new_todo_name, id:99}))
         var $add_todo = this.$el.find(".add-new-todo")
         var $new_todo_textbox = this.$el.find(".new-todo-text")
         this.spy(this.view, "make_todo_view")
         var assert_todo_added = function() {
-          buster.assert.same(1, self.todolist.attributes.todos.length)
-          buster.assert.same(new_todo_name, self.todolist.attributes.todos.models[0].attributes.text)
+          var todos = self.todolist.get("todos")
+          buster.assert.same(1, todos.length)
+          buster.assert.same(new_todo_name, todos.models[0].get("text"))
           assert_deferred.resolver.resolve()
         }
         this.todolist.on("add:todos", assert_todo_added)
@@ -127,7 +130,7 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         return deferred.promise
       }
     },
-    "//done todolist interaction": {
+    "done todolist interaction": {
       "check click creates a done todolist": function() {
         var deferred = when.defer()
         var self = this
@@ -188,7 +191,6 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
             "resource_uri": "/api/testing/todo/" + id + "/",
             "text": "lorem ipsum"
           })
-          console.log('got request to do. With method:', xhr.method,  "returning:", text)
           xhr.respond(201, { "Content-Type": "application/json" }, text)
         })
         this.sandbox.server.respondWith(/todo\/set\//,function(xhr) {
@@ -199,19 +201,11 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
                 })
             }
           )
-          console.log("got request for set of todos. returning:", response)
           xhr.respond(200, { "Content-Type": "application/json" }, response)
         })
-
         this.view.model.save().then(function() {
-          console.log('post save todolist', self.view.model.get('todos').models.length)
           self.todo1 = new ToDoModel({text:"lorem ipsum", list: self.view.model})
-          console.log('pre save', self.view.model.get('todos').models.length)
-          var num_todos = self.view.model.get("todos").models.length
           self.todo1.save().then(function() {
-            console.log('post save todo1', self.view.model.get('todos').models.length)
-            var new_num_todos = self.view.model.get('todos').models.length
-            buster.assert.same(num_todos, new_num_todos)
             self.todo2 = new ToDoModel({text:"lorem ipsum", list: self.view.model})
             self.todo2.save().then(function() {
               self.todo3 = new ToDoModel({text:"lorem ipsum", list: self.view.model})
@@ -223,7 +217,7 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         })
         return deferred.promise
       },
-      "//update todo count" : {
+      "update todo count": {
         "on add": function() {
           var self = this
           var deferred = when.defer()
@@ -260,9 +254,6 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
       "make_todo_views": function () {
         this.spy(this.view, "make_todo_view")
         this.view.make_todo_views(this.view.model)
-
-        console.log("number of todos:", this.view.model.get("todos").models.length)
-        _.each(this.view.model.get("todos").models, function(todo) { console.log("todo: ", todo.get('id'), todo.get('text'))})
         buster.assert.equals(3, this.view.make_todo_view.callCount)
         this.todo3.set("complete", true)
         this.view.make_todo_views(this.view.model)
@@ -270,7 +261,7 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
       },
       // We need to test this manually because `register_todo_view_creator_listener` gets called in the `success`
       // callback of `fetchRelated` which, unfortunately, isn't testable in buster.
-      "//register_todo_view_creator_listener": function() {
+      "register_todo_view_creator_listener": function() {
         this.spy(this.view, "make_todo_view")
         this.todo1.set("complete", true)
         buster.assert.equals(0, this.view.make_todo_view.callCount)
