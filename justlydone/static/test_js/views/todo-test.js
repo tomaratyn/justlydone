@@ -42,6 +42,18 @@ function($,        when,         ToDoView,     todo_model) {
         }, 100)
         this.view.$el.find(".delete-todo").click()
         return deferred.promise
+      },
+      "test click done destroys view": function() {
+        var deferred = when.defer()
+        var self = this
+        this.spy(this.view, "remove")
+        buster.refute.called(this.view.remove)
+        this.view.click_done_todo_checkbox()
+        setTimeout(function() {
+          buster.assert.calledOnce(self.view.remove)
+          deferred.resolver.resolve()
+        }, 100)
+        return deferred.promise
       }
     }
   })

@@ -25,13 +25,20 @@ function(AbstractTodoController) {
         var self = this
         this.model.on("change:complete", function(model, isComplete, options){
           if (isComplete){
-            self.remove_view()
+            this.remove_view()
           }
-        })
+        }, this)
       },
       mark_todo_as_complete: function(){
-        this.model.set({complete:true}, {silent:true})
-        this.model.save()
+        this.model.set({complete:true})
+        return this.model.save()
+      },
+      remove_view: function() {
+        var view = this.view
+        this.view = null
+        view.controller = null
+        this.model.off(null, null, this)
+        view.remove()
       }
     })
 })
