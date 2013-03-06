@@ -30,8 +30,8 @@ function (BaseController, TodoModel) {
     make_todo: function(todo_properties) {
       todo_properties.list = this.model
       var todo = new TodoModel(todo_properties)
-      var promise = todo.save()
-      return promise
+      this.view.register_todo_view_creator_listener(todo)
+      return todo.save()
     }
   })
 })

@@ -66,6 +66,7 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         var $add_todo = this.$el.find(".add-new-todo")
         var $new_todo_textbox = this.$el.find(".new-todo-text")
         this.spy(this.view, "make_todo_view")
+        this.spy(this.view, "register_todo_view_creator_listener")
         var assert_todo_added = function() {
           var todos = self.todolist.get("todos")
           buster.assert.same(1, todos.length)
@@ -77,6 +78,7 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         $add_todo.trigger("click")
         setTimeout(function() {
           buster.assert.calledOnce(self.view.make_todo_view)
+          buster.assert.calledOnce(self.view.register_todo_view_creator_listener)
           timeout_deferred.resolver.resolve()
         }, 100)
         return joined_deferred

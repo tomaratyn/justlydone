@@ -40,9 +40,11 @@ function (when, TodolistModel, TodolistView, TodoModel) {
         var deferred = when.defer()
         var self = this
         this.spy(this.view, "add_new_todo_view_to_display")
+        this.spy(this.view, "register_todo_view_creator_listener")
         this.model.on("add:todos", function(todo, todosInList) {
           setTimeout(function() {
             buster.assert.calledOnce(self.view.add_new_todo_view_to_display)
+            buster.assert.calledOnce(self.view.register_todo_view_creator_listener)
             deferred.resolver.resolve()
           }, 10)
         })

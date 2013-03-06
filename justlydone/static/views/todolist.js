@@ -44,15 +44,9 @@ function($,        _,            Backbone,              Mustache,   TodolistCont
     },
     add_new_todo: function() {
       var text = this.$el.find(".new-todo-text").val()
-      var self = this
       if (text) {
-        var new_todo = new TodoModel({text: text, list: this.model})
-        new_todo.save(null, {
-          success: function(new_todo, response, options) {
-            self.register_todo_view_creator_listener(new_todo)
-            self.$el.find(".new-todo-text").val("")
-          }
-        })
+        this.controller.make_todo({text:text})
+        this.$el.find(".new-todo-text").val("")
       }
     },
     add_new_todo_view_to_display: function(todoView){
