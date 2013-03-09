@@ -43,7 +43,7 @@ var require = {
   paths: {
     "backbone": "backbone-0.9.10",
     "backbone-tastypie": "test_js/backbone-tastypie",
-    "backbone-relational": "backbone-relational-master",
+    "backbone-relational": "backbone-relational-0.8.0",
     "bootstrap": "bootstrap-2.1.0/js/bootstrap",
     "humane": "humane-custom",
     "jquery": "jquery-1.8.0",
