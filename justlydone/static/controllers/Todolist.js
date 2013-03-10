@@ -26,12 +26,24 @@ function (BaseController, TodoModel) {
           this.view.add_new_todo_view_to_display(todoview)
         }
       }, this)
+      _.each(this.model.get('todos').models, this.register_todo_view_creator_listener, this)
     },
     make_todo: function(todo_properties) {
       todo_properties.list = this.model
       var todo = new TodoModel(todo_properties)
-      this.view.register_todo_view_creator_listener(todo)
+      this.register_todo_view_creator_listener(todo)
       return todo.save()
+    },
+    register_todo_view_creator_listener: function(todoModel) {
+      var self = this
+      todoModel.on("change:complete", function(todoModel, isComplete, options) {
+        if (!isComplete) {
+          if (self.view.$el) {
+            var todoView = self.view.make_todo_view(todoModel)
+            self.view.add_new_todo_view_to_display(todoView)
+          }
+        }
+      })
     }
   })
 })

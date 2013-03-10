@@ -36,9 +36,6 @@ function($,        _,            Backbone,              Mustache,   TodolistCont
       this.model.on("add:todos", function() {this.update_todo_count() }, this)
       this.model.on("remove:todos", function() {this.update_todo_count() }, this)
       var self = this
-      _.each(this.model.get('todos').models, function(todoModel) {
-        self.register_todo_view_creator_listener(todoModel)
-      })
       this.doneListView = null
       this.controller = new TodolistController({view: this})
     },
@@ -70,18 +67,7 @@ function($,        _,            Backbone,              Mustache,   TodolistCont
           var todo_view = self.make_todo_view(todo)
           self.add_new_todo_view_to_display(todo_view)
         }
-        self.register_todo_view_creator_listener(todo)
-      })
-    },
-    register_todo_view_creator_listener: function(todoModel) {
-      var self = this
-      todoModel.on("change:complete", function(todoModel, isComplete, options) {
-        if (!isComplete) {
-          if (self.$el) {
-            var todoView = self.make_todo_view(todoModel)
-            self.add_new_todo_view_to_display(todoView)
-          }
-        }
+        self.controller.register_todo_view_creator_listener(todo)
       })
     },
     remove_list: function () {

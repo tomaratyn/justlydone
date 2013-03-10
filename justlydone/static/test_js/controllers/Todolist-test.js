@@ -40,17 +40,33 @@ function (when, TodolistModel, TodolistView, TodoModel) {
         var deferred = when.defer()
         var self = this
         this.spy(this.view, "add_new_todo_view_to_display")
-        this.spy(this.view, "register_todo_view_creator_listener")
+        this.spy(this.view.controller, "register_todo_view_creator_listener")
         this.model.on("add:todos", function(todo, todosInList) {
           setTimeout(function() {
             buster.assert.calledOnce(self.view.add_new_todo_view_to_display)
-            buster.assert.calledOnce(self.view.register_todo_view_creator_listener)
+            buster.assert.calledOnce(self.view.controller.register_todo_view_creator_listener)
             deferred.resolver.resolve()
           }, 10)
         })
         this.controller.make_todo({text:"Lorem Ipsum"})
         return deferred.promise
       }
+    },
+    // We need to test this manually because `register_todo_view_creator_listener` gets called in the `success`
+    // callback of `fetchRelated` which, unfortunately, isn't testable in buster.
+    "register_todo_view_creator_listener": function() {
+      todo1 = new TodoModel({text:"lorem ipsum", list: this.model})
+      todo1.save()
+      this.spy(this.view, "make_todo_view")
+      todo1.set("complete", true)
+      buster.assert.equals(0, this.view.make_todo_view.callCount)
+      todo1.set("complete", false)
+      buster.assert.equals(0, this.view.make_todo_view.callCount)
+      this.view.controller.register_todo_view_creator_listener(todo1)
+      todo1.set("complete", true)
+      buster.assert.equals(0, this.view.make_todo_view.callCount)
+      todo1.set("complete", false)
+      buster.assert.equals(1, this.view.make_todo_view.callCount)
     }
   })
 });

@@ -66,7 +66,7 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         var $add_todo = this.$el.find(".add-new-todo")
         var $new_todo_textbox = this.$el.find(".new-todo-text")
         this.spy(this.view, "make_todo_view")
-        this.spy(this.view, "register_todo_view_creator_listener")
+        this.spy(this.view.controller, "register_todo_view_creator_listener")
         var assert_todo_added = function() {
           var todos = self.todolist.get("todos")
           buster.assert.same(1, todos.length)
@@ -78,7 +78,7 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         $add_todo.trigger("click")
         setTimeout(function() {
           buster.assert.calledOnce(self.view.make_todo_view)
-          buster.assert.calledOnce(self.view.register_todo_view_creator_listener)
+          buster.assert.calledOnce(self.view.controller.register_todo_view_creator_listener)
           timeout_deferred.resolver.resolve()
         }, 100)
         return joined_deferred
@@ -245,20 +245,6 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         this.todo3.set("complete", true)
         this.view.make_todo_views(this.view.model)
         buster.assert.equals(3+2, this.view.make_todo_view.callCount)
-      },
-      // We need to test this manually because `register_todo_view_creator_listener` gets called in the `success`
-      // callback of `fetchRelated` which, unfortunately, isn't testable in buster.
-      "register_todo_view_creator_listener": function() {
-        this.spy(this.view, "make_todo_view")
-        this.todo1.set("complete", true)
-        buster.assert.equals(0, this.view.make_todo_view.callCount)
-        this.todo1.set("complete", false)
-        buster.assert.equals(0, this.view.make_todo_view.callCount)
-        this.view.register_todo_view_creator_listener(this.todo1)
-        this.todo1.set("complete", true)
-        buster.assert.equals(0, this.view.make_todo_view.callCount)
-        this.todo1.set("complete", false)
-        buster.assert.equals(1, this.view.make_todo_view.callCount)
       }
     }
   })

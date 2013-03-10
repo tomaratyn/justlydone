@@ -18,9 +18,9 @@
  */
 
 var require = {
-//  baseUrl: "../resources/",
+  baseUrl: "../resources/",
   /* for buster test -po use: */
-  baseUrl: "../static/",
+//  baseUrl: "../static/",
   shim: {
     "backbone": {
       deps: ["jquery", "underscore"],
