@@ -32,9 +32,6 @@ function($,        _,            Backbone,              Mustache,   TodolistCont
     initialize: function (options) {
       // we wrap the call to remove in a closure so that we can spy on remove() in tests.
       this.model.on("destroy", function() { this.remove() }, this)
-      this.model.on("change:name", this.update_name_label, this)
-      this.model.on("add:todos", function() {this.update_todo_count() }, this)
-      this.model.on("remove:todos", function() {this.update_todo_count() }, this)
       var self = this
       this.doneListView = null
       this.controller = new TodolistController({view: this})
@@ -107,6 +104,12 @@ function($,        _,            Backbone,              Mustache,   TodolistCont
       }
       $modal.modal("hide")
     },
+    set_list_name: function(name) {
+      this.$(".name").text(name)
+    },
+    set_todo_count: function(count) {
+      this.$(".todo-count").text(count)
+    },
     show_done_todolist: function() {
       if (!this.doneListView) {
        this.doneListView = this.make_done_todolist()
@@ -130,14 +133,6 @@ function($,        _,            Backbone,              Mustache,   TodolistCont
         $todos.addClass("hide")
       }
     },
-    template: $("script#list_todolist").text(),
-    update_name_label: function () {
-      this.$el.find(".name").text(this.model.attributes.name)
-    },
-    update_todo_count: function() {
-      if (this.$el) {
-        this.$el.find(".todo-count").text(this.model.attributes.todos.length)
-      }
-    }
+    template: $("script#list_todolist").text()
   })
 })

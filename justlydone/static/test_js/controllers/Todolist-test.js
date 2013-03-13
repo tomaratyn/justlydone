@@ -67,6 +67,12 @@ function (when, TodolistModel, TodolistView, TodoModel) {
       buster.assert.equals(0, this.view.make_todo_view.callCount)
       todo1.set("complete", false)
       buster.assert.equals(1, this.view.make_todo_view.callCount)
+    },
+    "update list name": function() {
+      var new_name = "New Name"
+      this.stub(this.view, "set_list_name")
+      this.model.set("name", new_name)
+      buster.assert.calledOnce(this.view.set_list_name)
     }
   })
 });
