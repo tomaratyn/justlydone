@@ -44,6 +44,9 @@ function (BaseController, TodoModel) {
           }
         }
       })
+    },
+    rename_list: function(new_name){
+      return this.model.save({"name": new_name})
     }
   })
 })

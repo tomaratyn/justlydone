@@ -98,22 +98,21 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         return deferred.promise
       }
     },
-    rename_list : {
-      test_rename_list: function() {
-        var self = this
+    "rename list" : {
+      "happy day": function() {
         var new_name = "new name"
         var deferred = when.defer()
-        this.todolist.on("change:name", function() {
-          buster.assert.same(new_name, self.todolist.attributes.name)
+        this.todolist.on("change:name", function(todolist, name, options) {
+          buster.assert.same(new_name, name)
           deferred.resolver.resolve()
         })
         this.$el.find(".name").trigger("dblclick")
-        buster.assert.same(this.$el.find(".list-old-name").text(), this.todolist.attributes.name)
+        buster.assert.same(this.$el.find(".list-old-name").text(), this.todolist.get("name"))
         this.$el.find(".list-new-name").val(new_name)
         this.$el.find(".edit-list-name-modal .save").trigger("click")
         return deferred.promise
       },
-      test_modal_save_button: function() {
+      "detailed interaction test": function() {
         var deferred = when.defer()
         var $modal = this.$el.find(".edit-list-name-modal")
         var $save = $modal.find(".save")

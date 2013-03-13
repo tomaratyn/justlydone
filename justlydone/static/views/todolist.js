@@ -74,17 +74,16 @@ function($,        _,            Backbone,              Mustache,   TodolistCont
       this.model.destroy()
     },
     rename_list: function (e) {
-      var view = this
+      var self = this
       var $modal = this.$el.find(".edit-list-name-modal")
-      $modal.find(".list-old-name").text(this.model.attributes.name)
-      $modal.find(".list-new-name").attr("placeholder", this.model.attributes.name)
+      $modal.find(".list-old-name").text(this.model.get("name"))
+      $modal.find(".list-new-name").attr("placeholder", this.model.get("name"))
       $modal.modal()
       //focus must be given after .modal() is called
       $modal.find(".list-new-name").focus()
       $modal.on("hide", function () {
         if ($modal.data("dosave")) {
-          view.model.set({"name": $modal.find(".list-new-name").val()})
-          view.model.save()
+          self.controller.rename_list($modal.find(".list-new-name").val())
           $modal.data("dosave", false)
           $modal.off("hide")
         }
