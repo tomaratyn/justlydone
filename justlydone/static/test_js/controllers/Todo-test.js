@@ -17,36 +17,20 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["when", "models/todo", "views/todo", "controllers/Todo"],
-function(when,   TodoModel, TodoView) {
+define(["models/todo", "views/todo", "controllers/Todo"],
+function(TodoModel,     TodoView) {
   buster.testCase("Todo Controller", {
     setUp: function() {
-      this.useFakeServer()
       this.model= new TodoModel({text: "lorem ipsum", complete:false})
       this.view = new TodoView({model:this.model})
       this.controller = this.view.controller
-      this.sandbox.server.autoRespond = true
-      this.sandbox.server.respondWith("POST",
-                                      "http://localhost:8000/api/testing/todo/",
-                                      JSON.stringify({text:"lorem ipsum", id:99, complete:false}))
-      this.sandbox.server.respondWith("POST",
-                                      "http://localhost:8000/api/testing/todo/99/",
-                                      JSON.stringify({text:"lorem ipsum", id:99, complete:true}))
     },
     "remove view on change:complete and complete === true": function() {
-      var deferred = when.defer()
-      var self = this
       this.spy(this.controller, "remove_view")
       this.spy(this.view, "remove")
-      this.model.save().then(function() {
-        self.model.set({complete: true})
-        self.model.save().then(function() {
-          buster.assert.calledOnce(self.controller.remove_view)
-          buster.assert.calledOnce(self.view.remove)
-          deferred.resolver.resolve()
-        })
-      })
-      return deferred.promise
+      this.model.set({complete: true})
+      buster.assert.calledOnce(this.controller.remove_view)
+      buster.assert.calledOnce(this.view.remove)
     }
   })
 })

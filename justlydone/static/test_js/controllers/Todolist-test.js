@@ -17,19 +17,13 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["when", "models/todolist", "views/todolist", "models/todo"],
-function (when, TodolistModel, TodolistView, TodoModel) {
+define(["when", "test_js/FakeServerConfigurator", "models/todolist", "views/todolist", "models/todo"],
+function(when,   FakeServerConfigurator,           TodolistModel,     TodolistView,     TodoModel) {
   buster.testCase("todolist controller", {
     setUp: function() {
-      this.useFakeServer()
-      this.sandbox.server.autoRespond = true
-      this.sandbox.server.respondWith("POST",
-        "http://localhost:8000/api/testing/todolist/",
-        JSON.stringify({name:"test", id:21, todos:[]}))
-      this.sandbox.server.respondWith("POST",
-        "http://localhost:8000/api/testing/todo/",
-        JSON.stringify({text:"Lorem Ipsum", id:99, list: 21}))
-
+      FakeServerConfigurator.enableFakeServer(this)
+      FakeServerConfigurator.enableTodolistCreateResponse(this)
+      FakeServerConfigurator.enableTodoCreateResponse(this)
       this.model = new TodolistModel({name: "test"})
       this.model.save()
       this.view = new TodolistView({model:this.model})
@@ -43,12 +37,17 @@ function (when, TodolistModel, TodolistView, TodoModel) {
         this.spy(this.view.controller, "register_todo_view_creator_listener")
         this.model.on("add:todos", function(todo, todosInList) {
           setTimeout(function() {
+            if (self.view.add_new_todo_view_to_display.callCount > 1) {
+              console.log(self.view.add_new_todo_view_to_display.firstCall)
+              console.log(self.view.add_new_todo_view_to_display.secondCall)
+              buster.assert(false)
+            }
             buster.assert.calledOnce(self.view.add_new_todo_view_to_display)
             buster.assert.calledOnce(self.view.controller.register_todo_view_creator_listener)
             deferred.resolver.resolve()
           }, 10)
         })
-        this.controller.make_todo({text:"Lorem Ipsum"})
+        this.controller.make_todo({text:"Lorem Ipsum", complete: false})
         return deferred.promise
       }
     },
