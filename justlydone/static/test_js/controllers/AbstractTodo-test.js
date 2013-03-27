@@ -25,7 +25,7 @@ define(["models/todo", "views/donetodo", "controllers/DoneTodo"],
         this.view = new DoneTodoView({model:this.model})
         // Using DoneTodoController for no particular reason, just need a concrete
         // implementation of the TodoController.
-        this.controller = new DoneTodoController({view:this.view})
+        this.controller = this.view.controller
       },
       "remove view on model destruction": function() {
         this.spy(this.view, "remove")

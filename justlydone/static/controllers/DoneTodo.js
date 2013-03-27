@@ -20,5 +20,14 @@
 define(["controllers/AbstractTodo"],
 function(AbstractTodoController) {
     return AbstractTodoController.extend({
+      initialize: function() {
+        Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this)
+        this.model.on("change:complete", this.on_incomplete_remove_view, this)
+      },
+      on_incomplete_remove_view: function(model, isComplete, options) {
+        if (!isComplete){
+          this.remove_view()
+        }
+      }
     })
 })

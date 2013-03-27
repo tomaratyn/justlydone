@@ -17,20 +17,15 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["jquery", "underscore", "mustache", "views/AbstractTodoView"],
-function($,        _,            Mustache, AbstractTodoView) {
+define(["jquery", "underscore", "mustache", "views/AbstractTodoView", "controllers/DoneTodo", "object_get_prototype_monkeypatch"],
+function($,        _,            Mustache,   AbstractTodoView,         DoneTodoController) {
     return AbstractTodoView.extend({
       events: {
-        "click .delete-todo": "click_delete_todo",
+        "click .delete-todo": "click_delete_todo"
       },
       initialize: function() {
-        var self = this
         Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this)
-        this.model.on("change:complete", function(model, isComplete, options) {
-          if (!isComplete) {
-            self.remove()
-          }
-        })
+        this.controller = new DoneTodoController({view:this})
       },
       render: function() {
         this.setElement(Mustache.render(this.template, this.model.attributes))

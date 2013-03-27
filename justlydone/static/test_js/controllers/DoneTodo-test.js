@@ -23,7 +23,12 @@ function(TodoModel, DoneTodoView, DoneTodoController) {
     setUp: function() {
       this.model= new TodoModel({text: "lorem ipsum", complete:true})
       this.view = new DoneTodoView({model:this.model})
-      this.controller = new DoneTodoController({view:this.view})
+      this.controller = this.view.controller
+    },
+    "catch todo:complete change to false": function() {
+      this.spy(this.view, "remove")
+      this.model.set({complete: false})
+      buster.assert.calledOnce(this.view.remove)
     }
   })
 })
