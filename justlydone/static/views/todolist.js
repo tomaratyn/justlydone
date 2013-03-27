@@ -32,7 +32,6 @@ function($,        _,            Backbone,              Mustache,   TodolistCont
     initialize: function (options) {
       // we wrap the call to remove in a closure so that we can spy on remove() in tests.
       this.model.on("destroy", function() { this.remove() }, this)
-      var self = this
       this.doneListView = null
       this.controller = new TodolistController({view: this})
     },
@@ -70,7 +69,7 @@ function($,        _,            Backbone,              Mustache,   TodolistCont
     remove_list: function () {
       this.model.destroy()
     },
-    rename_list: function (e) {
+    rename_list: function () {
       var self = this
       var $modal = this.$el.find(".edit-list-name-modal")
       $modal.find(".list-old-name").text(this.model.get("name"))

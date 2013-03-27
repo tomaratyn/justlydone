@@ -42,7 +42,7 @@ function(_) {
           "complete": false,
           "completion_datetime": null,
           "creation_datetime": "2012-12-15T20:24:16.415315+00:00",
-          "id": ++id,
+          "id": id++,
           "list": 88,
           "resource_uri": "/api/testing/todo/" + id + "/",
           "text": "lorem ipsum " + id

@@ -17,11 +17,11 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["underscore", "jquery", "when", "models/todolist", "models/todo", "views/todolist"],
-function(_,            $,        when,   todolist_model,    ToDoModel,     TodoListView) {
+define(["underscore", "jquery", "when", "test_js/FakeServerConfigurator", "models/todolist", "models/todo", "views/todolist"],
+function(_,            $,        when,   FakeServerConfigurator,           todolist_model,    ToDoModel,     TodoListView) {
   buster.testCase("views todolist", {
     setUp: function() {
-      this.useFakeServer()
+      FakeServerConfigurator.enableFakeServer(this)
       this.todolist = new todolist_model({name:"my todolist"})
       this.view = new TodoListView({model: this.todolist})
       this.view.template =
@@ -45,57 +45,21 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
     },
     add_new_todo: {
       "add_todo": function() {
-        var self = this
-        var timeout_deferred = when.defer()
-        var assert_deferred = when.defer()
-        var joined_deferred = when.defer()
-        joined_deferred.count = 2
-        var decrement_joined_deferred = function () {
-          joined_deferred.count--
-          if (joined_deferred.count == 0) {
-            joined_deferred.resolver.resolve()
-          }
-        }
-        timeout_deferred.promise.then(decrement_joined_deferred)
-        assert_deferred.promise.then(decrement_joined_deferred)
-        var new_todo_name = "Save the World"
-        this.sandbox.server.autoRespond = true
-        this.sandbox.server.respondWith("POST",
-                                        "http://localhost:8000/api/testing/todo/",
-                                        JSON.stringify({text:new_todo_name, id:99}))
+        var new_todo_name = "Lorem Ipsum"
         var $add_todo = this.$el.find(".add-new-todo")
         var $new_todo_textbox = this.$el.find(".new-todo-text")
-        this.spy(this.view, "make_todo_view")
-        this.spy(this.view.controller, "register_todo_view_creator_listener")
-        var assert_todo_added = function() {
-          var todos = self.todolist.get("todos")
-          buster.assert.same(1, todos.length)
-          buster.assert.same(new_todo_name, todos.models[0].get("text"))
-          assert_deferred.resolver.resolve()
-        }
-        this.todolist.on("add:todos", assert_todo_added)
+        this.stub(this.view.controller, "make_todo")
         $new_todo_textbox.val(new_todo_name)
         $add_todo.trigger("click")
-        setTimeout(function() {
-          buster.assert.calledOnce(self.view.make_todo_view)
-          buster.assert.calledOnce(self.view.controller.register_todo_view_creator_listener)
-          timeout_deferred.resolver.resolve()
-        }, 100)
-        return joined_deferred
+        buster.assert.calledOnce(this.view.controller.make_todo)
       },
       dont_add_empty: function() {
-        var deferred = when.defer()
         var $add_todo = this.$el.find(".add-new-todo")
-        var assert_didnt_fire = function(){
-          buster.assert(false)
-        }
-        this.todolist.on("add:todos", assert_didnt_fire)
+        var $new_todo_textbox = this.$el.find(".new-todo-text")
+        this.stub(this.view.controller, "make_todo")
+        $new_todo_textbox.val("")
         $add_todo.trigger("click")
-        setTimeout(function() {
-          assert(true)
-          deferred.resolver.resolve()
-        }, 100)
-        return deferred.promise
+        buster.refute.called(this.view.controller.make_todo)
       }
     },
     "rename list" : {
