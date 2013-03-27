@@ -67,7 +67,7 @@ function($,        _,            Backbone,              Mustache,   TodolistCont
       })
     },
     remove_list: function () {
-      this.model.destroy()
+      this.controller.destroy_model()
     },
     rename_list: function () {
       var self = this

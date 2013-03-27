@@ -34,6 +34,9 @@ function (BaseController, TodoModel) {
     count_todos: function() {
       return this.model.get("todos").models.length
     },
+    destroy_model: function() {
+      this.model.destroy()
+    },
     make_todo: function(todo_properties) {
       todo_properties.list = this.model
       var todo = new TodoModel(todo_properties)
