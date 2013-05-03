@@ -89,11 +89,7 @@ function($,        _,            Backbone,              Mustache,   TodolistCont
     render: function () {
       var self = this
       this.setElement(Mustache.render(this.template, this.model.attributes))
-      this.model.fetchRelated("todos", {
-        success: function () {
-          self.make_todo_views(self.model)
-        }
-      })
+      this.model.fetchRelated("todos")
       return this
     },
     save_and_close_edit_name_modal: function() {
