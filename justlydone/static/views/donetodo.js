@@ -21,11 +21,18 @@ define(["jquery", "underscore", "mustache", "views/AbstractTodoView", "controlle
 function($,        _,            Mustache,   AbstractTodoView,         DoneTodoController) {
     return AbstractTodoView.extend({
       events: {
-        "click .delete-todo": "click_delete_todo"
+        "click .delete-todo": "click_delete_todo",
+        "click .done": "click_complete_checkbox"
       },
       initialize: function() {
         Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this)
         this.controller = new DoneTodoController({view:this})
+      },
+      click_complete_checkbox: function() {
+        var doneCheckbox = this.$el.find(".done")
+        if (doneCheckbox.length > 0 && !doneCheckbox.is(":checked")) {
+          this.controller.mark_todo_as_incomplete()
+        }
       },
       render: function() {
         this.setElement(Mustache.render(this.template, this.model.attributes))

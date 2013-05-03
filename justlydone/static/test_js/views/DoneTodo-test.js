@@ -17,21 +17,17 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["controllers/AbstractTodo"],
-function(AbstractTodoController) {
-    return AbstractTodoController.extend({
-      initialize: function() {
-        Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this)
-        this.model.on("change:complete", this.on_incomplete_remove_view, this)
-      },
-      mark_todo_as_incomplete: function() {
-        this.model.set("complete", false)
-        return this.model.save()
-      },
-      on_incomplete_remove_view: function(model, isComplete, options) {
-        if (!isComplete){
-          this.remove_view()
-        }
-      }
-    })
+define(["models/todo", "views/donetodo"],
+function (TodoModel, DoneTodoView) {
+  buster.testCase("views DoneTodo", {
+    setUp: function() {
+      this.doneTodo = new TodoModel({text: "Lorem Ipsum", complete: true})
+      this.doneTodoView = new DoneTodoView({model: this.doneTodo})
+    },
+    "uncheck listener should mark todo model incomplete": function() {
+      this.doneTodoView.$el.append("<input type='checkbox' class='done'></input>")
+      this.doneTodoView.click_complete_checkbox()
+      buster.refute(this.doneTodo.get("complete"))
+    }
+  })
 })
