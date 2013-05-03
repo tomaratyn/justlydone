@@ -28,6 +28,14 @@ function(AbstractTodoController) {
             this.remove_view()
           }
         }, this)
+        this.model.on("change:text", this.change_text, this)
+        this.model.on("change:creation_datetime", this.change_create_datetime, this)
+      },
+      change_create_datetime: function(model, new_creation_datetime, options) {
+        this.view.update_creation_datetime(new_creation_datetime)
+      },
+      change_text: function(model, new_text, options) {
+        this.view.update_todo_text(new_text)
       },
       mark_todo_as_complete: function(){
         this.model.set({complete:true})

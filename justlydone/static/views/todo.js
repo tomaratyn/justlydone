@@ -37,6 +37,13 @@ function ($,        Mustache,   AbstractTodoView,         TodoController) {
       this.humanize_times()
       return this
     },
-    template: $("script#todo_template").text()
+    template: $("script#todo_template").text(),
+    update_creation_datetime: function(new_creation_datetime) {
+      this.$el.find(".creation-datetime").attr("datetime", new_creation_datetime)
+      this.humanize_times()
+    },
+    update_todo_text: function(new_text) {
+      this.$el.find(".text").text(new_text)
+    }
   })
 })
