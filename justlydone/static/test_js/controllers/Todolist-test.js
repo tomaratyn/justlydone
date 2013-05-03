@@ -51,17 +51,9 @@ function(when,   FakeServerConfigurator,           TodolistModel,     TodolistVi
         return deferred.promise
       }
     },
-    // We need to test this manually because `register_todo_view_creator_listener` gets called in the `success`
-    // callback of `fetchRelated` which, unfortunately, isn't testable in buster.
     "register_todo_view_creator_listener": function() {
       todo1 = new TodoModel({text:"lorem ipsum", list: this.model})
-      todo1.save()
       this.spy(this.view, "make_todo_view")
-      todo1.set("complete", true)
-      buster.assert.equals(0, this.view.make_todo_view.callCount)
-      todo1.set("complete", false)
-      buster.assert.equals(0, this.view.make_todo_view.callCount)
-      this.view.controller.register_todo_view_creator_listener(todo1)
       todo1.set("complete", true)
       buster.assert.equals(0, this.view.make_todo_view.callCount)
       todo1.set("complete", false)

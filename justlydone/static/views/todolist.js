@@ -63,7 +63,6 @@ function($,        _,            Backbone,              Mustache,   TodolistCont
           var todo_view = self.make_todo_view(todo)
           self.add_new_todo_view_to_display(todo_view)
         }
-        self.controller.register_todo_view_creator_listener(todo)
       })
     },
     remove_list: function () {

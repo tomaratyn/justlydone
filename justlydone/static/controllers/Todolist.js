@@ -22,6 +22,7 @@ function (BaseController, TodoModel) {
     initialize: function() {
       this.model.on("add:todos", function(todo) {
         if (this.view.el) {
+          this.register_todo_view_creator_listener(todo)
           var todoview = this.view.make_todo_view(todo)
           this.view.add_new_todo_view_to_display(todoview)
         }
@@ -40,22 +41,20 @@ function (BaseController, TodoModel) {
     make_todo: function(todo_properties) {
       todo_properties.list = this.model
       var todo = new TodoModel(todo_properties)
-      this.register_todo_view_creator_listener(todo)
       return todo.save()
     },
     on_name_change: function(todolist, name, options) {
       this.view.set_list_name(name)
     },
     register_todo_view_creator_listener: function(todoModel) {
-      var self = this
       todoModel.on("change:complete", function(todoModel, isComplete, options) {
         if (!isComplete) {
-          if (self.view.$el) {
-            var todoView = self.view.make_todo_view(todoModel)
-            self.view.add_new_todo_view_to_display(todoView)
+          if (this.view.$el) {
+            var todoView = this.view.make_todo_view(todoModel)
+            this.view.add_new_todo_view_to_display(todoView)
           }
         }
-      })
+      }, this)
     },
     rename_list: function(new_name){
       return this.model.save({"name": new_name})
