@@ -17,11 +17,11 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["underscore", "jquery", "when", "models/todolist", "models/todo", "views/todolist"],
-function(_,            $,        when,   todolist_model,    ToDoModel,     TodoListView) {
+define(["underscore", "jquery", "when", "test_js/FakeServerConfigurator", "models/todolist", "models/todo", "views/todolist"],
+function(_,            $,        when,   FakeServerConfigurator,           todolist_model,    ToDoModel,     TodoListView) {
   buster.testCase("views todolist", {
     setUp: function() {
-      this.useFakeServer()
+      FakeServerConfigurator.enableFakeServer(this)
       this.todolist = new todolist_model({name:"my todolist"})
       this.view = new TodoListView({model: this.todolist})
       this.view.template =
@@ -44,71 +44,39 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
       this.$el = this.view.render().$el
     },
     add_new_todo: {
-      add_todo: function() {
-        var self = this
-        var timeout_deferred = when.defer()
-        var assert_deferred = when.defer()
-        var joined_deferred = when.defer()
-        joined_deferred.count = 2
-        var decrement_joined_deferred = function () {
-          joined_deferred.count--
-          if (joined_deferred.count == 0) {
-            joined_deferred.resolver.resolve()
-          }
-        }
-        timeout_deferred.promise.then(decrement_joined_deferred)
-        assert_deferred.promise.then(decrement_joined_deferred)
-        var new_todo_name = "Save the World"
-        this.sandbox.server.autoRespond = true
-        this.sandbox.server.respondWith("POST", "http://localhost:8000/api/testing/todo/", JSON.stringify({text:new_todo_name, id:99}))
+      "add_todo": function() {
+        var new_todo_name = "Lorem Ipsum"
         var $add_todo = this.$el.find(".add-new-todo")
         var $new_todo_textbox = this.$el.find(".new-todo-text")
-        this.spy(this.view, "make_todo_view")
-        var assert_todo_added = function() {
-          buster.assert.same(1, self.todolist.attributes.todos.length)
-          buster.assert.same(new_todo_name, self.todolist.attributes.todos.models[0].attributes.text)
-          assert_deferred.resolver.resolve()
-        }
-        this.todolist.on("add:todos", assert_todo_added)
+        this.stub(this.view.controller, "make_todo")
         $new_todo_textbox.val(new_todo_name)
         $add_todo.trigger("click")
-        window.setTimeout(function() {
-          buster.assert.calledOnce(self.view.make_todo_view)
-          timeout_deferred.resolver.resolve()
-        }, 100)
-        return joined_deferred
+        buster.assert.calledOnce(this.view.controller.make_todo)
       },
       dont_add_empty: function() {
-        var deferred = when.defer()
         var $add_todo = this.$el.find(".add-new-todo")
-        var assert_didnt_fire = function(){
-          buster.assert(false)
-        }
-        this.todolist.on("add:todos", assert_didnt_fire)
+        var $new_todo_textbox = this.$el.find(".new-todo-text")
+        this.stub(this.view.controller, "make_todo")
+        $new_todo_textbox.val("")
         $add_todo.trigger("click")
-        setTimeout(function() {
-          assert(true)
-          deferred.resolver.resolve()
-        }, 100)
-        return deferred.promise
+        buster.refute.called(this.view.controller.make_todo)
       }
     },
-    rename_list : {
-      test_rename_list: function() {
-        var self = this
+    "rename list" : {
+      "happy day": function() {
         var new_name = "new name"
         var deferred = when.defer()
-        this.todolist.on("change:name", function() {
-          buster.assert.same(new_name, self.todolist.attributes.name)
+        this.todolist.on("change:name", function(todolist, name, options) {
+          buster.assert.same(new_name, name)
           deferred.resolver.resolve()
         })
         this.$el.find(".name").trigger("dblclick")
-        buster.assert.same(this.$el.find(".list-old-name").text(), this.todolist.attributes.name)
+        buster.assert.same(this.$el.find(".list-old-name").text(), this.todolist.get("name"))
         this.$el.find(".list-new-name").val(new_name)
         this.$el.find(".edit-list-name-modal .save").trigger("click")
         return deferred.promise
       },
-      test_modal_save_button: function() {
+      "detailed interaction test": function() {
         var deferred = when.defer()
         var $modal = this.$el.find(".edit-list-name-modal")
         var $save = $modal.find(".save")
@@ -129,31 +97,16 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
     },
     "done todolist interaction": {
       "check click creates a done todolist": function() {
-        var deferred = when.defer()
-        var self = this
         this.spy(this.view, "make_done_todolist")
         this.$el.find(".show-done-todolist").click()
-        setTimeout(function() {
-          buster.assert.called(self.view.make_done_todolist)
-          deferred.resolver.resolve()
-        }, 10)
-        return deferred.promise
+        buster.assert.called(this.view.make_done_todolist)
       },
       "don't trigger twice": function() {
-        var deferred = when.defer()
-        var self = this
         this.spy(this.view, "make_done_todolist")
         this.$el.find(".show-done-todolist").click()
-        setTimeout(function() {
-          buster.assert.called(self.view.make_done_todolist)
-          self.$el.find(".show-done-todolist").click()
-          setTimeout(function() {
-            buster.assert.equals(1, self.view.make_done_todolist.callCount)
-            deferred.resolver.resolve()
-          }, 10)
-        }, 10)
-        return deferred.promise
-
+        buster.assert.called(this.view.make_done_todolist)
+        this.$el.find(".show-done-todolist").click()
+        buster.assert.equals(1, this.view.make_done_todolist.callCount)
       }
     },
     "test remove view on model removal": function() {
@@ -168,7 +121,6 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         var id = 99
         var keys = ["complete", "id", "resource_uri", "creation_datetime", "text"]
         this.sandbox.server.autoRespond = true
-        this.sandbox.server.autoRespondAfter = 2
         this.sandbox.server.respondWith(/todolist\/?$/, function(xhr) {
           xhr.respond(201, { "Content-Type": "application/json" }, JSON.stringify({
             "creation_datetime": "2012-12-20T22:37:32.580887+00:00",
@@ -187,7 +139,7 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
             "id": ++id,
             "list": "/api/testing/todolist/88/",
             "resource_uri": "/api/testing/todo/" + id + "/",
-            "text": "lorem ipsum " + id
+            "text": "lorem ipsum"
           })
           xhr.respond(201, { "Content-Type": "application/json" }, text)
         })
@@ -215,7 +167,7 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         })
         return deferred.promise
       },
-      "update todo count" : {
+      "update todo count": {
         "on add": function() {
           var self = this
           var deferred = when.defer()
@@ -256,20 +208,6 @@ function(_,            $,        when,   todolist_model,    ToDoModel,     TodoL
         this.todo3.set("complete", true)
         this.view.make_todo_views(this.view.model)
         buster.assert.equals(3+2, this.view.make_todo_view.callCount)
-      },
-      // We need to test this manually because `register_todo_view_creator_listener` gets called in the `success`
-      // callback of `fetchRelated` which, unfortunately, isn't testable in buster.
-      register_todo_view_creator_listener: function() {
-        this.spy(this.view, "make_todo_view")
-        this.todo1.set("complete", true)
-        buster.assert.equals(0, this.view.make_todo_view.callCount)
-        this.todo1.set("complete", false)
-        buster.assert.equals(0, this.view.make_todo_view.callCount)
-        this.view.register_todo_view_creator_listener(this.todo1)
-        this.todo1.set("complete", true)
-        buster.assert.equals(0, this.view.make_todo_view.callCount)
-        this.todo1.set("complete", false)
-        buster.assert.equals(1, this.view.make_todo_view.callCount)
       }
     }
   })

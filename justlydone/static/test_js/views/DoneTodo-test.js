@@ -1,5 +1,4 @@
-/*
- * Copyright (C) 2012  The Boulevard Platform Inc.
+/* Copyright (C) 2013  The Boulevard Platform Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,34 +17,17 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-var config = module.exports;
-
-config["My tests"] = {
-  rootPath: "./",
-  environment: "browser", // or "node"
-  libs: [
-    "test_js/require_config.js",
-    "require-2.1.0.js"
-  ],
-  sources: [
-    "*.js",
-    "**/*.js"
-  ],
-  tests: [
-    "test_js/*-test.js",
-    "test_js/controllers/*-test.js",
-    "test_js/views/*-test.js"
-  ],
-  extensions: [ require("buster-amd") ]
-// Not used until buster starts shipping with resources/proxying.
-// Also, should use testing_host.js
-/*
-  ,
-  resources: [{
-    path:"/api",
-    backend:"http://localhost:8000/api"
-  }]
-*/
-}
-
-
+define(["models/todo", "views/donetodo"],
+function (TodoModel, DoneTodoView) {
+  buster.testCase("views DoneTodo", {
+    setUp: function() {
+      this.doneTodo = new TodoModel({text: "Lorem Ipsum", complete: true})
+      this.doneTodoView = new DoneTodoView({model: this.doneTodo})
+    },
+    "uncheck listener should mark todo model incomplete": function() {
+      this.doneTodoView.$el.append("<input type='checkbox' class='done'></input>")
+      this.doneTodoView.click_complete_checkbox()
+      buster.refute(this.doneTodo.get("complete"))
+    }
+  })
+})

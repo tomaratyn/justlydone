@@ -17,8 +17,8 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["jquery", "underscore", "backbone-relational", "mustache", "views/todo", "models/todo", "views/donelist", "bootstrap"],
-function($,        _,            Backbone,              Mustache, ToDoView, TodoModel, DoneListView) {
+define(["jquery", "underscore", "backbone-relational", "mustache", "controllers/Todolist", "views/todo", "models/todo", "views/donelist", "bootstrap"],
+function($,        _,            Backbone,              Mustache,   TodolistController,     ToDoView,     TodoModel,     DoneListView) {
   return Backbone.View.extend({
     events: {
       "click .add-new-todo": "add_new_todo",
@@ -32,29 +32,18 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
     initialize: function (options) {
       // we wrap the call to remove in a closure so that we can spy on remove() in tests.
       this.model.on("destroy", function() { this.remove() }, this)
-      this.model.on("change:name", this.update_name_label, this)
-      this.model.on("add:todos", function() {this.update_todo_count() }, this)
-      this.model.on("remove:todos", function() {this.update_todo_count() }, this)
-      var self = this
-      _.each(this.model.get('todos').models, function(todoModel) {
-        self.register_todo_view_creator_listener(todoModel)
-      })
       this.doneListView = null
+      this.controller = new TodolistController({view: this})
     },
     add_new_todo: function() {
       var text = this.$el.find(".new-todo-text").val()
-      var self = this
       if (text) {
-        var new_todo = new TodoModel({text: text, list: this.model})
-        new_todo.save(null, {
-          success: function(new_todo, response, options) {
-            self.register_todo_view_creator_listener(new_todo)
-            var new_view = self.make_todo_view(new_todo)
-            self.$el.find(".todos").append(new_view.render().el)
-            self.$el.find(".new-todo-text").val("")
-          }
-        })
+        this.controller.make_todo({text:text})
+        this.$el.find(".new-todo-text").val("")
       }
+    },
+    add_new_todo_view_to_display: function(todoView){
+      this.$(".todos").append(todoView.render().el)
     },
     hide_done_todolist: function() {
       this.$el.find(".show-done-todolist").removeClass("hide")
@@ -72,38 +61,24 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
       _.each(todolist.get("todos").models, function (todo) {
         if (!todo.get("complete")) {
           var todo_view = self.make_todo_view(todo)
-          self.$el.find(".todos").append(todo_view.render().el)
-        }
-        self.register_todo_view_creator_listener(todo)
-      })
-    },
-    register_todo_view_creator_listener: function(todoModel) {
-      var self = this
-      todoModel.on("change:complete", function(todoModel, isComplete, options) {
-        if (!isComplete) {
-          if (self.$el) {
-            var todoView = self.make_todo_view(todoModel)
-            todoView.render()
-            self.$el.find(".todos").append(todoView.$el)
-          }
+          self.add_new_todo_view_to_display(todo_view)
         }
       })
     },
     remove_list: function () {
-      this.model.destroy()
+      this.controller.destroy_model()
     },
-    rename_list: function (e) {
-      var view = this
+    rename_list: function () {
+      var self = this
       var $modal = this.$el.find(".edit-list-name-modal")
-      $modal.find(".list-old-name").text(this.model.attributes.name)
-      $modal.find(".list-new-name").attr("placeholder", this.model.attributes.name)
+      $modal.find(".list-old-name").text(this.model.get("name"))
+      $modal.find(".list-new-name").attr("placeholder", this.model.get("name"))
       $modal.modal()
       //focus must be given after .modal() is called
       $modal.find(".list-new-name").focus()
       $modal.on("hide", function () {
         if ($modal.data("dosave")) {
-          view.model.set({"name": $modal.find(".list-new-name").val()})
-          view.model.save()
+          self.controller.rename_list($modal.find(".list-new-name").val())
           $modal.data("dosave", false)
           $modal.off("hide")
         }
@@ -113,11 +88,7 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
     render: function () {
       var self = this
       this.setElement(Mustache.render(this.template, this.model.attributes))
-      this.model.fetchRelated("todos", {
-        success: function () {
-          self.make_todo_views(self.model)
-        }
-      })
+      this.model.fetchRelated("todos")
       return this
     },
     save_and_close_edit_name_modal: function() {
@@ -126,6 +97,12 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
         $modal.data("dosave", 1)
       }
       $modal.modal("hide")
+    },
+    set_list_name: function(name) {
+      this.$(".name").text(name)
+    },
+    set_todo_count: function(count) {
+      this.$(".todo-count").text(count)
     },
     show_done_todolist: function() {
       if (!this.doneListView) {
@@ -150,14 +127,6 @@ function($,        _,            Backbone,              Mustache, ToDoView, Todo
         $todos.addClass("hide")
       }
     },
-    template: $("script#list_todolist").text(),
-    update_name_label: function () {
-      this.$el.find(".name").text(this.model.attributes.name)
-    },
-    update_todo_count: function() {
-      if (this.$el) {
-        this.$el.find(".todo-count").text(this.model.attributes.todos.length)
-      }
-    }
+    template: $("script#list_todolist").text()
   })
 })
