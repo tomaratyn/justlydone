@@ -18,19 +18,20 @@
  */
 
 define(["models/todo", "views/todo", "controllers/Todo"],
-function(TodoModel,     TodoView) {
-  buster.testCase("Todo Controller", {
-    setUp: function() {
-      this.model= new TodoModel({text: "lorem ipsum", complete:false})
-      this.view = new TodoView({model:this.model})
-      this.controller = this.view.controller
-    },
-    "remove view on change:complete and complete === true": function() {
-      this.spy(this.controller, "remove_view")
-      this.spy(this.view, "remove")
-      this.model.set({complete: true})
-      buster.assert.calledOnce(this.controller.remove_view)
-      buster.assert.calledOnce(this.view.remove)
-    }
-  })
-})
+  function (TodoModel,     TodoView) {
+    "use strict";
+    buster.testCase("Todo Controller", {
+      setUp: function () {
+        this.model = new TodoModel({text: "lorem ipsum", complete:false});
+        this.view = new TodoView({model:this.model});
+        this.controller = this.view.controller;
+      },
+      "remove view on change:complete and complete === true": function () {
+        this.spy(this.controller, "remove_view");
+        this.spy(this.view, "remove");
+        this.model.set({complete: true});
+        buster.assert.calledOnce(this.controller.remove_view);
+        buster.assert.calledOnce(this.view.remove);
+      }
+    });
+  });

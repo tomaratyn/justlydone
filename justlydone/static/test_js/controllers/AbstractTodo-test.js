@@ -18,21 +18,22 @@
  */
 
 define(["models/todo", "views/donetodo", "controllers/DoneTodo"],
-  function(TodoModel, DoneTodoView, DoneTodoController) {
+  function (TodoModel, DoneTodoView, DoneTodoController) {
+    "use strict";
     buster.testCase("Abstract Todo Controller", {
-      setUp: function() {
-        this.model= new TodoModel({text: "lorem ipsum", complete:true})
-        this.view = new DoneTodoView({model:this.model})
+      setUp: function () {
+        this.model = new TodoModel({text: "lorem ipsum", complete: true});
+        this.view = new DoneTodoView({model: this.model});
         // Using DoneTodoController for no particular reason, just need a concrete
         // implementation of the TodoController.
-        this.controller = this.view.controller
+        this.controller = this.view.controller;
       },
-      "remove view on model destruction": function() {
-        this.spy(this.view, "remove")
-        this.spy(this.controller, "remove_view")
-        this.model.trigger("destroy", this.model)
-        buster.assert.calledOnce(this.view.remove)
-        buster.assert.calledOnce(this.controller.remove_view)
+      "remove view on model destruction": function () {
+        this.spy(this.view, "remove");
+        this.spy(this.controller, "remove_view");
+        this.model.trigger("destroy", this.model);
+        buster.assert.calledOnce(this.view.remove);
+        buster.assert.calledOnce(this.controller.remove_view);
       }
     })
   })

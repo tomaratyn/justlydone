@@ -18,16 +18,17 @@
  */
 
 define(["models/todo", "views/donetodo"],
-function (TodoModel, DoneTodoView) {
-  buster.testCase("views DoneTodo", {
-    setUp: function() {
-      this.doneTodo = new TodoModel({text: "Lorem Ipsum", complete: true})
-      this.doneTodoView = new DoneTodoView({model: this.doneTodo})
-    },
-    "uncheck listener should mark todo model incomplete": function() {
-      this.doneTodoView.$el.append("<input type='checkbox' class='done'></input>")
-      this.doneTodoView.click_complete_checkbox()
-      buster.refute(this.doneTodo.get("complete"))
-    }
+  function (TodoModel, DoneTodoView) {
+    "use strict";
+    buster.testCase("views DoneTodo", {
+      setUp: function() {
+        this.doneTodo = new TodoModel({text: "Lorem Ipsum", complete: true});
+        this.doneTodoView = new DoneTodoView({model: this.doneTodo});
+      },
+      "uncheck listener should mark todo model incomplete": function () {
+        this.doneTodoView.$el.append("<input type='checkbox' class='done'></input>");
+        this.doneTodoView.click_complete_checkbox();
+        buster.refute(this.doneTodo.get("complete"));
+      }
+    })
   })
-})

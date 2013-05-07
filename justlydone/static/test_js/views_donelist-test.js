@@ -18,25 +18,25 @@
  */
 
 define(["underscore", "jquery", "when", "models/todolist", "models/todo", "views/donelist"],
-function(_,            $,        when,   ToDoListModel,     ToDoModel,     DoneListView) {
+  function (_,            $,        when,   ToDoListModel,     ToDoModel,     DoneListView) {
+    "use strict";
     buster.testCase("view donetodolist", {
-      setUp: function() {
-        this.todolist = new ToDoListModel({name:"my todolist"})
-        this.view = new DoneListView({model: this.todolist})
-        this.view.template = "<div><ul class='donetodos'></ul></div>"
-        this.todo1 = new ToDoModel({text:"lorem ipsum", list: this.view.model})
-        this.todo2 = new ToDoModel({text:"lorem ipsum", list: this.view.model})
-        this.todo3 = new ToDoModel({text:"lorem ipsum", list: this.view.model})
+      setUp: function () {
+        this.todolist = new ToDoListModel({name: "my todolist"});
+        this.view = new DoneListView({model: this.todolist});
+        this.view.template = "<div><ul class='donetodos'></ul></div>";
+        this.todo1 = new ToDoModel({text: "lorem ipsum", list: this.view.model});
+        this.todo2 = new ToDoModel({text: "lorem ipsum", list: this.view.model});
+        this.todo3 = new ToDoModel({text: "lorem ipsum", list: this.view.model});
       },
-      show_done_todos: function() {
+      show_done_todos: function () {
         // the view's controller has a listener for complete changes. We use silent so that it doesn't fire.
-        this.todo2.set("complete", true, {silent: true})
-        this.todo3.set("complete", true, {silent: true})
-        this.spy(this.view, "make_donetodo_view")
-        buster.refute.equals(2, this.view.make_donetodo_view.callCount)
-        this.view.make_donetodo_views(this.view.model)
-        buster.assert.equals(2, this.view.make_donetodo_view.callCount)
+        this.todo2.set("complete", true, {silent: true});
+        this.todo3.set("complete", true, {silent: true});
+        this.spy(this.view, "make_donetodo_view");
+        buster.refute.equals(2, this.view.make_donetodo_view.callCount);
+        this.view.make_donetodo_views(this.view.model);
+        buster.assert.equals(2, this.view.make_donetodo_view.callCount);
       }
-    })
-  }
-)
+    });
+  });

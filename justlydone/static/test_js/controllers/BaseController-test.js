@@ -18,37 +18,38 @@
  */
 
 define(["backbone", "controllers/BaseController"],
-function(backbone,   BaseController) {
-  buster.testCase("Test Base Controller", {
-    "controller with view": function() {
-      var view = new (backbone.View.extend({}))()
-      var NewController = BaseController.extend({
-        initialize: function() {
-          buster.assert.same(view, this.view)
-        }
-      })
-      new NewController({view:view})
-    },
-    "controller attaches model directly": function() {
-      var model = new (backbone.Model.extend({}))()
-      var view = new (backbone.View.extend({model:model}))()
-      var NewController = BaseController.extend({
-        initialize: function() {
-          buster.assert.same(view, this.view)
-          buster.assert.same(this.view.model, this.model)
-          buster.assert.same(model, this.model)
-        }
-      })
-      new NewController({view:view})
-    },
-    "simple new controller": function() {
-      var NewController = BaseController.extend({
-        initialize: function() {
-          this.is_initialized = true
-        }
-      })
-      var newController = new NewController({})
-      buster.assert.same(true, newController.is_initialized)
-    }
-  })
-});
+  function (backbone,   BaseController) {
+    "use strict";
+    buster.testCase("Test Base Controller", {
+      "controller with view": function () {
+        var view = new (backbone.View.extend({}))(),
+          NewController = BaseController.extend({
+            initialize: function () {
+              buster.assert.same(view, this.view);
+            }
+          });
+        new NewController({view: view});
+      },
+      "controller attaches model directly": function () {
+        var model = new (backbone.Model.extend({}))(),
+          view = new (backbone.View.extend({model: model}))(),
+          NewController = BaseController.extend({
+            initialize: function () {
+              buster.assert.same(view, this.view);
+              buster.assert.same(this.view.model, this.model);
+              buster.assert.same(model, this.model);
+            }
+          });
+        new NewController({view: view});
+      },
+      "simple new controller": function () {
+        var NewController = BaseController.extend({
+            initialize: function () {
+              this.is_initialized = true;
+            }
+          }),
+          newController = new NewController({});
+        buster.assert.same(true, newController.is_initialized);
+      }
+    });
+  });

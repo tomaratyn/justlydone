@@ -18,13 +18,13 @@
  */
 
 define(["backbone-relational", "urls"],
-  function(BackBone,              urls) {
-    var ToDo_model = Backbone.RelationalModel.extend({
+  function (Backbone,              urls) {
+    "use strict";
+    return Backbone.RelationalModel.extend({
       defaults: {
         text: "",
         complete: false
       },
       urlRoot: urls.TODO_URL
-    })
-    return ToDo_model
-  })
+    });
+  });

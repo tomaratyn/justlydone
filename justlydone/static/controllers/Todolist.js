@@ -17,50 +17,51 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 define(["controllers/BaseController", "models/todo"],
-function (BaseController, TodoModel) {
-  return BaseController.extend({
-    initialize: function() {
-      this.model.on("add:todos", function(todo) {
-        if (this.view.el) {
-          this.register_todo_view_creator_listener(todo)
-          var todoview = this.view.make_todo_view(todo)
-          this.view.add_new_todo_view_to_display(todoview)
-        }
-      }, this)
-      this.model.on("add:todos", function() {this.update_todo_count() }, this)
-      this.model.on("remove:todos", function() {this.update_todo_count() }, this)
-      this.model.on("change:name", this.on_name_change, this)
-      this.model.get('todos').each(this.register_todo_view_creator_listener, this)
-    },
-    count_todos: function() {
-      return this.model.get("todos").models.length
-    },
-    destroy_model: function() {
-      this.model.destroy()
-    },
-    make_todo: function(todo_properties) {
-      todo_properties.list = this.model
-      var todo = new TodoModel(todo_properties)
-      return todo.save()
-    },
-    on_name_change: function(todolist, name, options) {
-      this.view.set_list_name(name)
-    },
-    register_todo_view_creator_listener: function(todoModel) {
-      todoModel.on("change:complete", function(todoModel, isComplete, options) {
-        if (!isComplete) {
-          if (this.view.$el) {
-            var todoView = this.view.make_todo_view(todoModel)
-            this.view.add_new_todo_view_to_display(todoView)
+  function (BaseController, TodoModel) {
+    "use strict";
+    return BaseController.extend({
+      initialize: function () {
+        this.model.on("add:todos", function (todo) {
+          if (this.view.el) {
+            this.register_todo_view_creator_listener(todo);
+            var todoview = this.view.make_todo_view(todo);
+            this.view.add_new_todo_view_to_display(todoview);
           }
-        }
-      }, this)
-    },
-    rename_list: function(new_name){
-      return this.model.save({"name": new_name})
-    },
-    update_todo_count: function() {
-      this.view.set_todo_count(this.count_todos())
-    }
+        }, this);
+        this.model.on("add:todos", function () {this.update_todo_count(); }, this);
+        this.model.on("remove:todos", function () {this.update_todo_count(); }, this);
+        this.model.on("change:name", this.on_name_change, this);
+        this.model.get('todos').each(this.register_todo_view_creator_listener, this);
+      },
+      count_todos: function () {
+        return this.model.get("todos").models.length;
+      },
+      destroy_model: function () {
+        this.model.destroy();
+      },
+      make_todo: function (todo_properties) {
+        todo_properties.list = this.model;
+        var todo = new TodoModel(todo_properties);
+        return todo.save();
+      },
+      on_name_change: function(todolist, name, options) {
+        this.view.set_list_name(name);
+      },
+      register_todo_view_creator_listener: function (todoModel) {
+        todoModel.on("change:complete", function (todoModel, isComplete, options) {
+          if (!isComplete) {
+            if (this.view.$el) {
+              var todoView = this.view.make_todo_view(todoModel);
+              this.view.add_new_todo_view_to_display(todoView);
+            }
+          }
+        }, this);
+      },
+      rename_list: function (new_name) {
+        return this.model.save({"name": new_name});
+      },
+      update_todo_count: function () {
+        this.view.set_todo_count(this.count_todos());
+      }
+    })
   })
-})

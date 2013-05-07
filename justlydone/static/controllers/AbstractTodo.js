@@ -18,17 +18,18 @@
  */
 
 define(["controllers/BaseController"],
-function(BaseController) {
+  function (BaseController) {
+    "use strict";
     // This controller holds common behaviours that all todo controllers must handle.
     return BaseController.extend({
-      initialize: function() {
-        this.model.on("destroy", function() { this.remove_view() }, this)
+      initialize: function () {
+        this.model.on("destroy", function () { this.remove_view(); }, this);
       },
-      destroy_todo: function() {
-        this.model.destroy()
+      destroy_todo: function () {
+        this.model.destroy();
       },
-      remove_view: function() {
-        this.view.remove()
+      remove_view: function () {
+        this.view.remove();
       }
-    })
-})
+    });
+  });
