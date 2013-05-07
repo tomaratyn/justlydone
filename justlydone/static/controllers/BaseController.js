@@ -18,33 +18,32 @@
  */
 
 define(["underscore", "backbone"],
-function(_,            backbone) {
-
-  // Based on the code for the View controller
-  var Controller = function(options) {
-    this._configure(options || {});
-    this.initialize.apply(this, arguments);
-  }
-
-  // These options will be attached directly to the controller not just in options.
-  var controllerOptions = ['model', 'collection', 'view']
-
-  Controller.prototype = {
-    // A copy of the backbone.View._configure function. We've just modified the "viewOptions" to be controllerOptions
-    // so that the controller correctly grabs what it needs.
-    _configure: function(options) {
-      if (this.options) options = _.extend({}, this.options, options)
-      for (var i = 0, l = controllerOptions.length; i < l; i++) {
-        var attr = controllerOptions[i]
-        if (options[attr]) this[attr] = options[attr]
+  function (_, backbone) {
+    "use strict";
+    // Based on the code for the View controller
+    var Controller = function (options) {
+        this._configure(options || {});
+        this.initialize.apply(this, arguments);
+      },
+      // These options will be attached directly to the controller not just in options.
+      controllerOptions = ['model', 'collection', 'view'];
+    Controller.prototype = {
+      // A copy of the backbone.View._configure function. We've just modified the "viewOptions" to be controllerOptions
+      // so that the controller correctly grabs what it needs.
+      _configure: function (options) {
+        if (this.options) {
+          options = _.extend({}, this.options, options);
+        }
+        _.extend(this, _.pick(options, 'model', 'collection', 'view'));
+        if (this.view && this.view.model && !this.model) {
+          this.model = this.view.model;
+        }
+        this.options = options;
       }
-      if (this.view && this.view.model && !this.model) this.model = this.view.model
-      this.options = options
-    }
-  }
+    };
 
-  // This we're fine grabbing by reference rather than copying the code itself.
-  Controller.extend = backbone.View.extend
+    // This we're fine grabbing by reference rather than copying the code itself.
+    Controller.extend = backbone.View.extend;
 
-  return Controller
-});
+    return Controller;
+  });

@@ -18,35 +18,36 @@
  */
 
 define(["controllers/AbstractTodo"],
-function(AbstractTodoController) {
+  function (AbstractTodoController) {
+    "use strict";
     return AbstractTodoController.extend({
-      initialize: function() {
-        Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this)
-        var self = this
-        this.model.on("change:complete", function(model, isComplete, options){
-          if (isComplete){
-            this.remove_view()
+      initialize: function () {
+        Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this);
+        var self = this;
+        this.model.on("change:complete", function (model, isComplete, options) {
+          if (isComplete) {
+            this.remove_view();
           }
-        }, this)
-        this.model.on("change:text", this.change_text, this)
-        this.model.on("change:creation_datetime", this.change_create_datetime, this)
+        }, this);
+        this.model.on("change:text", this.change_text, this);
+        this.model.on("change:creation_datetime", this.change_create_datetime, this);
       },
-      change_create_datetime: function(model, new_creation_datetime, options) {
-        this.view.update_creation_datetime(new_creation_datetime)
+      change_create_datetime: function (model, new_creation_datetime, options) {
+        this.view.update_creation_datetime(new_creation_datetime);
       },
-      change_text: function(model, new_text, options) {
-        this.view.update_todo_text(new_text)
+      change_text: function (model, new_text, options) {
+        this.view.update_todo_text(new_text);
       },
-      mark_todo_as_complete: function(){
-        this.model.set({complete:true})
-        return this.model.save()
+      mark_todo_as_complete: function () {
+        this.model.set({complete: true});
+        return this.model.save();
       },
-      remove_view: function() {
-        var view = this.view
-        this.view = null
-        view.controller = null
-        this.model.off(null, null, this)
-        view.remove()
+      remove_view: function () {
+        var view = this.view;
+        this.view = null;
+        view.controller = null;
+        this.model.off(null, null, this);
+        view.remove();
       }
-    })
-})
+    });
+  });

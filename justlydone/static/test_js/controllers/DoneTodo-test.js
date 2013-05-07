@@ -17,18 +17,19 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["models/todo", "views/donetodo", "controllers/DoneTodo"],
-function(TodoModel, DoneTodoView, DoneTodoController) {
-  buster.testCase("DoneTodo Controller", {
-    setUp: function() {
-      this.model= new TodoModel({text: "lorem ipsum", complete:true})
-      this.view = new DoneTodoView({model:this.model})
-      this.controller = this.view.controller
-    },
-    "catch todo:complete change to false": function() {
-      this.spy(this.view, "remove")
-      this.model.set({complete: false})
-      buster.assert.calledOnce(this.view.remove)
-    }
-  })
-})
+define(["models/Todo", "views/DoneTodo", "controllers/DoneTodo"],
+  function (TodoModel, DoneTodoView, DoneTodoController) {
+    "use strict";
+    buster.testCase("DoneTodo Controller", {
+      setUp: function () {
+        this.model = new TodoModel({text: "lorem ipsum", complete: true});
+        this.view = new DoneTodoView({model: this.model});
+        this.controller = this.view.controller;
+      },
+      "catch todo:complete change to false": function () {
+        this.spy(this.view, "remove");
+        this.model.set({complete: false});
+        buster.assert.calledOnce(this.view.remove);
+      }
+    });
+  });

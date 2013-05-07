@@ -17,14 +17,14 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define([   "backbone-relational", "models/todolist", "urls"],
-  function( Backbone,              ToDoList_model,    urls){
-    ToDoList_List = Backbone.Collection.extend({
-      model: ToDoList_model,
+define([   "backbone-relational", "models/Todolist", "urls"],
+  function (Backbone, TodolistModel, urls) {
+    "use strict";
+    return Backbone.Collection.extend({
+      model: TodolistModel,
       url: urls.TODOLISTS_URL,
       parse: function (response) {
-        return response.objects
+        return response.objects;
       }
-    })
-    return ToDoList_List
-})
+    });
+  });

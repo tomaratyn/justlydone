@@ -17,8 +17,24 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define([ "jquery", "when", "models/todo", "views/AbstractTodoView" ],
-function( $,        when,   TodoModel,     AbstractTodoView) {
-  return buster.testCase("AbstractTodoView Test", {
-  })
-})
+define(["models/Todo"],
+  function (TodoModel) {
+    "use strict";
+    buster.testCase("test todo_model's name", {
+      setUp: function () {
+        this.useFakeServer();
+      },
+      empty_by_default: function () {
+        var todo = new TodoModel(),
+          jqXHR = todo.save(),
+          requestBody,
+          request;
+        buster.refute.same(jqXHR, false);
+        buster.assert.same(1, this.sandbox.server.requests.length);
+        request = this.sandbox.server.requests[0];
+        requestBody = JSON.parse(request.requestBody);
+        buster.assert.same("", requestBody.text);
+        buster.assert.same(null, requestBody.list);
+      }
+    });
+  });

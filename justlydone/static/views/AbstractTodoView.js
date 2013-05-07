@@ -18,15 +18,16 @@
  */
 
 define([ "backbone-relational", "humane", "object_get_prototype_monkeypatch"],
-function(Backbone) {
-  return Backbone.View.extend({
-    initialize: function() {
-    },
-    click_delete_todo: function() {
-      this.controller.destroy_todo()
-    },
-    humanize_times: function() {
-      this.$el.find("time").humaneDates()
-    }
-  })
-})
+  function (Backbone) {
+    "use strict";
+    return Backbone.View.extend({
+      initialize: function () {
+      },
+      click_delete_todo: function () {
+        this.controller.destroy_todo();
+      },
+      humanize_times: function () {
+        this.$el.find("time").humaneDates();
+      }
+    });
+  });

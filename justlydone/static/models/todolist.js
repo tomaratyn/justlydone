@@ -17,23 +17,23 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["backbone-relational", "urls", "models/todo"],
-function (Backbone, urls, ToDoModel) {
-    var ToDoList_model = Backbone.RelationalModel.extend({
+define(["backbone-relational", "urls", "models/Todo"],
+  function (Backbone, urls, TodoModel) {
+    "use strict";
+    return Backbone.RelationalModel.extend({
       defaults: {
-        name:""
+        name: ""
       },
       relations: [
         {
-          type:"HasMany",
-          key:"todos",
-          relatedModel: ToDoModel,
-          reverseRelation:{
-            key:"list"
+          type: "HasMany",
+          key: "todos",
+          relatedModel: TodoModel,
+          reverseRelation: {
+            key: "list"
           }
         }
       ],
       urlRoot: urls.TODOLISTS_URL
-    })
-    return ToDoList_model
-  })
+    });
+  });

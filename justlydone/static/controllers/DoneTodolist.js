@@ -17,19 +17,20 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 define(["controllers/BaseController"],
-function (BaseController) {
-  return BaseController.extend({
-    initialize: function() {
-      this.model.on("add:todos", this.register_donetodo_view_creator_listener, this)
-    },
-    register_donetodo_view_creator_listener: function(todoModel) {
-      todoModel.on("change:complete", function(todoModel, isComplete, options) {
-        if (isComplete) {
-          var todoView = this.view.make_donetodo_view(todoModel)
-          todoView.render()
-          this.view.add_new_todo_view_to_display(todoView)
-        }
-      }, this)
-    }
-  })
-})
+  function (BaseController) {
+    "use strict";
+    return BaseController.extend({
+      initialize: function () {
+        this.model.on("add:todos", this.register_donetodo_view_creator_listener, this);
+      },
+      register_donetodo_view_creator_listener: function (todoModel) {
+        todoModel.on("change:complete", function (todoModel, isComplete, options) {
+          if (isComplete) {
+            var todoView = this.view.make_donetodo_view(todoModel);
+            todoView.render();
+            this.view.add_new_todo_view_to_display(todoView);
+          }
+        }, this);
+      }
+    });
+  });

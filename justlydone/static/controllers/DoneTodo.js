@@ -18,20 +18,21 @@
  */
 
 define(["controllers/AbstractTodo"],
-function(AbstractTodoController) {
+  function (AbstractTodoController) {
+    "use strict";
     return AbstractTodoController.extend({
-      initialize: function() {
-        Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this)
-        this.model.on("change:complete", this.on_incomplete_remove_view, this)
+      initialize: function () {
+        Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this);
+        this.model.on("change:complete", this.on_incomplete_remove_view, this);
       },
-      mark_todo_as_incomplete: function() {
-        this.model.set("complete", false)
-        return this.model.save()
+      mark_todo_as_incomplete: function () {
+        this.model.set("complete", false);
+        return this.model.save();
       },
-      on_incomplete_remove_view: function(model, isComplete, options) {
-        if (!isComplete){
-          this.remove_view()
+      on_incomplete_remove_view: function (model, isComplete, options) {
+        if (!isComplete) {
+          this.remove_view();
         }
       }
-    })
-})
+    });
+  });
