@@ -18,7 +18,7 @@
  */
 
 define(["jquery", "underscore", "mustache", "views/AbstractTodoView", "controllers/DoneTodo", "object_get_prototype_monkeypatch"],
-  function ($,        _,            Mustache,   AbstractTodoView,         DoneTodoController) {
+  function ($, _, Mustache, AbstractTodoView, DoneTodoController) {
     "use strict";
     return AbstractTodoView.extend({
       events: {

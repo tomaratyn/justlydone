@@ -18,7 +18,7 @@
  */
 
 define(["backbone-relational", "urls"],
-  function (Backbone,              urls) {
+  function (Backbone, urls) {
     "use strict";
     return Backbone.RelationalModel.extend({
       defaults: {

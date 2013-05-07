@@ -17,8 +17,8 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["backbone-relational", "urls", "models/todo"],
-  function (Backbone, urls, ToDoModel) {
+define(["backbone-relational", "urls", "models/Todo"],
+  function (Backbone, urls, TodoModel) {
     "use strict";
     return Backbone.RelationalModel.extend({
       defaults: {
@@ -28,7 +28,7 @@ define(["backbone-relational", "urls", "models/todo"],
         {
           type: "HasMany",
           key: "todos",
-          relatedModel: ToDoModel,
+          relatedModel: TodoModel,
           reverseRelation: {
             key: "list"
           }

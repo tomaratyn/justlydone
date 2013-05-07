@@ -16,7 +16,7 @@
  * Contributors:
  *  - Tom Aratyn <tom@aratyn.name>
  */
-define(["controllers/BaseController", "models/todo"],
+define(["controllers/BaseController", "models/Todo"],
   function (BaseController, TodoModel) {
     "use strict";
     return BaseController.extend({

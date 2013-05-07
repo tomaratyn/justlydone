@@ -17,7 +17,7 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["models/todo", "views/donetodo", "controllers/DoneTodo"],
+define(["models/Todo", "views/DoneTodo", "controllers/DoneTodo"],
   function (TodoModel, DoneTodoView, DoneTodoController) {
     "use strict";
     buster.testCase("Abstract Todo Controller", {
@@ -35,5 +35,5 @@ define(["models/todo", "views/donetodo", "controllers/DoneTodo"],
         buster.assert.calledOnce(this.view.remove);
         buster.assert.calledOnce(this.controller.remove_view);
       }
-    })
-  })
+    });
+  });

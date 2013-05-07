@@ -18,7 +18,7 @@
  */
 
 define(["backbone", "controllers/BaseController"],
-  function (backbone,   BaseController) {
+  function (backbone, BaseController) {
     "use strict";
     buster.testCase("Test Base Controller", {
       "controller with view": function () {

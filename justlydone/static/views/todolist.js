@@ -17,8 +17,8 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["jquery", "underscore", "backbone-relational", "mustache", "controllers/Todolist", "views/todo", "models/todo", "views/donelist", "bootstrap"],
-  function ($,        _,            Backbone,              Mustache,   TodolistController,     ToDoView,     TodoModel,     DoneListView) {
+define(["jquery", "underscore", "backbone-relational", "mustache", "controllers/Todolist", "views/Todo", "models/Todo", "views/DoneTodolist", "bootstrap"],
+  function ($, _, Backbone, Mustache, TodolistController, TodoView, TodoModel, DoneTodolistView) {
     "use strict";
     return Backbone.View.extend({
       events: {
@@ -52,10 +52,10 @@ define(["jquery", "underscore", "backbone-relational", "mustache", "controllers/
         this.$el.find(".hide-done-todolist").addClass("hide");
       },
       make_done_todolist: function () {
-        return new DoneListView({model: this.model});
+        return new DoneTodolistView({model: this.model});
       },
       make_todo_view: function (todo) {
-        return new ToDoView({model: todo});
+        return new TodoView({model: todo});
       },
       make_todo_views: function (todolist) {
         var self = this;

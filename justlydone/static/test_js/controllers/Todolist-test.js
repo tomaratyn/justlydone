@@ -17,8 +17,8 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["when", "test_js/FakeServerConfigurator", "models/todolist", "views/todolist", "models/todo"],
-  function (when,   FakeServerConfigurator,           TodolistModel,     TodolistView,     TodoModel) {
+define(["when", "test_js/FakeServerConfigurator", "models/Todolist", "views/Todolist", "models/Todo"],
+  function (when, FakeServerConfigurator, TodolistModel, TodolistView, TodoModel) {
     "use strict";
     buster.testCase("todolist controller", {
       setUp: function () {

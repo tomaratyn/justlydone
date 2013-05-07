@@ -17,17 +17,17 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["underscore", "jquery", "when", "models/todolist", "models/todo", "views/donelist"],
-  function (_,            $,        when,   ToDoListModel,     ToDoModel,     DoneListView) {
+define(["underscore", "jquery", "when", "models/Todolist", "models/Todo", "views/DoneTodolist"],
+  function (_, $, when, TodolistModel, TodoModel, DoneTodolistModel) {
     "use strict";
     buster.testCase("view donetodolist", {
       setUp: function () {
-        this.todolist = new ToDoListModel({name: "my todolist"});
-        this.view = new DoneListView({model: this.todolist});
+        this.todolist = new TodolistModel({name: "my todolist"});
+        this.view = new DoneTodolistModel({model: this.todolist});
         this.view.template = "<div><ul class='donetodos'></ul></div>";
-        this.todo1 = new ToDoModel({text: "lorem ipsum", list: this.view.model});
-        this.todo2 = new ToDoModel({text: "lorem ipsum", list: this.view.model});
-        this.todo3 = new ToDoModel({text: "lorem ipsum", list: this.view.model});
+        this.todo1 = new TodoModel({text: "lorem ipsum", list: this.view.model});
+        this.todo2 = new TodoModel({text: "lorem ipsum", list: this.view.model});
+        this.todo3 = new TodoModel({text: "lorem ipsum", list: this.view.model});
       },
       show_done_todos: function () {
         // the view's controller has a listener for complete changes. We use silent so that it doesn't fire.

@@ -17,13 +17,13 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["jquery", "when", "views/todo", "models/todo"],
-  function ($,        when,         ToDoView,     TodoModel) {
+define(["jquery", "when", "views/Todo", "models/Todo"],
+  function ($, when, TodoView, TodoModel) {
     "use strict";
     buster.testCase("views todo", {
       setUp: function () {
         var todo = new TodoModel({text: "lorem ipsum"});
-        this.view = new ToDoView({model: todo});
+        this.view = new TodoView({model: todo});
       },
       with_template: {
         setUp: function () {

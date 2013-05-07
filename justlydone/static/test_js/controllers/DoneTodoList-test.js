@@ -17,13 +17,13 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["models/todolist", "models/todo", "views/donelist"],
-  function (TodoListModel, TodoModel, DoneTodoListView) {
+define(["models/Todolist", "models/Todo", "views/DoneTodolist"],
+  function (TodolistModel, TodoModel, DoneTodolistView) {
     "use strict";
     buster.testCase("DoneTodoList Controller", {
       setUp: function () {
-        this.todolist = new TodoListModel({name: "my todolist"});
-        this.view = new DoneTodoListView({model: this.todolist});
+        this.todolist = new TodolistModel({name: "my todolist"});
+        this.view = new DoneTodolistView({model: this.todolist});
         this.view.template = "<div><ul class='donetodos'></ul></div>";
       },
       register_donetodo_view_creator_listener: function () {

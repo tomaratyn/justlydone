@@ -17,7 +17,7 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["underscore", "models/todo", "models/todolist"],
+define(["underscore", "models/Todo", "models/Todolist"],
   function (_, TodoModel, TodolistModel) {
     "use strict";
     buster.testCase("create empty", {
@@ -28,7 +28,7 @@ define(["underscore", "models/todo", "models/todolist"],
         var todolist = new TodolistModel(),
           jqXHR = todolist.save(),
           request,
-          requestBody
+          requestBody;
         buster.refute.same(jqXHR, false);
         buster.assert.same(1, this.sandbox.server.requests.length);
         request = this.sandbox.server.requests[0];
@@ -50,7 +50,7 @@ define(["underscore", "models/todo", "models/todolist"],
         requestBody = JSON.parse(this.sandbox.server.requests[0].requestBody);
         buster.assert.same(todolist.attributes.name, requestBody.name);
         _.each(todos, function (todo) {
-          var actual_todo = _.where(requestBody.todos, {text:todo.attributes.text});
+          var actual_todo = _.where(requestBody.todos, {text: todo.attributes.text});
           buster.assert.same(1, actual_todo.length);
         });
       }

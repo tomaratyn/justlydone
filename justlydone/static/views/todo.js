@@ -18,7 +18,7 @@
  */
 
 define(["jquery", "mustache", "views/AbstractTodoView", "controllers/Todo", "humane"],
-  function ($,        Mustache,   AbstractTodoView,         TodoController) {
+  function ($, Mustache, AbstractTodoView, TodoController) {
     "use strict";
     return AbstractTodoView.extend({
       events: {

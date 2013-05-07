@@ -17,11 +17,11 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["models/todo", "views/donetodo"],
+define(["models/Todo", "views/DoneTodo"],
   function (TodoModel, DoneTodoView) {
     "use strict";
     buster.testCase("views DoneTodo", {
-      setUp: function() {
+      setUp: function () {
         this.doneTodo = new TodoModel({text: "Lorem Ipsum", complete: true});
         this.doneTodoView = new DoneTodoView({model: this.doneTodo});
       },
@@ -30,5 +30,5 @@ define(["models/todo", "views/donetodo"],
         this.doneTodoView.click_complete_checkbox();
         buster.refute(this.doneTodo.get("complete"));
       }
-    })
-  })
+    });
+  });

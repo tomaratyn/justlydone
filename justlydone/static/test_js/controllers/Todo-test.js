@@ -17,8 +17,8 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["models/todo", "views/todo", "controllers/Todo"],
-  function (TodoModel,     TodoView) {
+define(["models/Todo", "views/Todo", "controllers/Todo"],
+  function (TodoModel, TodoView) {
     "use strict";
     buster.testCase("Todo Controller", {
       setUp: function () {

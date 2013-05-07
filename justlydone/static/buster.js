@@ -32,20 +32,20 @@ config["My tests"] = {
     "**/*.js"
   ],
   tests: [
-    "test_js/*-test.js",
     "test_js/controllers/*-test.js",
+    "test_js/models/*-test.js",
     "test_js/views/*-test.js"
   ],
   extensions: [ require("buster-amd") ]
-// Not used until buster starts shipping with resources/proxying.
-// Also, should use testing_host.js
-/*
-  ,
-  resources: [{
-    path:"/api",
-    backend:"http://localhost:8000/api"
-  }]
-*/
-}
+  // Not used until buster starts shipping with resources/proxying.
+  // Also, should use testing_host.js
+  /*
+    ,
+    resources: [{
+      path:"/api",
+      backend:"http://localhost:8000/api"
+    }]
+  */
+};
 
 

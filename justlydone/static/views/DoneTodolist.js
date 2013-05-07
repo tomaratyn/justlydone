@@ -17,8 +17,8 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["jquery", "underscore", "backbone-relational", "mustache", "controllers/DoneTodolist", "views/donetodo"],
-  function ($,        _,            Backbone,              Mustache,   DoneTodolistController,     DoneTodoView) {
+define(["jquery", "underscore", "backbone-relational", "mustache", "controllers/DoneTodolist", "views/DoneTodo"],
+  function ($, _, Backbone, Mustache, DoneTodolistController, DoneTodoView) {
     "use strict";
     return Backbone.View.extend({
       initialize: function () {

@@ -18,7 +18,7 @@
  */
 
 define(["underscore", "backbone"],
-  function (_,            backbone) {
+  function (_, backbone) {
     "use strict";
     // Based on the code for the View controller
     var Controller = function (options) {

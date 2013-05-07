@@ -17,8 +17,8 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["underscore", "jquery", "when", "test_js/FakeServerConfigurator", "models/todolist", "models/todo", "views/todolist"],
-  function (_,            $,        when,   FakeServerConfigurator,           TodoListModel,    ToDoModel,     TodoListView) {
+define(["underscore", "jquery", "when", "test_js/FakeServerConfigurator", "models/Todolist", "models/Todo", "views/Todolist"],
+  function (_, $, when, FakeServerConfigurator, TodoListModel, TodoModel, TodoListView) {
     "use strict";
     buster.testCase("views todolist", {
       setUp: function () {
@@ -155,11 +155,11 @@ define(["underscore", "jquery", "when", "test_js/FakeServerConfigurator", "model
             xhr.respond(200, { "Content-Type": "application/json" }, response);
           });
           this.view.model.save().then(function () {
-            self.todo1 = new ToDoModel({text: "lorem ipsum", list: self.view.model});
+            self.todo1 = new TodoModel({text: "lorem ipsum", list: self.view.model});
             self.todo1.save().then(function () {
-              self.todo2 = new ToDoModel({text: "lorem ipsum", list: self.view.model});
+              self.todo2 = new TodoModel({text: "lorem ipsum", list: self.view.model});
               self.todo2.save().then(function () {
-                self.todo3 = new ToDoModel({text: "lorem ipsum", list: self.view.model});
+                self.todo3 = new TodoModel({text: "lorem ipsum", list: self.view.model});
                 self.todo3.save().then(function () {
                   deferred.resolver.resolve();
                 });
@@ -182,7 +182,7 @@ define(["underscore", "jquery", "when", "test_js/FakeServerConfigurator", "model
                 deferred.resolver.resolve();
               }, 10);
             });
-            new ToDoModel({text: "going to trigger the tested code", list: this.view.model});
+            new TodoModel({text: "going to trigger the tested code", list: this.view.model});
             return deferred.promise;
           },
           "on delete": function () {

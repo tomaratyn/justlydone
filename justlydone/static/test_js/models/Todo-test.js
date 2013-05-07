@@ -17,7 +17,7 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["models/todo"],
+define(["models/Todo"],
   function (TodoModel) {
     "use strict";
     buster.testCase("test todo_model's name", {
