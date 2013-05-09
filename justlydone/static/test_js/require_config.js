@@ -18,9 +18,9 @@
  */
 
 var require = {
-//  baseUrl: "../resources/",
+  baseUrl: "../resources/",
   /* for buster test -po use: */
-  baseUrl: "../static/",
+//  baseUrl: "../static/",
   shim: {
     "backbone": {
       deps: ["jquery", "underscore"],
@@ -41,14 +41,14 @@ var require = {
     "underscore": {exports: "_"}
   },
   paths: {
-    "backbone": "backbone-0.9.2",
+    "backbone": "backbone-0.9.10",
     "backbone-tastypie": "test_js/backbone-tastypie",
-    "backbone-relational": "backbone-relational.head",
+    "backbone-relational": "backbone-relational-0.8.0",
     "bootstrap": "bootstrap-2.1.0/js/bootstrap",
     "humane": "humane-custom",
     "jquery": "jquery-1.8.0",
     "mustache": "mustache-0.7.0",
-    "underscore": "underscore-1.4.2",
+    "underscore": "underscore-1.4.4",
     "when": "when-1.6.0"
   }
 }

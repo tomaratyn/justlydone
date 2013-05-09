@@ -24,15 +24,14 @@
 
 {% block header_template %}
 
-
     <script type="x-application/mustache" id="todo_template">
         {% templatetag openvariable %}=[[ ]]={% templatetag closevariable %}
         <li class="span9">
             <input type="checkbox" class="done" [[#complete]]checked=""[[/complete]]>
-            [[text]]
+            <span class="text">[[text]]</span>
             &nbsp;
             [[#complete]]<small>Finished: <time datetime="[[completion_datetime]]"></time></small>[[/complete]]
-            <small class="muted" >created: <time datetime="[[creation_datetime]]"></time></small>
+            <small class="muted" >created: <time class="creation-datetime" datetime="[[creation_datetime]]"></time></small>
             <button class="pull-right btn btn-link delete-todo"><i class="icon-trash icon-grey"></i></button>
         </li>
     </script>
@@ -89,7 +88,6 @@
 
 {% block page_contents %}
 
-
     <div class="row">
         <div class="span12">
             <h1>Howdy {{ request.user.username }}! <small>Here are your to do lists:</small></h1>
@@ -119,33 +117,31 @@
 {% block bottom_script_page %}
     <script>
         DEFINED_URLS = {
-            TODOLISTS_URL: '{{ ToDoListResource.get_resource_list_uri }}',
-            TODO_URL: '{{ ToDoResource.get_resource_list_uri }}'
-        }
-        require.config(global_require_config)
+          TODOLISTS_URL: '{{ ToDoListResource.get_resource_list_uri }}',
+          TODO_URL: '{{ ToDoResource.get_resource_list_uri }}'
+        };
+        require.config(global_require_config);
         require(["jquery", "collections/todolist", "views/todolist_list", "bootstrap"],
                 function ($, TodoListCollection, ToDoList_List_View) {
                     var todolist_collection = new TodoListCollection();
                     todolist_collection.fetch().then(function () {
-                        var view = new ToDoList_List_View({collection: todolist_collection})
-                        view.render_new_many_lists()
+                        var view = new ToDoList_List_View({collection: todolist_collection});
+                        view.render_new_many_lists();
                         $(function () {
                             $("form.nosubmit").submit(function () {
-                                return false
-                            })
+                                return false;
+                            });
                             $(".modal#edit-list-name-modal .save").click(function () {
-                                var $modal = $(this).parents(".modal#edit-list-name-modal")
-                                $modal.data("dosave", true)
-                                $modal.modal("hide")
-                            })
+                                var $modal = $(this).parents(".modal#edit-list-name-modal");
+                                $modal.data("dosave", true);
+                                $modal.modal("hide");
+                            });
                             $(".modal#edit-list-name-modal").on("hidden", function () {
-                                $(this).find(".list-new-name").val("")
-                            })
-                        })
-                    })
-                }
-        )
-
+                                $(this).find(".list-new-name").val("");
+                            });
+                        });
+                    });
+                });
     </script>
 
 {% endblock %}

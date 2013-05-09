@@ -17,29 +17,29 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["jquery", "underscore", "mustache", "views/AbstractTodoView"],
-function($,        _,            Mustache, AbstractTodoView) {
+define(["jquery", "underscore", "mustache", "views/AbstractTodoView", "controllers/DoneTodo", "object_get_prototype_monkeypatch"],
+  function ($, _, Mustache, AbstractTodoView, DoneTodoController) {
+    "use strict";
     return AbstractTodoView.extend({
       events: {
         "click .delete-todo": "click_delete_todo",
-        "change .done": "make_done"
-
+        "click .done": "click_complete_checkbox"
       },
-      initialize: function() {
-        var self = this
-        Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this)
-        this.model.on("change:complete", function(model, isComplete, options) {
-          if (!isComplete) {
-            self.remove()
-          }
-        })
+      initialize: function () {
+        Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this);
+        this.controller = new DoneTodoController({view: this});
       },
-      render: function() {
-        this.setElement(Mustache.render(this.template, this.model.attributes))
-        this.humanize_times()
-        return this
+      click_complete_checkbox: function () {
+        var doneCheckbox = this.$el.find(".done");
+        if (doneCheckbox.length > 0 && !doneCheckbox.is(":checked")) {
+          this.controller.mark_todo_as_incomplete();
+        }
+      },
+      render: function () {
+        this.setElement(Mustache.render(this.template, this.model.attributes));
+        this.humanize_times();
+        return this;
       },
       template: $("script#todo_template").text()
-    })
-  }
-)
+    });
+  });

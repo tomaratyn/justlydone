@@ -1,5 +1,4 @@
-/*
- * Copyright (C) 2012  The Boulevard Platform Inc.
+/* Copyright (C) 2013  The Boulevard Platform Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,26 +17,21 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-// URLS are only hardcoded for testing, in production each template should define
-// a set of urls using a global `DEFINED_URLS` variable.
-
-define(["underscore", "test_js/testing_host"],
-  function (_, testing_host) {
+define(["models/Todo", "views/Todo", "controllers/Todo"],
+  function (TodoModel, TodoView) {
     "use strict";
-    if (typeof DEFINED_URLS !== "undefined") {
-      return DEFINED_URLS;
-    }
-    else if (typeof buster !== "undefined") {
-      var urls = {
-        TODO_URL: "/api/testing/todo/",
-        TODOLISTS_URL: "/api/testing/todolist"
-      };
-      _.map(urls, function (value, key, collection) {
-        return collection[key] = testing_host.host + value;
-      });
-      return urls;
-    }
-    else {
-      throw "No URLS in this context";
-    }
+    buster.testCase("Todo Controller", {
+      setUp: function () {
+        this.model = new TodoModel({text: "lorem ipsum", complete:false});
+        this.view = new TodoView({model:this.model});
+        this.controller = this.view.controller;
+      },
+      "remove view on change:complete and complete === true": function () {
+        this.spy(this.controller, "remove_view");
+        this.spy(this.view, "remove");
+        this.model.set({complete: true});
+        buster.assert.calledOnce(this.controller.remove_view);
+        buster.assert.calledOnce(this.view.remove);
+      }
+    });
   });

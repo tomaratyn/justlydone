@@ -1,5 +1,4 @@
-/*
- * Copyright (C) 2012  The Boulevard Platform Inc.
+/* Copyright (C) 2012  The Boulevard Platform Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,26 +17,24 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-// URLS are only hardcoded for testing, in production each template should define
-// a set of urls using a global `DEFINED_URLS` variable.
-
-define(["underscore", "test_js/testing_host"],
-  function (_, testing_host) {
+define(["models/Todo"],
+  function (TodoModel) {
     "use strict";
-    if (typeof DEFINED_URLS !== "undefined") {
-      return DEFINED_URLS;
-    }
-    else if (typeof buster !== "undefined") {
-      var urls = {
-        TODO_URL: "/api/testing/todo/",
-        TODOLISTS_URL: "/api/testing/todolist"
-      };
-      _.map(urls, function (value, key, collection) {
-        return collection[key] = testing_host.host + value;
-      });
-      return urls;
-    }
-    else {
-      throw "No URLS in this context";
-    }
+    buster.testCase("test todo_model's name", {
+      setUp: function () {
+        this.useFakeServer();
+      },
+      empty_by_default: function () {
+        var todo = new TodoModel(),
+          jqXHR = todo.save(),
+          requestBody,
+          request;
+        buster.refute.same(jqXHR, false);
+        buster.assert.same(1, this.sandbox.server.requests.length);
+        request = this.sandbox.server.requests[0];
+        requestBody = JSON.parse(request.requestBody);
+        buster.assert.same("", requestBody.text);
+        buster.assert.same(null, requestBody.list);
+      }
+    });
   });

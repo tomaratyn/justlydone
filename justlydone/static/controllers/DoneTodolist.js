@@ -1,5 +1,4 @@
-/*
- * Copyright (C) 2012  The Boulevard Platform Inc.
+/* Copyright (C) 2013  The Boulevard Platform Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,27 +16,21 @@
  * Contributors:
  *  - Tom Aratyn <tom@aratyn.name>
  */
-
-// URLS are only hardcoded for testing, in production each template should define
-// a set of urls using a global `DEFINED_URLS` variable.
-
-define(["underscore", "test_js/testing_host"],
-  function (_, testing_host) {
+define(["controllers/BaseController"],
+  function (BaseController) {
     "use strict";
-    if (typeof DEFINED_URLS !== "undefined") {
-      return DEFINED_URLS;
-    }
-    else if (typeof buster !== "undefined") {
-      var urls = {
-        TODO_URL: "/api/testing/todo/",
-        TODOLISTS_URL: "/api/testing/todolist"
-      };
-      _.map(urls, function (value, key, collection) {
-        return collection[key] = testing_host.host + value;
-      });
-      return urls;
-    }
-    else {
-      throw "No URLS in this context";
-    }
+    return BaseController.extend({
+      initialize: function () {
+        this.model.on("add:todos", this.register_donetodo_view_creator_listener, this);
+      },
+      register_donetodo_view_creator_listener: function (todoModel) {
+        todoModel.on("change:complete", function (todoModel, isComplete, options) {
+          if (isComplete) {
+            var todoView = this.view.make_donetodo_view(todoModel);
+            todoView.render();
+            this.view.add_new_todo_view_to_display(todoView);
+          }
+        }, this);
+      }
+    });
   });

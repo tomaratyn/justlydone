@@ -1,4 +1,4 @@
-/* Copyright (C) 2012  The Boulevard Platform Inc.
+/* Copyright (C) 2013  The Boulevard Platform Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -17,20 +17,22 @@
  *  - Tom Aratyn <tom@aratyn.name>
  */
 
-define(["models/todo"], function(todo_model) {
-  buster.testCase("test todo_model's name", {
-    setUp: function() {
-      this.useFakeServer()
-    },
-    empty_by_default: function() {
-      var todo = new todo_model()
-      var jqXHR = todo.save()
-      buster.refute.same(jqXHR, false)
-      buster.assert.same(1, this.sandbox.server.requests.length)
-      var request = this.sandbox.server.requests[0]
-      var requestBody = JSON.parse(request.requestBody)
-      buster.assert.same("", requestBody.text)
-      buster.assert.same(null, requestBody.list)
-    }
-  })
-})
+define(["controllers/AbstractTodo"],
+  function (AbstractTodoController) {
+    "use strict";
+    return AbstractTodoController.extend({
+      initialize: function () {
+        Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this);
+        this.model.on("change:complete", this.on_incomplete_remove_view, this);
+      },
+      mark_todo_as_incomplete: function () {
+        this.model.set("complete", false);
+        return this.model.save();
+      },
+      on_incomplete_remove_view: function (model, isComplete, options) {
+        if (!isComplete) {
+          this.remove_view();
+        }
+      }
+    });
+  });
