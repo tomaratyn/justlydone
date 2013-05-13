@@ -121,11 +121,11 @@
           TODO_URL: '{{ ToDoResource.get_resource_list_uri }}'
         };
         require.config(global_require_config);
-        require(["jquery", "collections/todolist", "views/todolist_list", "bootstrap"],
-                function ($, TodoListCollection, ToDoList_List_View) {
+        require(["jquery", "collections/Todolist", "views/TodolistList", "bootstrap"],
+                function ($, TodoListCollection, TodolistListView) {
                     var todolist_collection = new TodoListCollection();
                     todolist_collection.fetch().then(function () {
-                        var view = new ToDoList_List_View({collection: todolist_collection});
+                        var view = new TodolistListView({collection: todolist_collection});
                         view.render_new_many_lists();
                         $(function () {
                             $("form.nosubmit").submit(function () {
