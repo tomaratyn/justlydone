@@ -32,7 +32,7 @@ define(["underscore"],
         TODO_URL: "/api/testing/todo/",
         TODOLISTS_URL: "/api/testing/todolist"
       },
-        testing_host = require("test_js/testing_host");
+        testing_host = require(["test_js/testing_host"]);
       _.map(urls, function (value, key, collection) {
         return collection[key] = testing_host.host + value;
       });
