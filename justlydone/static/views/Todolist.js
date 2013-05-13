@@ -28,7 +28,8 @@ define(["jquery", "underscore", "backbone-relational", "mustache", "controllers/
         "click .remove-list": "remove_list",
         "click .show-done-todolist": "show_done_todolist",
         "click .toggle-todos": "toggle_todos_display",
-        "click .rename-list": "rename_list"
+        "click .rename-list": "rename_list",
+        "keypress .new-todo-text": "keypress_add_new_todo"
       },
       initialize: function (options) {
         // we wrap the call to remove in a closure so that we can spy on remove() in tests.
@@ -50,6 +51,11 @@ define(["jquery", "underscore", "backbone-relational", "mustache", "controllers/
         this.$el.find(".show-done-todolist").removeClass("hide");
         this.$el.find(".donelist").addClass("hide");
         this.$el.find(".hide-done-todolist").addClass("hide");
+      },
+      keypress_add_new_todo: function (event) {
+        if (event.which === 13) {
+          this.add_new_todo();
+        }
       },
       make_done_todolist: function () {
         return new DoneTodolistView({model: this.model});
