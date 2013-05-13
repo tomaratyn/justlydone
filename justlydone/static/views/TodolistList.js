@@ -24,20 +24,25 @@ define(["jquery", "underscore", "backbone", "collections/Todolist", "views/Todol
       el: ".todolist_list",
       events: {
         "click .refresh": "refresh",
-        "click .add_new_list": "add_new_list"
+        "click .add_new_list": "add_new_list",
+        "keypress .new_list_name": "keypress_add_new_list"
       },
-      add_new_list: function (e) {
-        var $btn = $(e.currentTarget),
-          $label = $btn.parents("div").find("input.new_list_name"),
+      add_new_list: function () {
+        var $label = this.$("input.new_list_name"),
           new_list_name = $label.val();
         if (new_list_name.length > 0) {
           this.collection.create({name: new_list_name});
+          $label.val("");
         }
-        $label.val("");
       },
       initialize: function () {
         this.collection.on("add", this.render_new_single_list, this);
         this.collection.on("reset", this.render_new_many_lists, this);
+      },
+      keypress_add_new_list: function (event) {
+        if (event.which === 13) {
+          this.add_new_list();
+        }
       },
       render_new_many_lists: function () {
         this.$el.find("ul").html("");
