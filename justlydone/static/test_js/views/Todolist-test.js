@@ -31,6 +31,7 @@ define(["underscore", "jquery", "when", "test_js/FakeServerConfigurator", "model
           "<span class='todo-count'></span>" +
           "<input type='text'class='new-todo-text'>" +
           "<button class='add-new-todo'></button>" +
+          "<button class='rename-list'></button>" +
           "<div class='edit-list-name-modal modal'>" +
           "<i class='list-old-name'></i>" +
           "<input class='list-new-name' type='text'>" +
@@ -68,11 +69,11 @@ define(["underscore", "jquery", "when", "test_js/FakeServerConfigurator", "model
           var new_name = "new name",
             deferred = when.defer();
           this.todolist.on("change:name", function (todolist, name, options) {
-            buster.assert.same(new_name, name);
+            buster.assert.equals(new_name, name);
             deferred.resolver.resolve();
           });
-          this.$el.find(".name").trigger("dblclick");
-          buster.assert.same(this.$el.find(".list-old-name").text(), this.todolist.get("name"));
+          this.$el.find(".rename-list").trigger("click");
+          buster.assert.equals(this.$el.find(".list-old-name").text(), this.todolist.get("name"));
           this.$el.find(".list-new-name").val(new_name);
           this.$el.find(".edit-list-name-modal .save").trigger("click");
           return deferred.promise;
