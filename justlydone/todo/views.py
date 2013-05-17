@@ -16,20 +16,32 @@
 # Contributors:
 #  - Tom Aratyn <tom@aratyn.name>
 
-
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, TemplateView
 
 from todo.api import ToDoListResource, ToDoResource
 from todo.models import ToDoList as ToDoListModel
+from todo.util import do_not_cache_response
 
 
 class Index(TemplateView):
     template_name = "base.html"
 
+    @method_decorator(do_not_cache_response)
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(Index, self).dispatch(*args, **kwargs)
+
 
 class StaticListTodoLists(ListView):
     model = ToDoListModel
     context_object_name = "todolists"
+
+    @method_decorator(do_not_cache_response)
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(StaticListTodoLists, self).dispatch(*args, **kwargs)
 
 
 class JavaScriptDynamicView(TemplateView):
@@ -39,3 +51,8 @@ class JavaScriptDynamicView(TemplateView):
         return {"ToDoListResource": ToDoListResource,
                 "ToDoResource": ToDoResource,
                 "request": self.request }
+
+    @method_decorator(do_not_cache_response)
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(JavaScriptDynamicView, self).dispatch(*args, **kwargs)

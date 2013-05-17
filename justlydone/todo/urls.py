@@ -36,7 +36,7 @@ static_urls = patterns('',
 )
 
 jsdynamic_urls = patterns('',
-                          url(r'^$', login_required(views.JavaScriptDynamicView.as_view()), name="dynamic_todo_list"),
+                          url(r'^$', views.JavaScriptDynamicView.as_view(), name="dynamic_todo_list"),
 )
 
 urlpatterns = patterns('',

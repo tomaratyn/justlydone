@@ -18,7 +18,9 @@
 
 from django.core.serializers import json
 from django.utils import simplejson
+from django.utils.cache import add_never_cache_headers
 from tastypie.serializers import Serializer
+
 
 class PrettyJSONSerializer(Serializer):
     json_indent = 2
@@ -31,4 +33,13 @@ class PrettyJSONSerializer(Serializer):
                                 sort_keys=True,
                                 ensure_ascii=False,
                                 indent=self.json_indent)
-    
+
+
+def do_not_cache_response(view):
+    def add_do_not_cache_headers(request, *args, **kwargs):
+        response = view(request, *args, **kwargs)
+        response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response["Pragma"] = "no-cache"
+        add_never_cache_headers(response)
+        return response
+    return add_do_not_cache_headers
