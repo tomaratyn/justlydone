@@ -17,8 +17,10 @@
 #  - Tom Aratyn <tom@aratyn.name>
 
 from datetime import datetime
-from django.db import models
+import pytz
 
+from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 
 class ToDoList(models.Model):
@@ -42,7 +44,7 @@ class ToDo(models.Model):
 
     def save(self, *args, **kwargs):
         if self.complete and self.completion_datetime is None:
-            self.completion_datetime = datetime.utcnow()
+            self.completion_datetime = datetime.utcnow().replace(tzinfo=pytz.timezone(settings.TIME_ZONE))
         elif not self.complete and self.completion_datetime is not None:
             self.completion_datetime = None
         super(ToDo, self).save(*args, **kwargs)
