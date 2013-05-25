@@ -17,14 +17,20 @@
 #  - Tom Aratyn <tom@aratyn.name>
 
 from datetime import datetime
-from django.db import models
+import pytz
 
+from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
+
 
 class ToDoList(models.Model):
     name = models.CharField(max_length=140)
     creation_datetime = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, null=False, blank=False)
+
+    class Meta:
+        ordering = ["-name", "-creation_datetime"]
 
     def __unicode__(self):
         return u'%s' % self.name
@@ -37,12 +43,16 @@ class ToDo(models.Model):
     completion_datetime = models.DateTimeField(blank=True, null=True)
     list = models.ForeignKey(ToDoList)
 
+    class Meta:
+        # this should put the incomplete todos before the complete ones but might change if we move away from pgsql
+        ordering = ["-completion_datetime", "-creation_datetime"]
+
     def __unicode__(self):
         return u'%s%s' % (self.text, " (done)" if self.complete else "")
 
     def save(self, *args, **kwargs):
         if self.complete and self.completion_datetime is None:
-            self.completion_datetime = datetime.utcnow()
+            self.completion_datetime = datetime.utcnow().replace(tzinfo=pytz.timezone(settings.TIME_ZONE))
         elif not self.complete and self.completion_datetime is not None:
             self.completion_datetime = None
         super(ToDo, self).save(*args, **kwargs)

@@ -45,7 +45,7 @@ define(["jquery", "underscore", "backbone-relational", "mustache", "controllers/
         }
       },
       add_new_todo_view_to_display: function (todoView) {
-        this.$(".todos").append(todoView.render().el);
+        this.$(".todos").prepend(todoView.render().el);
       },
       hide_done_todolist: function () {
         this.$el.find(".show-done-todolist").removeClass("hide");

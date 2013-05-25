@@ -18,6 +18,9 @@
 
 import datetime
 from datetime import timedelta
+import pytz
+
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
 
@@ -32,7 +35,7 @@ class TodoRecordCompletionTimeTest(TestCase):
         todo = ToDo.objects.create(text="World Domination", list=list)
         self.assertFalse(todo.complete)
         self.assertEquals(None, todo.completion_datetime)
-        now = datetime.datetime.now()
+        now = datetime.datetime.utcnow().replace(tzinfo=pytz.timezone(settings.TIME_ZONE))
         todo.complete = True
         todo.save()
         self.assertTrue(todo.complete)
