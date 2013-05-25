@@ -56,7 +56,7 @@ define(["jquery", "underscore", "backbone", "collections/Todolist", "views/Todol
       },
       render_new_single_list: function (new_todo_list) {
         var view = new TodolistView({model: new_todo_list});
-        $(this.el).find(".todolists").append(view.render().el);
+        $(this.el).find(".todolists").prepend(view.render().el);
       }
     });
   });

@@ -176,4 +176,6 @@ LOGGING = {
 
 TASTYPIE_DATETIME_FORMATTING = "iso-8601"
 
+API_LIMIT_PER_PAGE = 0
+
 from main_project_settings.local_settings import *
